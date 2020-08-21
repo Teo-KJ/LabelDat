@@ -35,6 +35,13 @@
 
 ## Database: MySQL
 
-### Setup instructions
-
-**_To be added_**
+### Setup instructions (for Mac, not sure about Windows)
+1. Download mysql 8.0.x using Homebrew, then start MySQL server
+    ```
+   brew install mysql@8.0
+   brew services start mysql
+   ```
+2. Create a database for our data.
+    ```
+    mysql -u root < "create schema ase;"
+    ```
