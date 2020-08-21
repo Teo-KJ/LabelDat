@@ -4,8 +4,8 @@
 * `main.py` is the entry point of the Flask application. Also contains configurations.
 * `extensions.py` is just to avoid circular imports so that we can define models in future using SQLAlchemy easily
 * `api.py` file will contain all the routes that the front end requires.
-* `/models` will contain the entity definitions
-* `services` will contain the business logic
+* `/models` will contain the entity definitions (nothing yet)
+* `/services` will contain the business logic (nothing yet)
 
 
 ## Useful Resources
