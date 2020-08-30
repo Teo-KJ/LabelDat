@@ -34,8 +34,7 @@ For Mac :
    ```
    cd backend
    python3 -m venv venv
-   cd venv
-   bin/activate
+   source venv/bin/activate
    cd ..
    pip3 install -r requirements.txt
    ```
@@ -43,6 +42,11 @@ For Mac :
    ```
    cd backend
    pip3 freeze > requirements.txt
+   ```
+3. Start the Flask server
+   ```
+   cd backend
+   python3 main.py
    ```
 
 ## Database: MySQL
