@@ -22,32 +22,32 @@
 
 1. Setup virtual environment, activate and install necessary packages
 
-For Windows :
-   ```
-   cd backend
-   python3 -m venv venv
-   venv\Scripts\activate
-   pip3 install -r requirements.txt
-   ```
+   For Windows :
+    ```
+    cd backend
+    python3 -m venv venv
+    venv\Scripts\activate
+    pip3 install -r requirements.txt
+    ```
 
-For Mac :
-   ```
-   cd backend
-   python3 -m venv venv
-   source venv/bin/activate
-   cd ..
-   pip3 install -r requirements.txt
-   ```
+   For Mac :
+    ```
+    cd backend
+    python3 -m venv venv
+    source venv/bin/activate
+    cd ..
+    pip3 install -r requirements.txt
+    ```
 2. If you install other packages, please add them to requirements.txt
-   ```
-   cd backend
-   pip3 freeze > requirements.txt
-   ```
+    ```
+    cd backend
+    pip3 freeze > requirements.txt
+    ```
 3. Start the Flask server
-   ```
-   cd backend
-   python3 main.py
-   ```
+    ```
+    cd backend
+    python3 main.py
+    ```
 
 ## Database: MySQL
 
