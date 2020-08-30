@@ -22,23 +22,23 @@
 
 1. Setup virtual environment, activate and install necessary packages
 
-For Windows :
-   ```
-   cd backend
-   python3 -m venv venv
-   venv\Scripts\activate
-   pip3 install -r requirements.txt
-   ```
+   For Windows :
+      ```
+      cd backend
+      python3 -m venv venv
+      venv\Scripts\activate
+      pip3 install -r requirements.txt
+      ```
 
-For Mac :
-   ```
-   cd backend
-   python3 -m venv venv
-   cd venv
-   bin/activate
-   cd ..
-   pip3 install -r requirements.txt
-   ```
+   For Mac :
+      ```
+      cd backend
+      python3 -m venv venv
+      cd venv
+      bin/activate
+      cd ..
+      pip3 install -r requirements.txt
+      ```
 2. If you install other packages, please add them to requirements.txt
    ```
    cd backend
