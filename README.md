@@ -1,4 +1,4 @@
-# CZ3002 Data Labelling Application
+# CZ3002 Data Labelling Application (LabelDat)
 
 ## Frontend: React.js
 
@@ -51,7 +51,21 @@
 
 ## Database: MySQL
 
-### Setup instructions (for Mac, not sure about Windows)
+### Setup instructions
+For Windows
+1. Go to SQL's [Windows MSI Installer Download Page](https://dev.mysql.com/downloads/installer/) and follow setup instructions (Default port should be 3306)
+2. Create a database for our data with the following commands on MySQL Shell.
+    ```
+    \sql
+    \connect root@localhost
+    ```
+3. Type in password for root.
+4. Continue with the command below on MySQL Shell.
+    ```
+    create schema ase;
+    ```
+
+For Mac:
 1. Download mysql 8.0.x using Homebrew, then start MySQL server
     ```
    brew install mysql@8.0
