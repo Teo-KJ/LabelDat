@@ -75,3 +75,7 @@ For Mac :
     ```
     mysql -u root < "create schema ase;"
     ```
+3. Change password for root user. Run `mysql -u root` first to get into mysql console. Then run this to change password to **toor** (standardised)
+   ```
+   ALTER USER 'root'@'localhost' IDENTIFIED BY 'toor';
+   ```
