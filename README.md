@@ -52,7 +52,7 @@
 ## Database: MySQL
 
 ### Setup instructions
-For Windows
+For Windows :
 1. Go to SQL's [Windows MSI Installer Download Page](https://dev.mysql.com/downloads/installer/) and follow setup instructions (Default port should be 3306)
 2. Create a database for our data with the following commands on MySQL Shell.
     ```
@@ -65,7 +65,7 @@ For Windows
     create schema ase;
     ```
 
-For Mac:
+For Mac :
 1. Download mysql 8.0.x using Homebrew, then start MySQL server
     ```
    brew install mysql@8.0
