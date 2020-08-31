@@ -1,7 +1,7 @@
 from flask import Blueprint
 from extensions import db
 
-api = Blueprint("api", __name__, static_folder="static", template_folder="templates")
+api = Blueprint("controllers/api", __name__, static_folder="static", template_folder="templates")
 
 
 @api.route('/', methods=['GET'])
