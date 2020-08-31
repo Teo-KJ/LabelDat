@@ -1,11 +1,13 @@
 from flask import Flask
 from extensions import db
-from api import api
+from controllers.api import api
 
 
 def register_extensions(app_obj):
-    db.init_app(app_obj)
+    app_obj.app_context().push()
     app_obj.register_blueprint(api, url_prefix="")
+    db.init_app(app_obj)
+    db.create_all()
 
 
 def create_app(name):
@@ -21,5 +23,4 @@ def create_app(name):
 app = create_app(__name__)
 
 if __name__ == '__main__':
-    db.create_all()
     app.run(debug=True)
