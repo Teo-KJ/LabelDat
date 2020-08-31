@@ -1,4 +1,7 @@
-from models import *
+"""
+    This folder (/models) will contain the definition for all the data access objects.
+"""
+
 from models.label import Label
 from models.organisation import Organisation
 from models.project import Project
@@ -7,8 +10,6 @@ from models.task import Task
 from models.user import User
 
 '''
-    --------------------------------------------------------------------------------------------------------------------
-    This folder will contain the definition for all the data access objects.
     --------------------------------------------------------------------------------------------------------------------
     Explanation for the relationships. For example, 
 
