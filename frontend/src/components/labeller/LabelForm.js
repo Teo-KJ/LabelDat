@@ -1,14 +1,16 @@
 import React from "react";
-import { Formik, Field, Form } from "formik";
-import { Radio } from "antd";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Radio, Alert } from "antd";
+import validate from "./validate";
 
 const LabelForm = () => {
   return (
     <div>
       <h1>Sign Up</h1>
       <Formik
+        validate={validate}
         initialValues={{
-          picked: 3,
+          picked: "",
         }}
         onSubmit={async (values) => {
           console.log(values);
@@ -45,6 +47,10 @@ const LabelForm = () => {
               >
                 Option C
               </Field>
+              <ErrorMessage
+                name="picked"
+                render={(msg) => <Alert type="error" showIcon message={msg} />}
+              />
               <div>Picked: {values.picked}</div>
             </div>
 
