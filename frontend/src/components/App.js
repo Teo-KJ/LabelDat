@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
-import LabelForm from "../components/labeller/LabelForm";
-import Dashboard from "../components/labeller/Dashboard";
+import Dashboard from "./labeller/Dashboard";
+import LabelForm from "./labeller/LabelForm";
 
 function App() {
   // Insert routes here

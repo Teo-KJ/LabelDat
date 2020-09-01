@@ -1,8 +1,11 @@
-const validate = (values) => {
-  const errors = {};
-  if (!values.picked) {
-    errors.picked = "Required";
+const validate = (values, taskIndex) => {
+  let errors = { picked: [] };
+
+  if (!values.picked[taskIndex]) {
+    errors.picked[taskIndex] = "Required";
   }
+
+  if (!errors.picked.length) errors = {};
 
   return errors;
 };
