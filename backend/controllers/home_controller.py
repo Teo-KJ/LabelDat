@@ -1,10 +1,11 @@
 from flask import Blueprint
 from extensions import db
 
-api = Blueprint("api", __name__, static_folder="static", template_folder="templates")
+home_controller = Blueprint("controllers/home_controller",
+                            __name__, static_folder="static", template_folder="templates")
 
 
-@api.route('/', methods=['GET'])
+@home_controller.route('/', methods=['GET'])
 def home():
     try:
         tables = db.engine
