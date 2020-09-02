@@ -2,25 +2,31 @@ import React, { useState } from "react";
 import { Form, Formik } from "formik";
 import validate from "./validate";
 import LabelFormTask from "./LabelFormTask";
-
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+import { Typography } from "antd";
 
 // Mock API Data
+// const apiProjectData = {
+//   layout: { type: "radio", labelData: ["Dog", "Cat"] },
+//   data: [{ taskData: "Test Image" }, { taskData: "Test Image 2" }],
+// };
 const apiProjectData = {
-  layout: { type: "radio", labelData: ["Dog", "Cat"] },
-  data: [{ taskData: "Test Image" }, { taskData: "Test Image 2" }],
+  layout: { type: "checkbox", labelData: ["Dog", "Cat", "Rabbit", "Bird"] },
+  data: [
+    { taskData: "Test Image" },
+    { taskData: "Test Image 2" },
+    { taskData: "Test Image 3" },
+  ],
 };
 
 const LabelForm = () => (
   <div>
-    <h1>Formik Multistep Wizard</h1>
+    <Typography.Title level={2}>Insert Project Name Here</Typography.Title>
+
     <Wizard
       initialValues={{
         picked: [],
       }}
-      onSubmit={async (values) =>
-        sleep(300).then(() => console.log("Top level submit", values))
-      }
+      onSubmit={(values) => console.log("Top level submit", values)}
     >
       {/* Render a particular number of tasks in the form of pages here  */}
       {apiProjectData.data.map((task, index) => (
