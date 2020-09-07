@@ -1,50 +1,76 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Formik } from "formik";
 import validate from "./validate";
 import LabelFormTask from "./LabelFormTask";
 import { Typography } from "antd";
 
 // Mock API Data
-// const apiProjectData = {
-//   layout: { type: "radio", labelData: ["Dog", "Cat"] },
-//   data: [{ taskData: "Test Image" }, { taskData: "Test Image 2" }],
-// };
-const apiProjectData = {
-  layout: { type: "checkbox", labelData: ["Dog", "Cat", "Rabbit", "Bird"] },
-  data: [
-    { taskData: "Test Image" },
-    { taskData: "Test Image 2" },
-    { taskData: "Test Image 3" },
-  ],
+const generateApiTasksData = (count) => {
+  const tasksData = {
+    layout: { type: "radio", labelData: ["Dog", "Cat"] },
+    // layout: { type: "checkbox", labelData: ["Dog", "Cat", "Rabbit", "Bird"] },
+    data: [],
+  };
+
+  for (let i = 1; i <= count; i++) {
+    tasksData.data.push({ taskId: i, taskData: `Test Data ${i}` });
+  }
+
+  return tasksData;
 };
 
-const LabelForm = () => (
-  <div>
-    <Typography.Title level={2}>Insert Project Name Here</Typography.Title>
+const LabelForm = (props) => {
+  const [tasksData, setTasksData] = useState({});
+  console.log(props);
+  useEffect(() => {
+    //TODO: Replace with GET call: /api/projects/:projectId/tasks?count=5
+    setTasksData({
+      ...generateApiTasksData(
+        new URLSearchParams(props.location.search).get("count")
+      ),
+    });
+  }, [props.location.search]);
 
-    <Wizard
-      initialValues={{
-        picked: [],
-      }}
-      onSubmit={(values) => console.log("Top level submit", values)}
-    >
-      {/* Render a particular number of tasks in the form of pages here  */}
-      {apiProjectData.data.map((task, index) => (
-        <WizardStep
-          key={index}
-          validate={(values) => validate(values, index)}
-          onSubmit={() => console.log("page submit")}
-        >
-          <LabelFormTask
-            taskIndex={index}
-            data={task.taskData}
-            layout={apiProjectData.layout}
-          />
-        </WizardStep>
-      ))}
-    </Wizard>
-  </div>
-);
+  const handleSubmit = (values) => {
+    //TODO: Replace with POST call: /api/projects/:projectId/tasks
+
+    const results = tasksData.data.map(({ taskId }, index) => ({
+      taskId,
+      picked: values.picked[index],
+    }));
+    console.log(props.match.params.projectId);
+    console.log(results);
+  };
+
+  if (!tasksData.data) return <div>Loading...</div>;
+  return (
+    <div>
+      <Typography.Title level={2}>Insert Project Name Here</Typography.Title>
+
+      <Wizard
+        initialValues={{
+          picked: [],
+        }}
+        onSubmit={handleSubmit}
+      >
+        {/* Render a particular number of tasks in the form of pages here  */}
+        {tasksData.data.map((task, index) => (
+          <WizardStep
+            key={index}
+            validate={(values) => validate(values, index)}
+            onSubmit={() => console.log("page submit")}
+          >
+            <LabelFormTask
+              taskIndex={index}
+              data={task.taskData}
+              layout={tasksData.layout}
+            />
+          </WizardStep>
+        ))}
+      </Wizard>
+    </div>
+  );
+};
 
 const Wizard = ({ children, initialValues, onSubmit }) => {
   const [stepNumber, setStepNumber] = useState(0);
