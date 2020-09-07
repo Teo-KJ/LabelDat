@@ -1,0 +1,47 @@
+$borderRadius: 5px;
+$borderColor: #D6D6D6;
+$backgroundColorSetting: #fbfbfb;
+$maxWidth: 350px;
+$iconWidth: 16.8px;
+$iconMargin: 10px;
+
+.data-type {
+  box-sizing: border-box;
+  width: 80%;
+  padding: 10px 20px;
+  border: 1px solid $borderColor;
+  border-radius: $borderRadius;
+}
+
+.setting-component {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .input-setting-row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+    input, textarea{
+      width: 100%; //will occupy the whol remaining flexbox
+      margin-left: 10px;
+      margin: 0 0 0 10px;
+      border-radius: $borderRadius !important;
+    }
+  }
+
+  .setting-sct {
+    background: $backgroundColorSetting;
+    width: 100%;
+    max-width: calc(350px + 26.8px);
+    margin: 20px auto 0px auto;
+    border: 1px solid $backgroundColorSetting;
+    border-radius: $borderRadius;
+    padding: 10px;
+  }
+}
