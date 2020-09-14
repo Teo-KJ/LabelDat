@@ -7,7 +7,10 @@ import imgTemplate from './template.jpg'
 export default function (props) {
   return(
     <div className="img-preview">
-      <img src={imgTemplate} style={props.imgStyle}></img>
+      <img 
+        src={props.img ? props.img : imgTemplate} 
+        style={props.imgProps ? (props.imgProps.style ? props.imgProps.style : {}) : {}}
+      ></img>
     </div>
   )
 }

@@ -28,7 +28,7 @@ export default function (props) {
           filterOption={(input, option) =>
             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
           }
-          value={props.value}
+          value={props.value ? props.value : null}
         >
           {props.list.map((_, i) => {
             return <Option key={i} value={_}>{_}</Option>
