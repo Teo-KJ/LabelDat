@@ -39,7 +39,6 @@ export default function (props) {
         return null;
     }
   }
-  console.log(props.sliderProps)
   return(
     <div>
       {dataTypes()}

@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 import Dashboard from "./labeller/Dashboard";
 import LabelForm from "./labeller/LabelForm";
-import TaskCreation from './TaskCreation';
+import TaskCreation from './project-owner/TaskCreation';
 
 function App() {
   // Insert routes here
