@@ -133,26 +133,63 @@ export default function (props) {
           </React.Fragment>
         )
       case "Checkbox": 
-      return (
-        <React.Fragment>
-          <div className="input-setting-row">
-            <label>Values</label>
-            <Input value={checkboxValue} onChange={(e)=>{addCheckboxValue(e.target.value)}}></Input>
-            <Button type="primary" onClick={newCheckboxValue}>Add</Button>
-          </div>
-          <div className="input-setting-row input-setting-row-sp">
-            {props.checkBoxProps ? 
-              props.checkBoxProps.values ? 
-                props.checkBoxProps.values.map(_ => <Button type="primary" danger onClick={()=>deleteCheckboxValue(_)}><DeleteOutlined/>{_}</Button>) : null
-              :
-              null
-            }
-          </div>
-        </React.Fragment>
-      )
+        return (
+          <React.Fragment>
+            <div className="input-setting-row">
+              <label>Values</label>
+              <Input value={checkboxValue} onChange={(e)=>{addCheckboxValue(e.target.value)}}></Input>
+              <Button type="primary" onClick={newCheckboxValue}>Add</Button>
+            </div>
+            <div className="input-setting-row input-setting-row-sp">
+              {props.checkBoxProps ? 
+                props.checkBoxProps.values ? 
+                  props.checkBoxProps.values.map(_ => <Button type="primary" danger onClick={()=>deleteCheckboxValue(_)}><DeleteOutlined/>{_}</Button>) : null
+                :
+                null
+              }
+            </div>
+          </React.Fragment>
+        )
+        case "Options": 
+        return (
+          <React.Fragment>
+            <div className="input-setting-row">
+              <label>Values</label>
+              <Input value={optionsValue} onChange={(e)=>{addOptionsValue(e.target.value)}}></Input>
+              <Button type="primary" onClick={newOptionsValue}>Add</Button>
+            </div>
+            <div className="input-setting-row input-setting-row-sp">
+              {props.optionsProps ? 
+                props.optionsProps.values ? 
+                  props.optionsProps.values.map(_ => <Button type="primary" danger onClick={()=>deleteCheckboxValue(_)}><DeleteOutlined/>{_}</Button>) : null
+                :
+                null
+              }
+            </div>
+          </React.Fragment>
+        )        
       default:
         return null;
     } 
+  }
+
+  const [optionsValue, addOptionsValue] = useState("")
+
+  function deleteOptionsValue (value) {
+    let newList = [...props.optionsProps.values]
+    newList = newList.filter(_ => _ !== value)
+    props.changeCheckBoxProps({ 
+      ...props.optionsProps, 
+      values: newList
+    })
+  }
+  
+  function newOptionsValue () {
+    props.changeOptionsProps({ 
+      ...props.optionsProps, 
+      values: props.optionsProps.values ? [...props.optionsProps.values, optionsValue] : [optionsValue]
+    })
+    addOptionsValue("")
   }
 
   const [checkboxValue, addCheckboxValue] = useState("")

@@ -18,16 +18,19 @@ export default function () {
   //Checkbox Input Type Styling
   const [checkBoxProps, changeCheckBoxProps] = useState({values:["default"]});
 
+  //Options Input Type Styling
+  const [optionsProps, changeOptionsProps] = useState({values:["default"]});
+
   //Data Types Selection
-  const [dataType, changeDataType] = useState("Sound");
+  const [dataType, changeDataType] = useState("");
 
   //Input Types Selection
-  const [inputType, changeInputType] = useState("Checkbox");
+  const [inputType, changeInputType] = useState("");
 
   //Description
   const [titleDesc, changeTitleDesc] = useState("Hello World!");
   const [desc, changeDesc] = useState("Please tell your labellers what to do.");
-  console.log(checkBoxProps)
+  console.log(optionsProps)
   return (
     <div className="task-creation">
       <div className="editor">
@@ -43,6 +46,8 @@ export default function () {
             changeSliderProps={changeSliderProps}
             changeCheckBoxProps={changeCheckBoxProps}
             checkBoxProps={checkBoxProps}
+            changeOptionsProps={changeOptionsProps}
+            optionsProps={optionsProps}
             desc={desc}
             changeDesc={changeDesc}
             titleDesc={titleDesc}
@@ -60,6 +65,7 @@ export default function () {
           imgProps={imgProps}
           sliderProps={sliderProps}
           checkBoxProps={checkBoxProps}
+          optionsProps={optionsProps}
           textInputStyle={textInputStyle}
         ></Preview>
       </div>
