@@ -1,0 +1,9 @@
+.slider-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .ant-slider {
+    width: 100%;
+    margin: 0 20px;
+  }
+}

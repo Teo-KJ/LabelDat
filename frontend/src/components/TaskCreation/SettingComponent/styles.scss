@@ -27,10 +27,17 @@ $iconMargin: 10px;
     flex-direction: row;
     align-items: center;
     margin-top: 10px;
-    input, textarea{
+    input, textarea, .ant {
       width: 100%; //will occupy the whol remaining flexbox
       margin-left: 10px;
-      margin: 0 0 0 10px;
+      margin: 0 10px 0 10px;
+      border-radius: $borderRadius !important;
+    }
+    .ant-select {
+      width: 100%;
+      margin-left: 10px;
+    }
+    .ant-select-selector {
       border-radius: $borderRadius !important;
     }
   }
