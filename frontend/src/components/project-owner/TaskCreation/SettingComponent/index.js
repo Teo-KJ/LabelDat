@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-import { Input, Select } from 'antd'
+import { Input, Select, Button } from 'antd'
+import { DeleteOutlined } from '@ant-design/icons'
 
 import './styles.scss'
 
@@ -131,10 +132,46 @@ export default function (props) {
             </div>
           </React.Fragment>
         )
+      case "Checkbox": 
+      return (
+        <React.Fragment>
+          <div className="input-setting-row">
+            <label>Values</label>
+            <Input value={checkboxValue} onChange={(e)=>{addCheckboxValue(e.target.value)}}></Input>
+            <Button type="primary" onClick={newCheckboxValue}>Add</Button>
+          </div>
+          <div className="input-setting-row input-setting-row-sp">
+            {props.checkBoxProps ? 
+              props.checkBoxProps.values ? 
+                props.checkBoxProps.values.map(_ => <Button type="primary" danger onClick={()=>deleteCheckboxValue(_)}><DeleteOutlined/>{_}</Button>) : null
+              :
+              null
+            }
+          </div>
+        </React.Fragment>
+      )
       default:
         return null;
-    }
-    
+    } 
+  }
+
+  const [checkboxValue, addCheckboxValue] = useState("")
+
+  function deleteCheckboxValue (value) {
+    let newList = [...props.checkBoxProps.values]
+    newList = newList.filter(_ => _ !== value)
+    props.changeCheckBoxProps({ 
+      ...props.checkBoxProps, 
+      values: newList
+    })
+  }
+  
+  function newCheckboxValue () {
+    props.changeCheckBoxProps({ 
+      ...props.checkBoxProps, 
+      values: props.checkBoxProps.values ? [...props.checkBoxProps.values, checkboxValue] : [checkboxValue]
+    })
+    addCheckboxValue("")
   }
 
   function DescriptionSetting () {
@@ -187,7 +224,7 @@ export default function (props) {
 
       <Dropdown 
         text="Select Input Type"
-        list={["Text", "Slider", "Options"]}
+        list={["Text", "Slider", "Options", "Checkbox"]}
         toggle={toggleInputTypeSetting}
         settingIsOpen={inputTypeSettingOpen}
         selectType={props.changeInputType}

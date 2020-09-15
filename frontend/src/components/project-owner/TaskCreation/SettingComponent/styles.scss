@@ -42,6 +42,15 @@ $iconMargin: 10px;
     }
   }
 
+  .input-setting-row-sp {
+    display: inline;
+    box-sizing: border-box;
+    button {
+      margin-right: 5px;
+      margin-top: 5px;
+    }
+  }
+
   .setting-sct {
     background: $backgroundColorSetting;
     width: 100%;

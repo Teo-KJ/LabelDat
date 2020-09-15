@@ -7,6 +7,7 @@ import Description from '../../Description'
 
 import TextInputType from '../../InputTypes/Text'
 import SliderInputType from '../../InputTypes/Slider'
+import CheckboxInputType from '../../InputTypes/Checkboxes'
 
 import './styles.scss'
 
@@ -35,6 +36,8 @@ export default function (props) {
         return <TextInputType placeholder={props.textInputStyle.placeholder}/>
       case 'Slider':
         return <SliderInputType sliderProps={props.sliderProps}></SliderInputType>
+      case 'Checkbox':
+        return <CheckboxInputType checkBoxProps={props.checkBoxProps}></CheckboxInputType>
       default:
         return null;
     }
