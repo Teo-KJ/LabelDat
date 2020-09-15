@@ -11,8 +11,8 @@ export default function (props) {
   const [dataTypeSettingOpen, toggleDataTypeSetting ] = useState(true)
   const [inputTypeSettingOpen, toggleInputTypeSetting ] = useState(true)
   const [descriptionSettingOpen, toggleDescriptionSetting ] = useState(false)
-  const [dataType, selectDataType] = useState("Image")
-  const [inputType, selectInputType] = useState("Text")
+  const dataType = props.dataType
+  const inputType = props.inputType
 
   // For the Data Type Setting 
   const [test, changeTest] = useState("hello");
@@ -27,16 +27,16 @@ export default function (props) {
 
   //to compute new style after setting
   useEffect(()=>{
-    newImgStyle()
+    newImgProps()
   }, [imgWidth, imgHeight, imgObjectFit])
 
-  function newImgStyle () {
+  function newImgProps () {
     let style = {
       width: `${imgWidth}px`,
       height: `${imgHeight}px`,
       objectFit: imgObjectFit
     }
-    props.changeImgStyle(style)
+    props.changeImgProps({style})
   }
 
   /* 
@@ -58,6 +58,21 @@ export default function (props) {
       placeholder: textInputPlaceholder
     }
     props.changeTextInputStyle(style)
+  }
+
+  const [maxSlider, changeMaxSlider] = useState(10);
+  const [minSlider, changeMinSlider] = useState(0);
+
+  useEffect(()=>{
+    newSliderProps()
+  }, [maxSlider, minSlider])
+
+  function newSliderProps () {
+    console.log(minSlider)
+    props.changeSliderProps({
+      min: minSlider,
+      max: maxSlider
+    })
   }
 
   /* 
@@ -99,7 +114,20 @@ export default function (props) {
           <React.Fragment>
             <div className="input-setting-row">
               <label>Placeholder</label>
-              <Input value={textInputPlaceholder} onChange={(e)=>{e.preventDefault();changeTextInputPlaceholder(e.target.value)}}></Input>
+              <Input value={textInputPlaceholder} onChange={(e)=>{changeTextInputPlaceholder(e.target.value)}}></Input>
+            </div>
+          </React.Fragment>
+        )
+      case "Slider": 
+        return (
+          <React.Fragment>
+            <div className="input-setting-row">
+              <label>Max</label>
+              <Input value={maxSlider} onChange={(e)=>{changeMaxSlider(e.target.value)}}></Input>
+            </div>
+            <div className="input-setting-row">
+              <label>Min</label>
+              <Input value={minSlider} onChange={(e)=>{changeMinSlider(e.target.value)}}></Input>
             </div>
           </React.Fragment>
         )
@@ -115,11 +143,11 @@ export default function (props) {
       <form>
         <div className="input-setting-row">
           <label>Title</label>
-          <Input placeholder="Basic usage" />
+          <Input placeholder="Insert Title" value={props.titleDesc} onChange={(e)=>props.changeTitleDesc(e.target.value)}/>
         </div>
         <div className="input-setting-row">
           <label>Description</label>
-          <TextArea rows={4} />
+          <TextArea rows={4} value={props.desc} onChange={(e)=>props.changeDesc(e.target.value)}/>
         </div>
       </form>
     )
@@ -132,7 +160,7 @@ export default function (props) {
         list={["Image", "Sound"]}
         toggle={toggleDataTypeSetting}
         settingIsOpen={dataTypeSettingOpen}
-        selectType={selectDataType}
+        selectType={props.changeDataType}
         dropdown={true}
         value={dataType}
         />
@@ -143,22 +171,7 @@ export default function (props) {
           {DataTypeSetting()}
         </div> : null
       }
-      <Dropdown 
-        text="Select Input Type"
-        list={["Text", "Slider", "Options"]}
-        toggle={toggleInputTypeSetting}
-        settingIsOpen={inputTypeSettingOpen}
-        selectType={selectInputType}
-        dropdown={true}
-        value={inputType}
-        />
-      {
-        inputTypeSettingOpen && inputType ? 
-        <div className="setting-sct setting-data">
-          <strong><p>{inputType} Setting</p></strong>
-          {InputTypeSetting()}
-        </div> : null
-      }
+
       <Dropdown
         dropdown={false}
         settingIsOpen={descriptionSettingOpen}
@@ -169,6 +182,23 @@ export default function (props) {
         <div className="setting-sct setting-data">
           <strong><p>Description Setting</p></strong>
           {DescriptionSetting()}
+        </div> : null
+      }
+
+      <Dropdown 
+        text="Select Input Type"
+        list={["Text", "Slider", "Options"]}
+        toggle={toggleInputTypeSetting}
+        settingIsOpen={inputTypeSettingOpen}
+        selectType={props.changeInputType}
+        dropdown={true}
+        value={inputType}
+        />
+      {
+        inputTypeSettingOpen && inputType ? 
+        <div className="setting-sct setting-data">
+          <strong><p>{inputType} Setting</p></strong>
+          {InputTypeSetting()}
         </div> : null
       }
     </div>
