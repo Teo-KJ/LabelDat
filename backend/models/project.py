@@ -18,3 +18,12 @@ class Project(db.Model):
 
     def __repr__(self):
         return f"<Project {self.project_id} | {self.project_name} | Organisation : {self.org_id}>"
+
+    def to_response(self):
+        return {
+            "orgId": self.org_id,
+            "projectName": self.project_name,
+            "itemDataType": self.item_data_type,
+            "layout": self.layout,
+            "outsource_labelling": self.outsource_labelling
+        }
