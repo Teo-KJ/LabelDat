@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Form, Formik } from "formik";
-import validate from "./validate";
-import LabelFormTask from "./LabelFormTask";
-import { Typography } from "antd";
+import validate from "../validate";
+import LabelFormTask from "../LabelFormTask";
+import { Typography, Button } from "antd";
+import "./styles.scss";
 
 // Mock API Data
 const generateApiTasksData = (count) => {
   const tasksData = {
-    layout: { type: "radio", labelData: ["Dog", "Cat"] },
-    // layout: { type: "checkbox", labelData: ["Dog", "Cat", "Rabbit", "Bird"] },
+    // layout: { type: "radio", labelData: ["Dog", "Cat"] },
+    layout: { type: "checkbox", labelData: ["Dog", "Cat", "Rabbit", "Bird"] },
     data: [],
   };
 
@@ -45,7 +46,9 @@ const LabelForm = (props) => {
   if (!tasksData.data) return <div>Loading...</div>;
   return (
     <div>
-      <Typography.Title level={2}>Insert Project Name Here</Typography.Title>
+      <Typography.Title level={2} className="project-title">
+        Insert Project Name Here
+      </Typography.Title>
 
       <Wizard
         initialValues={{
@@ -111,20 +114,35 @@ const Wizard = ({ children, initialValues, onSubmit }) => {
     >
       {(formik) => (
         <Form>
-          <p>
-            Step {stepNumber + 1} of {totalSteps}
-          </p>
-          {step}
-          <div style={{ display: "flex" }}>
-            {stepNumber > 0 && (
-              <button onClick={() => previous(formik.values)} type="button">
-                Back
-              </button>
-            )}
-            <div>
-              <button disabled={formik.isSubmitting} type="submit">
+          <div className="main-form-container">
+            {step}
+            <div className="button-group">
+              {stepNumber > 0 && (
+                <Button
+                  className="form-button"
+                  onClick={() => previous(formik.values)}
+                  shape="round"
+                >
+                  Back
+                </Button>
+              )}
+              <Button
+                className="form-button"
+                disabled={formik.isSubmitting}
+                type="primary"
+                htmlType="submit"
+                shape="round"
+              >
                 {isLastStep ? "Submit" : "Next"}
-              </button>
+              </Button>
+              <Button
+                type="dashed"
+                className="task-counter"
+                shape="round"
+                size="small"
+              >
+                {stepNumber + 1}/{totalSteps}
+              </Button>
             </div>
           </div>
         </Form>
