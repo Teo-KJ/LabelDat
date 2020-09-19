@@ -1,3 +1,3 @@
-id,name,created_by,organisation_id
-P478596,Vehicle Data Set,U485261,O169872
-P781023,Fake News Identifier,U743201,O104783
+id,organisation_id,project_name,item_data_type,layout,outsource_labelling
+P478596,O169872,Vehicle Data Set,Image,ZIP,1
+P781023,O104783,Fake News Identifier,Text,JSON,0
