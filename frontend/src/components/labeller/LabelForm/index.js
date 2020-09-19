@@ -8,21 +8,45 @@ import "./styles.scss";
 // Mock API Data
 const generateApiTasksData = (count) => {
   const tasksData = {
-    // layout: { type: "radio", labelData: ["Dog", "Cat"] },
-    layout: { type: "checkbox", labelData: ["Dog", "Cat", "Rabbit", "Bird"] },
-    data: [],
-  };
+    // layout: {
+    //   inputType: "radio",
+    //   dataType: "image",
+    //   description: "Label what you see",
+    //   labelData: ["Dog", "Cat"],
+    // },
+    layout: {
+      inputType: "checkbox",
+      dataType: "image",
+      description: "Label what you see in the picture",
+      labelData: ["Dog", "Cat", "Rabbit", "Bird"],
+    },
+    //Length of data array as determined by count query param
+    data: [
+      {
+        taskId: 1,
+        taskData:
+          "https://cf.ltkcdn.net/dogs/images/std/248348-676x450-standing-pomeranian-dog.jpg",
 
-  for (let i = 1; i <= count; i++) {
-    tasksData.data.push({ taskId: i, taskData: `Test Data ${i}` });
-  }
+        width: 600,
+        height: 300,
+      },
+      {
+        taskId: 2,
+        taskData:
+          "https://thehappypuppysite.com/wp-content/uploads/2018/07/white-pomeranian-long.jpg",
+
+        width: 600,
+        height: 400,
+      },
+    ],
+  };
 
   return tasksData;
 };
 
 const LabelForm = (props) => {
   const [tasksData, setTasksData] = useState({});
-  console.log(props);
+
   useEffect(() => {
     //TODO: Replace with GET call: /api/projects/:projectId/tasks?count=5
     setTasksData({
@@ -65,7 +89,7 @@ const LabelForm = (props) => {
           >
             <LabelFormTask
               taskIndex={index}
-              data={task.taskData}
+              data={task}
               layout={tasksData.layout}
             />
           </WizardStep>

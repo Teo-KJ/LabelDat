@@ -6,11 +6,14 @@ import Description from "../../project-owner/Description";
 import "./styles.scss";
 
 const LabelFormTask = ({ data, layout, taskIndex }) => {
-  switch (layout.type) {
+  switch (layout.inputType) {
     case "radio":
       return (
         <div>
-          <Image />
+          <Image
+            img={data.taskData}
+            imgProps={{ style: { width: data.width, height: data.height } }}
+          />
 
           <div className="container">
             <Description description="Label what you see in the picture" />
@@ -40,10 +43,13 @@ const LabelFormTask = ({ data, layout, taskIndex }) => {
     case "checkbox":
       return (
         <div>
-          <Image />
+          <Image
+            img={data.taskData}
+            imgProps={{ style: { width: data.width, height: data.height } }}
+          />
 
           <div className="container">
-            <Description description="Label what you see in the picture" />
+            <Description description={layout.description} />
             {layout.labelData.map((value) => (
               <React.Fragment key={value}>
                 <Field
