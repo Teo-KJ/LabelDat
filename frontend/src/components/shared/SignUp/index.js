@@ -28,12 +28,26 @@ const SignUp = () => {
             >
               <Form.Item
                 className="form-item"
-                name="userId"
+                name="username"
                 label="User ID"
                 rules={[
                   {
                     required: true,
                     message: "Please input your User ID!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                className="form-item"
+                name="name"
+                label="Name"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your name!",
                   },
                 ]}
               >
@@ -52,8 +66,8 @@ const SignUp = () => {
                 ]}
               >
                 <Select>
-                  <Option value="projectOwner">Project Owner</Option>
-                  <Option value="labeller">Labeller</Option>
+                  <Option value="PROJECT_OWNER">Project Owner</Option>
+                  <Option value="LABELLER">Labeller</Option>
                 </Select>
               </Form.Item>
 

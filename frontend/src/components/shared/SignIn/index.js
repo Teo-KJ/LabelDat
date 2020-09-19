@@ -28,7 +28,7 @@ const SignIn = () => {
             >
               <Form.Item
                 className="form-item"
-                name="userId"
+                name="username"
                 label="User ID"
                 rules={[
                   {
@@ -52,8 +52,8 @@ const SignIn = () => {
                 ]}
               >
                 <Select>
-                  <Option value="projectOwner">Project Owner</Option>
-                  <Option value="labeller">Labeller</Option>
+                  <Option value="PROJECT_OWNER">Project Owner</Option>
+                  <Option value="LABELLER">Labeller</Option>
                 </Select>
               </Form.Item>
 
