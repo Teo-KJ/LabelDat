@@ -1,5 +1,6 @@
-import csv # meant to read CSV files
+import csv  # meant to read CSV files
 import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 

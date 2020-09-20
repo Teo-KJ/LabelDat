@@ -33,3 +33,13 @@ class ProjectService:
         project_ids = [pme.project_id for pme in project_manager_entries]
         projects = Project.query.filter(Project.id.in_(project_ids)).all()
         return [pj.to_response() for pj in projects]
+
+    @staticmethod
+    def get_project_by_project_id(project_id):
+        if not project_id:
+            raise BadRequest("The project_id is absent.")
+        try:
+           requested_project = Project.query.filter(Project.id == project_id).one_or_none()
+        except MultipleResultsFound:
+            raise BadRequest("Multiple Projects with the same project_id found")
+        return requested_project.to_response()

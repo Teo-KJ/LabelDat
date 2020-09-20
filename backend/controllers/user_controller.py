@@ -1,8 +1,10 @@
-from flask import Blueprint, request, jsonify, session
+import json
+
+from flask import Blueprint, jsonify, request, session
+from werkzeug.exceptions import *
+
 from services import *
 from utilities import *
-from werkzeug.exceptions import *
-import json
 
 user_controller = Blueprint("controllers/user_controller",
                             __name__, static_folder="static", template_folder="templates")
