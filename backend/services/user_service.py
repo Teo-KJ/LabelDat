@@ -9,8 +9,8 @@ class UserService:
 
     @staticmethod
     def create_user(org_id, username, password, name, user_type):
-        if User.query.filter_by(name=username).first():
-            return False
+        if User.query.filter_by(username=username).first():
+            raise Conflict("Username already exists.")
 
         if not org_id or not Organisation.query.filter_by(id=org_id):
             new_org_name = name
