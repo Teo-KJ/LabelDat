@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
-import Dashboard from "./labeller/Dashboard";
+import Dashboard from "./project-owner/Dashboard";
 import LabelForm from "./labeller/LabelForm";
 import TaskCreation from "./project-owner/TaskCreation";
 import SignIn from "./shared/SignIn";
