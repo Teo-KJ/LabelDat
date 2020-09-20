@@ -68,3 +68,20 @@ def projects():
         response.data = GenericErrorResponse(message=err.description).to_response()
         return jsonify(response.to_dict())
 
+@user_controller.route('/project/add', methods=['POST'])
+def add_project():
+    response = RestResponse()
+    try:
+        if request.method == "POST":
+            data = request.get_json()
+            print(data)
+            current_user_id = session.get("user_id")
+            newly_created_project = ProjectService.create_project(current_user_id, data.get("orgId"), data.get("projectName"), 
+                                                                    data.get("itemDataType"), data.get("layout"), data.get("outsource_labelling"))
+            response.status_code = 200
+            response.data = newly_created_project
+        return jsonify(response.to_dict())
+    except BadRequest as err:
+        response.status_code = err.code
+        response.data = GenericErrorResponse(message=err.description).to_response()
+        return jsonify(response.to_dict())

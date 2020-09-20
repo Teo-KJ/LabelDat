@@ -21,6 +21,7 @@ class Project(db.Model):
 
     def to_response(self):
         return {
+            "id": self.id,
             "orgId": self.org_id,
             "projectName": self.project_name,
             "itemDataType": self.item_data_type,
