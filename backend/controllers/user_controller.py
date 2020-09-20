@@ -26,7 +26,6 @@ def signin():
         if request.method == "POST":
             data = request.get_json()
             current_user = UserService.signin_user(username=data.get("username"), password=data.get("password"))
-            print(current_user)
             response.status_code = 200
             response.data = current_user
             session["user_id"] = current_user["id"]
