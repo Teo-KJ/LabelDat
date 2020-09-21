@@ -1,8 +1,10 @@
-from extensions import db
-from models import *
 import uuid
+
 from flask import session
 from werkzeug.exceptions import *
+
+from extensions import db
+from models import *
 
 
 class UserService:
@@ -31,6 +33,3 @@ class UserService:
         if not found_user:
             raise Unauthorized("The login credentials are invalid.")
         return found_user.to_response()
-
-
-

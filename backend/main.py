@@ -1,6 +1,7 @@
+import secrets
+
 from flask import Flask
 from flask_cors import CORS
-import secrets
 
 import models  # Import the models directory to create schema on MySQL DB.
 from config import *  # Flask App Config

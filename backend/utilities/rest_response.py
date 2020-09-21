@@ -1,4 +1,3 @@
-
 class RestResponse:
 
     def __init__(self, status_code=None, data=None):
