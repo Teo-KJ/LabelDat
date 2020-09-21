@@ -1,27 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from "react";
 
-import './styles.scss'
+import "./styles.scss";
 
-import {Radio} from 'antd'
+import { Radio } from "antd";
 
 export default function (props) {
-
-  let values = ["default"]
+  let values = ["default"];
   if (props.optionsProps) {
     if (props.optionsProps.values) {
-      values = props.optionsProps.values
+      values = props.optionsProps.values;
     }
   }
 
-  const [value, changeValue] = useState(-1)
+  const [value, changeValue] = useState(-1);
 
-  return(
+  return (
     <div className="options-container">
-      <Radio.Group value={value} onChange={(e)=>{changeValue(e.target.value)}}>
-        {
-          values.map((_, i) => <Radio value={i}>{_}</Radio>)
-        }
+      <Radio.Group
+        value={value}
+        onChange={(e) => {
+          changeValue(e.target.value);
+        }}
+      >
+        {values.map((_, i) => (
+          <Radio value={i}>{_}</Radio>
+        ))}
       </Radio.Group>
     </div>
-  )
+  );
 }

@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React from "react";
 
-import './styles.scss'
+import "./styles.scss";
 
-import soundTemplate from './template.mp3'
+import soundTemplate from "./template.mp3";
 
 export default function (props) {
-  return(
+  return (
     <div className="audio-preview">
       <audio
         controls="disabled"
-        src={ props.sound ? props.sound : soundTemplate }
-        >
-      </audio>
+        src={props.sound ? props.sound : soundTemplate}
+      ></audio>
     </div>
-  )
+  );
 }

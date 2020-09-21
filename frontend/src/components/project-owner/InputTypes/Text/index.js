@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from "react";
 
-import { Input } from 'antd';
+import { Input } from "antd";
 
-import './styles.scss'
+import "./styles.scss";
 
 export default function (props) {
-  return(
-    <Input placeholder={props.placeholder} />
-  )
+  return <Input placeholder={props.placeholder} />;
 }

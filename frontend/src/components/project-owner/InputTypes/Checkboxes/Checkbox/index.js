@@ -1,24 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from "react";
 
-import { Checkbox } from 'antd';
+import { Checkbox } from "antd";
 
-import './styles.scss'
+import "./styles.scss";
 
 export default function (props) {
-
-  let text = "default value"
-  const [checked, toggleCheck] = useState(false)
+  let text = "default value";
+  const [checked, toggleCheck] = useState(false);
 
   if (props.checkBoxProps) {
-    text = props.checkBoxProps.text ? props.checkBoxProps.text : "default value"
+    text = props.checkBoxProps.text
+      ? props.checkBoxProps.text
+      : "default value";
   }
 
-  function onChange (e) {
-    toggleCheck(!checked)
-    props.checkChange(text)
+  function onChange(e) {
+    toggleCheck(!checked);
+    props.checkChange(text);
   }
 
-  return(
-    <Checkbox onChange={(e)=>onChange(e)}>{text}</Checkbox>
-  )
+  return <Checkbox onChange={(e) => onChange(e)}>{text}</Checkbox>;
 }

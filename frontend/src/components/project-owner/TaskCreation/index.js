@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import './styles.scss'
+import React, { useState } from "react";
+import "./styles.scss";
 
-import SettingComponent from './SettingComponent'
-import Preview from './Preview'
+import SettingComponent from "./SettingComponent";
+import Preview from "./Preview";
 
 export default function () {
-
   //Image Data Type Styling
   const [imgProps, changeImgProps] = useState({});
 
@@ -16,10 +15,12 @@ export default function () {
   const [sliderProps, changeSliderProps] = useState({});
 
   //Checkbox Input Type Styling
-  const [checkBoxProps, changeCheckBoxProps] = useState({values:["default"]});
+  const [checkBoxProps, changeCheckBoxProps] = useState({
+    values: ["default"],
+  });
 
   //Options Input Type Styling
-  const [optionsProps, changeOptionsProps] = useState({values:["default"]});
+  const [optionsProps, changeOptionsProps] = useState({ values: ["default"] });
 
   //Data Types Selection
   const [dataType, changeDataType] = useState("");
@@ -30,7 +31,7 @@ export default function () {
   //Description
   const [titleDesc, changeTitleDesc] = useState("Hello World!");
   const [desc, changeDesc] = useState("Please tell your labellers what to do.");
-  console.log(optionsProps)
+  console.log(optionsProps);
   return (
     <div className="task-creation">
       <div className="editor">
@@ -70,5 +71,5 @@ export default function () {
         ></Preview>
       </div>
     </div>
-  )
+  );
 }

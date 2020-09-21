@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React from "react";
 
-import './styles.scss'
+import "./styles.scss";
 
-import imgTemplate from './template.jpg'
+import imgTemplate from "./template.jpg";
 
 export default function (props) {
-  return(
+  return (
     <div className="img-preview">
-      <img 
-        src={props.img ? props.img : imgTemplate} 
-        style={props.imgProps ? (props.imgProps.style ? props.imgProps.style : {}) : {}}
+      <img
+        alt=""
+        src={props.img ? props.img : imgTemplate}
+        style={
+          props.imgProps
+            ? props.imgProps.style
+              ? props.imgProps.style
+              : {}
+            : {}
+        }
       ></img>
     </div>
-  )
+  );
 }

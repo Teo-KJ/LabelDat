@@ -46,7 +46,6 @@ const columns = [
   {
     title: "Project Name",
     dataIndex: "projectName",
-    key: "projectName",
     render: (text, record) => {
       return <Link to={`/projects/${record.projectId}`}>{text}</Link>;
     },
@@ -54,17 +53,15 @@ const columns = [
   {
     title: "Date Created",
     dataIndex: "dateCreated",
-    key: "dateCreated",
   },
   {
     title: "Total Number of Tasks",
     dataIndex: "tasksCount",
-    key: "tasksCount",
   },
   {
     title: "Percentage of Tasks Labelled",
     dataIndex: "percentageLabelled",
-    key: "percentageLabelled",
+
     render: (text) => <Fragment>{text}%</Fragment>,
   },
 ];
@@ -108,7 +105,7 @@ const Dashboard = () => {
       >
         <Table
           columns={columns}
-          dataSource={data}
+          dataSource={data.map((row, index) => ({ ...row, key: index }))}
           size="small"
           pagination={{ hideOnSinglePage: true }}
         />

@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from "react";
 
-import './styles.scss'
+import "./styles.scss";
 
 export default function (props) {
-  return(
+  return (
     <div className="description">
-      <h2><strong>{props.title}</strong></h2>
+      <h2>
+        <strong>{props.title}</strong>
+      </h2>
       <p>{props.description}</p>
     </div>
-  )
+  );
 }
