@@ -1,4 +1,5 @@
 from flask import Blueprint
+
 from extensions import db
 
 home_controller = Blueprint("controllers/home_controller",

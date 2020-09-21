@@ -1,6 +1,6 @@
-import enum
+from enum import IntEnum
 
 
-class UserType(enum.Enum):
+class UserType(IntEnum):
     PROJECT_OWNER = 2
     LABELLER = 1

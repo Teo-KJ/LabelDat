@@ -1,16 +1,18 @@
-from extensions import db
-from models import *
 import uuid
+
 from flask import session
 from werkzeug.exceptions import *
+
+from extensions import db
+from models import *
 
 
 class UserService:
 
     @staticmethod
     def create_user(org_id, username, password, name, user_type):
-        if User.query.filter_by(name=username).first():
-            return False
+        if User.query.filter_by(username=username).first():
+            raise Conflict("Username already exists.")
 
         if not org_id or not Organisation.query.filter_by(id=org_id):
             new_org_name = name
@@ -31,6 +33,3 @@ class UserService:
         if not found_user:
             raise Unauthorized("The login credentials are invalid.")
         return found_user.to_response()
-
-
-

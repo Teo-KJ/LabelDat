@@ -1,8 +1,10 @@
-from flask import Blueprint, request, jsonify, session
+import json
+
+from flask import Blueprint, jsonify, request, session
+from werkzeug.exceptions import *
+
 from services import *
 from utilities import *
-from werkzeug.exceptions import *
-import json
 
 user_controller = Blueprint("controllers/user_controller",
                             __name__, static_folder="static", template_folder="templates")
@@ -26,7 +28,6 @@ def signin():
         if request.method == "POST":
             data = request.get_json()
             current_user = UserService.signin_user(username=data.get("username"), password=data.get("password"))
-            print(current_user)
             response.status_code = 200
             response.data = current_user
             session["user_id"] = current_user["id"]
@@ -69,3 +70,20 @@ def projects():
         response.data = GenericErrorResponse(message=err.description).to_response()
         return jsonify(response.to_dict())
 
+@user_controller.route('/project/add', methods=['POST'])
+def add_project():
+    response = RestResponse()
+    try:
+        if request.method == "POST":
+            data = request.get_json()
+            print(data)
+            current_user_id = session.get("user_id")
+            newly_created_project = ProjectService.create_project(current_user_id, data.get("orgId"), data.get("projectName"), 
+                                                                    data.get("itemDataType"), data.get("layout"), data.get("outsource_labelling"))
+            response.status_code = 200
+            response.data = newly_created_project
+        return jsonify(response.to_dict())
+    except BadRequest as err:
+        response.status_code = err.code
+        response.data = GenericErrorResponse(message=err.description).to_response()
+        return jsonify(response.to_dict())

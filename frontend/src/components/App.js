@@ -6,6 +6,7 @@ import TaskCreation from "./project-owner/TaskCreation";
 import MainDashboard from "./project-owner/MainDashboard";
 import SignIn from "./shared/SignIn";
 import SignUp from "./shared/SignUp";
+import UploadFiles from "./project-owner/UploadFiles";
 
 function App() {
   // Insert routes here
@@ -16,6 +17,9 @@ function App() {
       <Route exact component={SignUp} path="/signup" />
       <Route exact component={SignIn} path="/signin" />
       <Route exact component={TaskCreation} path="/taskcreation" />
+      <Route exact path="/uploadfiles">
+        <UploadFiles dataType={"image"}></UploadFiles>
+      </Route>
       <Route exact component={LabelForm} path="/projects/:projectId/tasks" />
     </BrowserRouter>
   );
