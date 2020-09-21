@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography, Divider, Row, Col, Card } from "antd";
-import { HomeOutlined } from "@ant-design/icons";
+
 import { Chart, Interval } from "bizcharts";
 import "./styles.scss";
 
@@ -26,26 +26,24 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <Divider orientation="left">
-        <Typography.Title>
-          Dashboard <HomeOutlined />
-        </Typography.Title>
+        <Typography.Title>Insert Project Name Here</Typography.Title>
       </Divider>
       <Row gutter={96}>
-        <Col className="gutter-row" span={8} className="item">
+        <Col className="gutter-row" span={8} className="chart">
           <Card title="Chart Title" bordered={false}>
             <Chart height={320} autoFit data={data}>
               <Interval position="genre*sold" />
             </Chart>
           </Card>
         </Col>
-        <Col className="gutter-row" span={8} className="item">
+        <Col className="gutter-row" span={8} className="chart">
           <Card title="Chart Title" bordered={false}>
             <Chart height={320} autoFit data={data}>
               <Interval position="genre*sold" />
             </Chart>
           </Card>
         </Col>
-        <Col className="gutter-row" span={8} className="item">
+        <Col className="gutter-row" span={8} className="chart">
           <Card title="Chart Title" bordered={false}>
             <Chart height={320} autoFit data={data}>
               <Interval position="genre*sold" />
@@ -55,14 +53,14 @@ const Dashboard = () => {
       </Row>
 
       <Row gutter={96}>
-        <Col className="gutter-row" span={12} className="item">
+        <Col className="gutter-row" span={12} className="chart">
           <Card title="Chart Title" bordered={false}>
             <Chart height={320} autoFit data={data}>
               <Interval position="genre*sold" />
             </Chart>
           </Card>
         </Col>
-        <Col className="gutter-row" span={12} className="item">
+        <Col className="gutter-row" span={12} className="chart">
           <Card title="Chart Title" bordered={false}>
             <Chart height={320} autoFit data={data}>
               <Interval position="genre*sold" />
