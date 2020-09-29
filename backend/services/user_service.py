@@ -28,6 +28,13 @@ class UserService:
         return new_user.to_response()
 
     @staticmethod
+    def get_user_by_id(id):
+        found_user = User.query.filter_by(id=id).first()
+        if not found_user:
+            raise BadRequest("There is no valid current user.")
+        return found_user.to_response()
+
+    @staticmethod
     def signin_user(username, password):
         found_user = User.query.filter_by(username=username, password=password).first()
         if not found_user:
