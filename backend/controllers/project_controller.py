@@ -9,6 +9,17 @@ project_controller = Blueprint("controllers/project_controller",
 SESSION_USER_ID_KEY = "user_id"
 
 
+@project_controller.before_request
+def require_login():
+    endpoint = request.endpoint.split(".")[-1]
+    allowed_routes = []
+    if endpoint not in allowed_routes and "user_id" not in session:
+        response = RestResponse()
+        response.status_code = 401
+        response.data = GenericErrorResponse(message="Authentication is required.").to_response()
+        jsonify(response.to_dict())
+
+
 @project_controller.route('/', methods=['GET'])
 def get_projects():
     response = RestResponse()
@@ -45,11 +56,10 @@ def add_project():
     response = RestResponse()
     try:
         if request.method == "POST":
+            print(f"The request data is: {request.data}")
             data = request.get_json()
-            print(data)
             current_user_id = session.get(SESSION_USER_ID_KEY)
-            newly_created_project = ProjectService.create_project(current_user_id, data.get("orgId"),
-                                                                  data.get("projectName"),
+            newly_created_project = ProjectService.create_project(current_user_id, data.get("projectName"),
                                                                   data.get("itemDataType"), data.get("layout"),
                                                                   data.get("outsourceLabelling"))
             response.status_code = 200
@@ -61,7 +71,7 @@ def add_project():
         return jsonify(response.to_dict())
 
 
-@project_controller.route('/<project_id>/add/upload', methods=['POST'])
+@project_controller.route('/<project_id>/tasks/add/upload', methods=['POST'])
 def add_project_task(project_id):
     response = RestResponse()
     try:
@@ -81,7 +91,7 @@ def add_project_task(project_id):
 def get_user_contribution():
     response = RestResponse()
     try:
-        if request.method == "POST":
+        if request.method == "GET":
             current_user_id = session.get(SESSION_USER_ID_KEY)
             projects_contributed_to = ProjectService.get_projects_contributed_to_by_user_id(current_user_id)
             response.status_code = 200
@@ -118,7 +128,7 @@ def save_task_label_response():
         if request.method == "POST":
             data = request.get_json()
             current_user_id = session.get(SESSION_USER_ID_KEY)
-            unlabelled_tasks = LabelService.create_label(current_user_id, data.get("tasks"))
+            unlabelled_tasks = LabelService.create_label(current_user_id, data)
             response.status_code = 200
             response.data = unlabelled_tasks
         return jsonify(response.to_dict())

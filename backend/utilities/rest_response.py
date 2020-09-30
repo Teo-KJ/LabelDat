@@ -5,6 +5,6 @@ class RestResponse:
         self.data = data
 
     def to_dict(self):
-        data = dict(self.data or ())
+        data = self.data if self.data else dict()
         rv = {'status_code': self.status_code, 'data': data}
         return rv

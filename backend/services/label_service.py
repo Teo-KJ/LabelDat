@@ -3,6 +3,7 @@ import uuid
 from extensions import db
 from werkzeug.exceptions import *
 from models import *
+from datetime import datetime
 
 
 class LabelService:
@@ -18,9 +19,9 @@ class LabelService:
         saved_labels = []
         for label in labels:
             task_id = label.get("taskId")
-            label_data = label.get("labelData")
-            new_label = Label(str(uuid.uuid4()), task_id, user_id, label_data)
-            saved_new_label = db.session.add(new_label)
-            saved_labels.append(saved_new_label)
+            label_data = label.get("data")
+            new_label = Label(task_id=task_id, user_id=user_id, label_data=label_data, created_at=datetime.now())
+            db.session.add(new_label)
+            saved_labels.append(new_label)
         db.session.commit()
         return [saved_label.to_response() for saved_label in saved_labels]

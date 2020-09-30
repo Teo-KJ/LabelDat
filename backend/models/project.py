@@ -10,6 +10,7 @@ class Project(db.Model):
     item_data_type = db.Column(db.Enum(ItemDataType), nullable=False)
     layout = db.Column(db.JSON, nullable=False)
     outsource_labelling = db.Column(db.Boolean, nullable=False)
+    created_at = db.Column(db.DateTime(), nullable=False)
 
     # parent 1-to-many w Task
     tasks = db.relationship('Task', backref='task', lazy=True)
@@ -17,18 +18,19 @@ class Project(db.Model):
     project_managers = db.relationship('ProjectManager', backref='project', lazy=True)
 
     def __repr__(self):
-        return f"<Project {self.project_id} | {self.project_name} | Organisation : {self.org_id}>"
+        return f"<Project {self.id} | {self.project_name} | Organisation : {self.org_id}>"
 
     def to_response(self):
         return {
             "id": self.id,
             "orgId": self.org_id,
             "projectName": self.project_name,
-            "itemDataType": self.item_data_type,
+            "itemDataType": self.item_data_type.name,
             "layout": self.layout,
             "outsourceLabelling": self.outsource_labelling,
-            "tasks": self.tasks,
-            "projectManagers": self.project_managers
+            "created_at": self.created_at,
+            "tasks": [t.to_response() for t in self.tasks],
+            "projectManagers": [pm.to_response() for pm in self.project_managers]
         }
 
     def to_dashboard_response(self):
@@ -36,11 +38,11 @@ class Project(db.Model):
             "id": self.id,
             "orgId": self.org_id,
             "projectName": self.project_name,
-            "itemDataType": self.item_data_type,
+            "itemDataType": self.item_data_type.name,
             "layout": self.layout,
             "outsourceLabelling": self.outsource_labelling,
-            "tasks": self.tasks,
-            "projectManagers": self.project_managers,
+            "tasks": [t.to_response() for t in self.tasks],
+            "projectManagers": [pm.to_response() for pm in self.project_managers],
             "tasksCount": self.calculate_number_of_tasks(),
             "percentageLabelled": self.calculate_percentage_labelled()
         }
@@ -60,5 +62,5 @@ class Project(db.Model):
         #             group by task_id
         #         '''
         # num_labelled = len(db.session.execute(percentage_labelled_query))
-        num_labelled = len([task for task in self.tasks if len(task.labels) == 0])
+        num_labelled = len([task for task in self.tasks if len(task.labels) > 0])
         return (num_labelled // self.calculate_number_of_tasks()) * 100

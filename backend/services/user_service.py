@@ -1,6 +1,7 @@
 import uuid
 
 from flask import session
+from datetime import datetime
 from werkzeug.exceptions import *
 
 from extensions import db
@@ -16,13 +17,14 @@ class UserService:
 
         if not org_id or not Organisation.query.filter_by(id=org_id):
             new_org_name = name
-            new_org = Organisation(id=str(uuid.uuid4()), name=new_org_name, is_enterprise=False)
+            new_org = Organisation(id=str(uuid.uuid4()), name=new_org_name, is_enterprise=False,
+                                   created_at=datetime.now())
             db.session.add(new_org)
             org_id = new_org.id
 
         user_type = user_type.upper()
         new_user = User(id=str(uuid.uuid4()), org_id=org_id, username=username,
-                        password=password, name=name, user_type=user_type)
+                        password=password, name=name, user_type=user_type, created_at=datetime.now())
         db.session.add(new_user)
         db.session.commit()
         return new_user.to_response()

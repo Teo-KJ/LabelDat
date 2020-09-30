@@ -1,9 +1,9 @@
 import base64
 import uuid
-
 from extensions import db
 from werkzeug.exceptions import *
 from models import *
+from datetime import datetime
 
 
 class TaskService:
@@ -19,7 +19,10 @@ class TaskService:
 
         filename, item_data = file.filename, file
         encoded_item_data = base64.b64encode(item_data.read())
-        new_task = Task(str(uuid.uuid4()), project_id, filename, encoded_item_data)
-        saved_new_task = db.session.add(new_task)
+        new_task = Task(id=str(uuid.uuid4()), project_id=project_id, filename=filename, item_data=encoded_item_data,
+                        created_at=datetime.now())
+
+        db.session.add(new_task)
         db.session.commit()
-        return saved_new_task.to_response()
+        print(f"TaskService :: A new task is added: {new_task}")
+        return new_task.to_response()
