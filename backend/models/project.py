@@ -32,9 +32,6 @@ class Project(db.Model):
         }
 
     def to_dashboard_response(self):
-        number_of_tasks = self.calculate_number_of_tasks()
-        percentage_labelled = self.calculate_percentage_labelled()
-
         return {
             "id": self.id,
             "orgId": self.org_id,
@@ -43,24 +40,25 @@ class Project(db.Model):
             "layout": self.layout,
             "outsourceLabelling": self.outsource_labelling,
             "tasks": self.tasks,
-            "projectManagers": self.project_managers
+            "projectManagers": self.project_managers,
+            "tasksCount": self.calculate_number_of_tasks(),
+            "percentageLabelled": self.calculate_percentage_labelled()
         }
 
     def calculate_number_of_tasks(self):
-        tasks_query = f'''
-                    SELECT COUNT(*) as task_count
-                    FROM task t
-                    where t.project_id = {self.id}
-                '''
-        return db.session.execute(tasks_query).first().task_count
+        return len(self.tasks)
 
     def calculate_percentage_labelled(self):
-        percentage_labelled_query = f'''
-                    SELECT task_id, COUNT(task_id) FROM project p 
-                    inner join task t on p.id = t.project_id
-                    inner join label l on t.id = l.task_id
-                    where p.id = {self.id}
-                    group by task_id
-                '''
-        num_labelled = len(db.session.execute(percentage_labelled_query))
+        """
+            Count number of tasks that DO NOT have labels
+        """
+        # percentage_labelled_query = f'''
+        #             SELECT task_id, COUNT(task_id) FROM project p
+        #             inner join task t on p.id = t.project_id
+        #             inner join label l on t.id = l.task_id
+        #             where p.id = {self.id}
+        #             group by task_id
+        #         '''
+        # num_labelled = len(db.session.execute(percentage_labelled_query))
+        num_labelled = len([task for task in self.tasks if len(task.labels) == 0])
         return (num_labelled // self.calculate_number_of_tasks()) * 100

@@ -18,7 +18,6 @@ class TaskService:
             raise BadRequest("There is no file data.")
 
         filename, item_data = file.filename, file
-        # To add the limits for number of labels for user and a specific task?
         encoded_item_data = base64.b64encode(item_data.read())
         new_task = Task(str(uuid.uuid4()), project_id, filename, encoded_item_data)
         saved_new_task = db.session.add(new_task)

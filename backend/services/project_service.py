@@ -13,11 +13,11 @@ class ProjectService:
     def create_project(user_id, org_id, project_name, item_data_type, layout, outsource_labelling):
         if Project.query.filter_by(org_id=org_id, project_name=project_name, item_data_type=item_data_type).first():
             raise Conflict("Project already exists.")
-        
+
         new_project = None
         if org_id and Organisation.query.filter_by(id=org_id):
-            new_project = Project(id=str(uuid.uuid4()), org_id=org_id, project_name=project_name, 
-                                    item_data_type=item_data_type, layout=layout, outsource_labelling=outsource_labelling)
+            new_project = Project(id=str(uuid.uuid4()), org_id=org_id, project_name=project_name,
+                                  item_data_type=item_data_type, layout=layout, outsource_labelling=outsource_labelling)
             new_project_manager = ProjectManager(project_id=new_project.id, user_id=user_id)
             new_project.project_managers.append(new_project_manager)
             db.session.add(new_project)
@@ -46,14 +46,17 @@ class ProjectService:
 
     @staticmethod
     def get_projects_contributed_to_by_user_id(user_id):
+        """
+            Get all projects the user has contributed to, i.e. has labelled files of the projects
+        """
         if not user_id:
             raise BadRequest("The project_id is absent.")
         query = f'''
             SELECT p.id, p.org_id, p.project_name, p.item_data_type, p.layout, p.outsource_labelling 
             FROM user u
-            join label l on u.id = l.user_id
-            join task t on l.task_id = t.id
-            join project p on t.project_id = p.id
+            inner join label l on u.id = l.user_id
+            inner join task t on l.task_id = t.id
+            inner join project p on t.project_id = p.id
             where u.id = {user_id};
         '''
         projects = db.session.execute(query)
@@ -61,6 +64,10 @@ class ProjectService:
 
     @staticmethod
     def get_tasks_unlabelled_by_user_from_project(project_id, user_id, tasks_count):
+        """
+            For a labeller, receive the number of tasks (THAT ARE NOT YET LABELLED FOR THIS PARTICULAR USER)
+            for a particular project as specified by tasks_count query parameter.
+        """
         if not user_id:
             raise BadRequest("The user id is missing")
         if not project_id:

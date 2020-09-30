@@ -1,5 +1,3 @@
-import json
-
 from flask import Blueprint, jsonify, request, session
 from werkzeug.exceptions import *
 
@@ -12,7 +10,7 @@ SESSION_USER_ID_KEY = "user_id"
 
 
 @project_controller.route('/', methods=['GET'])
-def projects():
+def get_projects():
     response = RestResponse()
     try:
         if request.method == "GET":
@@ -28,7 +26,7 @@ def projects():
 
 
 @project_controller.route('/<project_id>', methods=['GET'])
-def projects(project_id):
+def get_project(project_id):
     response = RestResponse()
     try:
         if request.method == "GET":
@@ -53,7 +51,7 @@ def add_project():
             newly_created_project = ProjectService.create_project(current_user_id, data.get("orgId"),
                                                                   data.get("projectName"),
                                                                   data.get("itemDataType"), data.get("layout"),
-                                                                  data.get("outsource_labelling"))
+                                                                  data.get("outsourceLabelling"))
             response.status_code = 200
             response.data = newly_created_project
         return jsonify(response.to_dict())
@@ -95,15 +93,15 @@ def get_user_contribution():
         return jsonify(response.to_dict())
 
 
-# /projects/:projectId/tasks?count=COUNT_NO_HERE
-@project_controller.route('/projects/<project_id>/tasks', methods=['GET'])
+@project_controller.route('/<project_id>/tasks', methods=['GET'])
 def get_project_tasks_unlabelled(project_id):
     response = RestResponse()
     try:
         if request.method == "GET":
             current_user_id = session.get(SESSION_USER_ID_KEY)
             tasks_count = request.args.get('count')
-            unlabelled_tasks = ProjectService.get_tasks_unlabelled_by_user_from_project(project_id, current_user_id, tasks_count)
+            unlabelled_tasks = ProjectService.get_tasks_unlabelled_by_user_from_project(project_id, current_user_id,
+                                                                                        tasks_count)
             response.status_code = 200
             response.data = unlabelled_tasks
         return jsonify(response.to_dict())
@@ -113,31 +111,14 @@ def get_project_tasks_unlabelled(project_id):
         return jsonify(response.to_dict())
 
 
-@project_controller.route('/projects/tasks', methods=['POST'])
+@project_controller.route('/tasks', methods=['POST'])
 def save_task_label_response():
     response = RestResponse()
     try:
         if request.method == "POST":
             data = request.get_json()
             current_user_id = session.get(SESSION_USER_ID_KEY)
-            unlabelled_tasks = LabelService.create_label(current_user_id, data.get("taskId"), data.get("labelData"))
-            response.status_code = 200
-            response.data = unlabelled_tasks
-        return jsonify(response.to_dict())
-    except BadRequest as err:
-        response.status_code = err.code
-        response.data = GenericErrorResponse(message=err.description).to_response()
-        return jsonify(response.to_dict())
-
-
-@project_controller.route('/projects/tasks', methods=['POST'])
-def save_task_label_response():
-    response = RestResponse()
-    try:
-        if request.method == "POST":
-            data = request.get_json()
-            current_user_id = session.get(SESSION_USER_ID_KEY)
-            unlabelled_tasks = LabelService.create_label(current_user_id, data.get("taskId"), data.get("labelData"))
+            unlabelled_tasks = LabelService.create_label(current_user_id, data.get("tasks"))
             response.status_code = 200
             response.data = unlabelled_tasks
         return jsonify(response.to_dict())
