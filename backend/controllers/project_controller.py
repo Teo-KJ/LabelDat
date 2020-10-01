@@ -110,8 +110,26 @@ def get_project_tasks_unlabelled(project_id):
         if request.method == "GET":
             current_user_id = session.get(SESSION_USER_ID_KEY)
             tasks_count = request.args.get('count')
-            unlabelled_tasks = ProjectService.get_tasks_unlabelled_by_user_from_project(project_id, current_user_id,
-                                                                                        tasks_count)
+            unlabelled_tasks = ProjectService.get_tasks_by_user_from_project(project_id, current_user_id,
+                                                                                        tasks_count, True)
+            response.status_code = 200
+            response.data = unlabelled_tasks
+        return jsonify(response.to_dict())
+    except BadRequest as err:
+        response.status_code = err.code
+        response.data = GenericErrorResponse(message=err.description).to_response()
+        return jsonify(response.to_dict())
+
+
+@project_controller.route('/<project_id>/tasks/labelled', methods=['GET'])
+def get_project_tasks_labelled(project_id):
+    response = RestResponse()
+    try:
+        if request.method == "GET":
+            current_user_id = session.get(SESSION_USER_ID_KEY)
+            tasks_count = request.args.get('count')
+            unlabelled_tasks = ProjectService.get_tasks_by_user_from_project(project_id, current_user_id,
+                                                                                        tasks_count, False)
             response.status_code = 200
             response.data = unlabelled_tasks
         return jsonify(response.to_dict())

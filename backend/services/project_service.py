@@ -82,7 +82,7 @@ class ProjectService:
         return [p.to_response() for p in projects]
 
     @staticmethod
-    def get_tasks_unlabelled_by_user_from_project(project_id, user_id, tasks_count):
+    def get_tasks_by_user_from_project(project_id, user_id, tasks_count, labelled):
         """
             For a labeller, receive the number of tasks (THAT ARE NOT YET LABELLED FOR THIS PARTICULAR USER)
             for a particular project as specified by tasks_count query parameter.
@@ -93,13 +93,23 @@ class ProjectService:
             raise BadRequest("The project id is missing")
         if not tasks_count:
             raise BadRequest("The tasks count is missing")
+        if labelled is None:
+            raise BadRequest("Unknown whether tasks requested are labelled or unlabelled.")
 
-        query = f'''
-            SELECT t.id, t.project_id, t.filename, t.item_data, t.created_at FROM task t
-            INNER JOIN project p ON t.project_id = p.id
-            WHERE p.id = '{project_id}' and (t.id, '{user_id}') NOT IN (SELECT l.task_id, l.user_id FROM label l)
-            ORDER BY t.created_at DESC;
-        '''
+        if labelled:
+            query = f'''
+                SELECT t.id, t.project_id, t.filename, t.item_data, t.created_at FROM task t
+                INNER JOIN project p ON t.project_id = p.id
+                WHERE p.id = '{project_id}' and (t.id, '{user_id}') IN (SELECT l.task_id, l.user_id FROM label l)
+                ORDER BY t.created_at DESC;
+            '''
+        else:
+            query = f'''
+                SELECT t.id, t.project_id, t.filename, t.item_data, t.created_at FROM task t
+                INNER JOIN project p ON t.project_id = p.id
+                WHERE p.id = '{project_id}' and (t.id, '{user_id}') NOT IN (SELECT l.task_id, l.user_id FROM label l)
+                ORDER BY t.created_at DESC;
+            '''
         tasks = db.session.execute(query)   # .paginate(per_page=tasks_count)
         task_dicts = [dict(task) for task in tasks]
         tasks = [Task(id=d['id'], project_id=d['project_id'], filename=d['filename'], item_data=d['item_data'],
