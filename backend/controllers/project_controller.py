@@ -99,9 +99,9 @@ def get_project_tasks_unlabelled(project_id):
         if request.method == "GET":
             current_user_id = session.get(SESSION_USER_ID_KEY)
             tasks_count = request.args.get('count')
-            unlabelled_tasks = ProjectService.get_tasks_by_user_from_project(project_id, current_user_id,
-                                                                                        tasks_count, True)
-            response.data = unlabelled_tasks
+            unlabelled_tasks_and_layout = ProjectService.get_tasks_by_user_from_project(project_id, current_user_id,
+                                                                                        tasks_count, False)
+            response = unlabelled_tasks_and_layout
         return jsonify(response.to_dict()), 200
     except BadRequest as err:
         response.data = GenericErrorResponse(message=err.description).to_response()
@@ -115,9 +115,9 @@ def get_project_tasks_labelled(project_id):
         if request.method == "GET":
             current_user_id = session.get(SESSION_USER_ID_KEY)
             tasks_count = request.args.get('count')
-            unlabelled_tasks = ProjectService.get_tasks_by_user_from_project(project_id, current_user_id,
-                                                                                        tasks_count, False)
-            response.data = unlabelled_tasks
+            labelled_tasks_and_layout = ProjectService.get_tasks_by_user_from_project(project_id, current_user_id,
+                                                                                      tasks_count, True)
+            response = labelled_tasks_and_layout
         return jsonify(response.to_dict()), 200
     except BadRequest as err:
         response.data = GenericErrorResponse(message=err.description).to_response()

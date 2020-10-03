@@ -4,6 +4,7 @@ from sqlalchemy.orm.exc import MultipleResultsFound
 from werkzeug.exceptions import BadRequest, Conflict
 from extensions import db
 from models import *
+from utilities import *
 
 
 class ProjectService:
@@ -114,5 +115,8 @@ class ProjectService:
         task_dicts = [dict(task) for task in tasks]
         tasks = [Task(id=d['id'], project_id=d['project_id'], filename=d['filename'], item_data=d['item_data'],
                       created_at=d['created_at']) for d in task_dicts]
+        task_responses = [t.to_response() for t in tasks]
+        layout = Project.query.filter_by(id=project_id).first().layout
+
         print(f"ProjectService :: get_tasks_unlabelled_by_user_from_project :: The tasks retrieved are: {tasks}")
-        return [t.to_response() for t in tasks]
+        return TasksAndLayoutResponse(layout, task_responses)
