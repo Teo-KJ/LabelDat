@@ -1,4 +1,6 @@
 import React, { Fragment } from "react";
+import history from "../../../history";
+import axios from "axios";
 import "../styles.scss";
 import { Form, Input, Select, Row, Col, Card, Button } from "antd";
 
@@ -7,10 +9,11 @@ const { Option } = Select;
 const SignUp = () => {
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
-    //TODO: POST to route /signup
-    //TODO: Redirect to another page
-    console.log("Received values of form: ", values);
+  const onFinish = async (values) => {
+    console.log(values);
+    const res = await axios.post("/api/users/signup", values);
+
+    if (res.status === 200) history.push("/signin");
   };
 
   return (

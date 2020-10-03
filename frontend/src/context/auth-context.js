@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import axios from "axios";
+import history from "../history";
 
 export const AuthContext = React.createContext({
   user: null,
@@ -12,12 +13,19 @@ const AuthContextProvider = (props) => {
 
   const signInHandler = async (values) => {
     const res = await axios.post("/api/users/signin", values);
-    if (res.status === 200) setUser(res.data.data);
+    if (res.status === 200) {
+      setUser(res.data.data);
+      history.push("/");
+    }
   };
 
   const fetchUserHandler = useCallback(async () => {
-    const res = await axios.get("/api/users/current-user");
-    setUser(res.data.data);
+    try {
+      const res = await axios.get("/api/users/current-user");
+      if (res.status === 200) setUser(res.data.data);
+    } catch (err) {
+      if (err.response.status === 401) setUser({});
+    }
   }, []);
 
   return (
