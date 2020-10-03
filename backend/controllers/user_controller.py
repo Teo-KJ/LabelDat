@@ -1,5 +1,3 @@
-import json
-
 from flask import Blueprint, jsonify, request, session
 from werkzeug.exceptions import *
 

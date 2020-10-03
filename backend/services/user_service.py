@@ -22,10 +22,11 @@ class UserService:
             db.session.add(new_org)
             org_id = new_org.id
 
+        org = Organisation.query.filter_by(id=org_id).first()
         user_type = user_type.upper()
         new_user = User(id=str(uuid.uuid4()), org_id=org_id, username=username,
                         password=password, name=name, user_type=user_type, created_at=datetime.now())
-        db.session.add(new_user)
+        org.users.append(new_user)  # Resolves new organisation not existing before creating new user in 1 transaction.
         db.session.commit()
         return new_user.to_response()
 

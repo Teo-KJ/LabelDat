@@ -2,7 +2,6 @@ import uuid
 from datetime import datetime
 from sqlalchemy.orm.exc import MultipleResultsFound
 from werkzeug.exceptions import BadRequest, Conflict
-from collections import namedtuple
 from extensions import db
 from models import *
 
@@ -28,13 +27,14 @@ class ProjectService:
                               item_data_type=item_data_type, layout=layout, outsource_labelling=outsource_labelling,
                               created_at=datetime.now())
         new_project_manager = ProjectManager(project_id=new_project.id, user_id=user_id, created_at=datetime.now())
+        new_project.project_managers.append(new_project_manager)
+
         db.session.add(new_project)
-        db.session.add(new_project_manager)
+        db.session.commit()
 
         print(f"ProjectService :: create_project :: The new project to be created is: {new_project}")
         print(f"ProjectService :: create_project :: The new project manager entry added is: {new_project_manager}")
 
-        db.session.commit()
         return new_project.to_response()
 
     @staticmethod
