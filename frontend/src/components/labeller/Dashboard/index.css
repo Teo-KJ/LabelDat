@@ -1,0 +1,160 @@
+@media screen {
+    @font-face {
+      font-family: 'Ubuntu';
+      font-style: italic;
+      font-weight: normal;
+      src: local('Ubuntu Italic'), local('Ubuntu-Italic'), url('http://themes.googleusercontent.com/static/fonts/ubuntu/v4/kbP_6ONYVgE-bLa9ZRbvvvesZW2xOQ-xsNqO47m55DA.woff') format('woff');
+    }
+    }
+    @media screen {
+    @font-face {
+      font-family: 'Ubuntu';
+      font-style: normal;
+      font-weight: normal;
+      src: local('Ubuntu'), url('http://themes.googleusercontent.com/static/fonts/ubuntu/v4/_xyN3apAT_yRRDeqB3sPRg.woff') format('woff');
+    }
+    }
+    @media screen {
+    @font-face {
+      font-family: 'Ubuntu';
+      font-style: normal;
+      font-weight: bold;
+      src: local('Ubuntu Bold'), local('Ubuntu-Bold'), url('http://themes.googleusercontent.com/static/fonts/ubuntu/v4/0ihfXUL2emPh0ROJezvraD8E0i7KZn-EPnyo3HZu7kw.woff') format('woff');
+    }
+    }
+  
+    @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext');
+  
+  .trigger {
+      font-size: 18px;
+      line-height: 64px;
+      align-content: center;
+      width: 70px;
+      cursor: pointer;
+      color: #000;
+      background: #00B7E0;
+    }
+    
+    .content-layout {
+      background: #fff;
+      padding-left: 50px;
+      padding-top: 20px;
+    }
+  
+    .sidebar-textstyle{
+      background: #00B7E0;
+      font-family: "Open Sans";
+      font-size: 16px;
+      color: #fff;
+      padding-bottom: 450px;
+      font-family: "Ubuntu";
+      font-style: normal;
+      font-weight: normal;
+  
+    }
+    
+    .button-style{
+      background-color: #00B7E0;
+      border-radius: 10px;
+      font-family: "Ubuntu";
+      font-size: 14px;
+      font-style: normal;
+      font-weight: bold;
+      color: #fff;
+      /* color: inherit !important; */
+      border: 2px solid transparent !important;
+    }
+  
+    .header-style{
+      font-family: "Ubuntu";
+      font-style: normal;
+      font-weight: bold;
+      font-size: 20px;
+      color: #000000;
+    }
+  
+    .tableheader-style1{
+      font-family: "Ubuntu";
+      font-style: normal;
+      font-weight: bold;
+      font-size: 16px;
+      color: #000000;
+      background-color: #EFEFEF;
+      width: 360px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-left: 10px;
+    }
+  
+    .tableheader-style2{
+      font-family: "Ubuntu";
+      font-style: normal;
+      font-weight: bold;
+      font-size: 16px;
+      color: #000000;
+      background-color: #FAFAFA;
+      width: 170px;
+      padding-left: 10px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+  
+    .tableheader-style3{
+      font-family: "Ubuntu";
+      font-style: normal;
+      font-weight: bold;
+      font-size: 16px;
+      color: #000000;
+      background-color: #EFEFEF;
+      width: 200px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-left: 10px;
+    }
+  
+    .tablecontent-style1{
+      font-family: "Open Sans";
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      color: #000000;
+      background-color:#EFEFEF;
+      padding-left: 10px;
+      width: 360px;
+      max-width: 360px;
+      word-wrap: break-word;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+  
+    .tablecontent-style2{
+      font-family: "Open Sans";
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      color: #000000;
+      width: 170px;
+      padding-left: 10px;
+      background-color: #FAFAFA;
+      padding-top: 5px;
+      padding-bottom: 5px;
+  
+    }
+  
+    .tablecontent-style3{
+      width: 361px;
+      background-color:#EFEFEF;
+      width: 200px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-left: 15px;
+    }
+    
+    .hover-style{
+      background-color: #00B7E0;
+      border-radius: 10px;
+      font-family: "Ubuntu";
+      font-size: 14px;
+      font-style: normal;
+      color: #fff;
+    }
