@@ -1,20 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import 'antd/dist/antd.css';
-import './index.css';
-import Layoutz from './layoutz'
-import { BrowserRouter, Route } from 'react-router-dom';
+import React from "react";
+import "./index.css";
+import Table from "./ProjectTable";
 
 class Dashboard extends React.Component {
-
   render() {
-    return (
-      <BrowserRouter>
-      <Route path = "/labellerdashboard" component = {Layoutz}>
-      </Route>
-      </BrowserRouter>
-    );
+    return <Table />;
   }
 }
 
-ReactDOM.render(<Dashboard />, document.getElementById('container'));
+export default Dashboard;

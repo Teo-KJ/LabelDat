@@ -10,6 +10,11 @@ import SignUp from "./shared/SignUp";
 import UploadFiles from "./project-owner/UploadFiles";
 import { AuthContext } from "../context/auth-context";
 import Loading from "./shared/Loading";
+import Sidebar from "./shared/Sidebar";
+import LabellerDashboard from "./labeller/Dashboard";
+import { Layout } from "antd";
+
+const { Content } = Layout;
 
 function App() {
   const authContext = useContext(AuthContext);
@@ -66,11 +71,14 @@ function App() {
       // Render routes for Labeller
       case "LABELLER":
         return (
-          <Route
-            exact
-            component={LabelForm}
-            path="/projects/:projectId/tasks"
-          />
+          <Fragment>
+            <Route exact component={LabellerDashboard} path="/" />
+            <Route
+              exact
+              component={LabelForm}
+              path="/projects/:projectId/tasks"
+            />
+          </Fragment>
         );
       default:
         return null;
@@ -78,7 +86,14 @@ function App() {
   };
 
   // Insert routes here
-  return <Router history={history}>{renderRoutes()}</Router>;
+  return (
+    <Router history={history}>
+      <Layout>
+        <Sidebar />
+        <Content>{renderRoutes()}</Content>
+      </Layout>
+    </Router>
+  );
 }
 
 export default App;
