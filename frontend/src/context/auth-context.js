@@ -6,6 +6,7 @@ export const AuthContext = React.createContext({
   user: null,
   fetchUser: () => {},
   signIn: () => {},
+  signOut: () => {},
 });
 
 const AuthContextProvider = (props) => {
@@ -28,11 +29,17 @@ const AuthContextProvider = (props) => {
     }
   }, []);
 
+  const signOutHandler = async () => {
+    const res = await axios.get("/api/users/logout");
+    if (res.status === 200) setUser({});
+  };
+
   return (
     <AuthContext.Provider
       value={{
         signIn: signInHandler,
         fetchUser: fetchUserHandler,
+        signOut: signOutHandler,
         user,
       }}
     >

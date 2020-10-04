@@ -73,6 +73,7 @@ class Sidebar extends React.Component {
         <Menu.Item
           key="3"
           icon={<LogoutOutlined style={{ fontSize: "20px" }} />}
+          onClick={() => this.context.signOut()}
         >
           Sign Out
         </Menu.Item>
