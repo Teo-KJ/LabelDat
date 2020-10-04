@@ -4,7 +4,7 @@ import Table from "./ProjectTable";
 
 class Dashboard extends React.Component {
   render() {
-    return <Table />;
+    return <Layoutz />;
   }
 }
 

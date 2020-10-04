@@ -1,7 +1,8 @@
 import React from 'react';
 import './index.css';
 import ReactToolTip from 'react-tooltip'
-import { Button } from 'antd';
+import { Button, Menu, Dropdown } from 'antd';
+import { Redirect } from 'react-router-dom';
 //temporary file with fake data
 
 class Table extends React.Component {
@@ -20,6 +21,7 @@ class Table extends React.Component {
                 { projectname: 'ssss', datecreated: '20 Aug 2020', amtcomplete: 40, taskscount: 204, label: false, review: true },
                 { projectname: 'qqq', datecreated: '20 Sep 2020', amtcomplete: 80, taskscount: 300, label: true, review: true }
             ],
+
         }
     }
 
@@ -49,11 +51,32 @@ class Table extends React.Component {
         })
     }
 
+    //redirect() { return (<Redirect push to={{pathname: '/projects/:projectId/tasks?count=5',}} /> )}
+
+    dropdown() {
+        if (this.state.redirect) {
+            return <Redirect to={this.state.redirect} />;
+        }
+        return (
+            <Menu className="dropdown-style" >
+                <Menu.Item key="5" onClick={() => {this.setState({ redirect: "/projects/:projectId/tasks?count=5"});}}>
+                <a>5 tasks</a></Menu.Item>
+                <Menu.Item key="10" onClick={() => {this.setState({ redirect: "/projects/:projectId/tasks?count=10"});}}>
+                <a>10 tasks</a></Menu.Item>
+                <Menu.Item key="20" onClick={() => {this.setState({ redirect: "/projects/:projectId/tasks?count=20"});}}>
+                <a>20 tasks</a></Menu.Item>
+            </Menu>
+        )
+    }
+
     renderButtons(label, review) {
         let labelbutton;
         let reviewbutton;
         if (label) {
-            labelbutton = <Button className="button-style"> Label </Button>;
+            labelbutton = <Dropdown overlay={this.dropdown()}>
+                <Button className="button-style"> Label </Button>
+            </Dropdown>
+
         } else {
             labelbutton = <Button className="button-style" disabled="true"> Label </Button>;
         }
