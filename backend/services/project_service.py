@@ -12,17 +12,19 @@ class ProjectService:
     @staticmethod
     def create_project(user_id, project_name, item_data_type, layout, outsource_labelling):
         if not user_id:
-            raise BadRequest("The user id is missing.")
+            raise BadRequest("ProjectService :: create_project :: The user id is missing.")
 
         current_user = User.query.filter_by(id=user_id).first()
         org_id = current_user.org_id
         outsource_labelling = outsource_labelling if outsource_labelling else True
 
         if not org_id or not Organisation.query.filter_by(id=org_id):
-            raise BadRequest("The org_id is missing, or the organisation is invalid.")
+            raise BadRequest("ProjectService :: create_project :: The org_id is missing, or the organisation is "
+                             "invalid.")
 
         if Project.query.filter_by(org_id=org_id, project_name=project_name, item_data_type=item_data_type).first():
-            raise Conflict("Project with the same name and item data type already exists.")
+            raise Conflict("ProjectService ::create_project :: "
+                           "Project with the same name and item data type already exists.")
 
         new_project = Project(id=str(uuid.uuid4()), org_id=org_id, project_name=project_name,
                               item_data_type=item_data_type, layout=layout, outsource_labelling=outsource_labelling,
@@ -41,7 +43,7 @@ class ProjectService:
     @staticmethod
     def get_projects_by_user_id(user_id):
         if not user_id:
-            raise BadRequest("The user_id is absent.")
+            raise BadRequest("ProjectService :: get_projects_by_user_id :: The user_id is absent.")
         project_manager_entries = ProjectManager.query.filter_by(user_id=user_id)
         project_ids = [pme.project_id for pme in project_manager_entries]
         projects = Project.query.filter(Project.id.in_(project_ids)).all()
@@ -50,11 +52,12 @@ class ProjectService:
     @staticmethod
     def get_project_by_project_id(project_id):
         if not project_id:
-            raise BadRequest("The project_id is absent.")
+            raise BadRequest("ProjectService :: get_project_by_project_id :: The project_id is absent.")
         try:
             requested_project = Project.query.filter(Project.id == project_id).one_or_none()
         except MultipleResultsFound:
-            raise BadRequest("Multiple Projects with the same project_id found")
+            raise BadRequest("ProjectService :: get_project_by_project_id :: "
+                             "Multiple Projects with the same project_id found")
         return requested_project.to_response()
 
     @staticmethod
@@ -63,7 +66,7 @@ class ProjectService:
             Get all projects the user has contributed to, i.e. has labelled files of the projects
         """
         if not user_id:
-            raise BadRequest("The user is absent.")
+            raise BadRequest("ProjectService :: get_projects_contributed_to_by_user_id :: The user is absent.")
         query = f'''
             SELECT p.id, p.org_id, p.project_name, p.item_data_type, p.layout, p.outsource_labelling, p.created_at 
             FROM user u
@@ -89,13 +92,14 @@ class ProjectService:
             for a particular project as specified by tasks_count query parameter.
         """
         if not user_id:
-            raise BadRequest("The user id is missing")
+            raise BadRequest("ProjectService :: get_tasks_by_user_from_project :: The user id is missing")
         if not project_id:
-            raise BadRequest("The project id is missing")
+            raise BadRequest("ProjectService :: get_tasks_by_user_from_project :: The project id is missing")
         if not tasks_count:
-            raise BadRequest("The tasks count is missing")
+            raise BadRequest("ProjectService :: get_tasks_by_user_from_project :: The tasks count is missing")
         if labelled is None:
-            raise BadRequest("Unknown whether tasks requested are labelled or unlabelled.")
+            raise BadRequest("ProjectService :: get_tasks_by_user_from_project :: "
+                             "Unknown whether tasks requested are labelled or unlabelled.")
 
         if labelled:
             query = f'''

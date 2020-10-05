@@ -46,7 +46,7 @@ def get_project(project_id):
         return jsonify(response.to_dict()), err.code
 
 
-@project_controller.route('/add', methods=['POST'])
+@project_controller.route('/', methods=['POST'])
 def add_project():
     response = RestResponse()
     try:
@@ -64,14 +64,14 @@ def add_project():
         return jsonify(response.to_dict()), err.code
 
 
-@project_controller.route('/<project_id>/tasks/add/upload', methods=['POST'])
+@project_controller.route('/<project_id>/tasks', methods=['POST'])
 def add_project_task(project_id):
     response = RestResponse()
     try:
         if request.method == "POST":
-            file = request.files['file']
-            newly_created_task = TaskService.create_task(project_id, file)
-            response.data = newly_created_task
+            files = request.get_json()
+            newly_created_tasks = TaskService.create_task(project_id, files)
+            response.data = newly_created_tasks
         return jsonify(response.to_dict()), 200
     except BadRequest as err:
         response.data = GenericErrorResponse(message=err.description).to_response()
