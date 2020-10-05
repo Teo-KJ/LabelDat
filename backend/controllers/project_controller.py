@@ -19,7 +19,7 @@ def require_login():
         return jsonify(response.to_dict()), 401
 
 
-@project_controller.route('/', methods=['GET'])
+@project_controller.route('', methods=['GET'])
 def get_projects():
     response = RestResponse()
     try:
@@ -27,6 +27,14 @@ def get_projects():
             current_user_id = session.get(SESSION_USER_ID_KEY)
             user_projects = ProjectService.get_projects_by_user_id(current_user_id)
             response.data = user_projects
+        elif request.method == "POST":
+            print(f"The request data is: {request.data}")
+            data = request.get_json()
+            current_user_id = session.get(SESSION_USER_ID_KEY)
+            newly_created_project = ProjectService.create_project(current_user_id, data.get("projectName"),
+                                                                  data.get("itemDataType"), data.get("layout"),
+                                                                  data.get("outsourceLabelling"))
+            response.data = newly_created_project
         return jsonify(response.to_dict()), 200
     except BadRequest as err:
         response.data = GenericErrorResponse(message=err.description).to_response()
@@ -40,24 +48,6 @@ def get_project(project_id):
         if request.method == "GET":
             project = ProjectService.get_project_by_project_id(project_id)
             response.data = project
-        return jsonify(response.to_dict()), 200
-    except BadRequest as err:
-        response.data = GenericErrorResponse(message=err.description).to_response()
-        return jsonify(response.to_dict()), err.code
-
-
-@project_controller.route('/', methods=['POST'])
-def add_project():
-    response = RestResponse()
-    try:
-        if request.method == "POST":
-            print(f"The request data is: {request.data}")
-            data = request.get_json()
-            current_user_id = session.get(SESSION_USER_ID_KEY)
-            newly_created_project = ProjectService.create_project(current_user_id, data.get("projectName"),
-                                                                  data.get("itemDataType"), data.get("layout"),
-                                                                  data.get("outsourceLabelling"))
-            response.data = newly_created_project
         return jsonify(response.to_dict()), 200
     except BadRequest as err:
         response.data = GenericErrorResponse(message=err.description).to_response()
