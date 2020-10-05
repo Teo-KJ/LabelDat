@@ -7,15 +7,10 @@ export default function (props) {
   const [uploadedFiles, changeUploadedFiles] = useState([]);
 
   function onChange(e) {
-    console.log(files.current.files[0]);
-    //Upload files
-    //receive response
-    let _ = [...uploadedFiles];
-    for (let i = 0; i < files.current.files.length; i++) {
-      _.push(files.current.files[i].name);
-    }
-    changeUploadedFiles(_);
-    e.target.value = null;
+    let files = files.current.files
+
+    //upload the files
+    
   }
 
   return (

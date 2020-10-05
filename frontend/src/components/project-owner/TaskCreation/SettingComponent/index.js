@@ -14,40 +14,6 @@ export default function (props) {
   const dataType = props.dataType;
   const inputType = props.inputType;
 
-  // For the Data Type Setting
-  // const [test, changeTest] = useState("hello");
-
-  /* 
-  For Data Type Template Setting =================================================================================
-  */
-
-  const [imgWidth, changeImgWidth] = useState("500");
-  const [imgHeight, changeImgHeight] = useState("300");
-  const [imgObjectFit, changeImgObjectFit] = useState("cover");
-
-  // const newImgProps = useCallback(() => {
-  //   let style = {
-  //     width: `${imgWidth}px`,
-  //     height: `${imgHeight}px`,
-  //     objectFit: imgObjectFit,
-  //   };
-  //   props.changeImgProps({ style });
-  // }, []);
-
-  //to compute new style after setting
-  useEffect(() => {
-    newImgProps();
-  }, [imgWidth, imgHeight, imgObjectFit]);
-
-  function newImgProps() {
-    let style = {
-      width: `${imgWidth}px`,
-      height: `${imgHeight}px`,
-      objectFit: imgObjectFit,
-    };
-    props.changeImgProps({ style });
-  }
-
   /* 
   For Data Type Template Setting =================================================================================
   */
@@ -91,50 +57,7 @@ export default function (props) {
   */
 
   function DataTypeSetting() {
-    const { Option } = Select;
-    switch (dataType) {
-      case "Image":
-        return (
-          <React.Fragment>
-            <div className="input-setting-row">
-              <label>Width</label>
-              <Input
-                value={imgWidth}
-                onChange={(e) => {
-                  changeImgWidth(e.target.value);
-                }}
-              />
-              px
-            </div>
-            <div className="input-setting-row">
-              <label>Height</label>
-              <Input
-                value={imgHeight}
-                onChange={(e) => {
-                  changeImgHeight(e.target.value);
-                }}
-              />
-              px
-            </div>
-            <div className="input-setting-row">
-              <label>
-                <span>Object&nbsp;Fit</span>
-              </label>
-              <Select
-                value={imgObjectFit}
-                onChange={(v) => {
-                  changeImgObjectFit(v);
-                }}
-              >
-                <Option value="cover">Cover</Option>
-                <Option value="contain">Contain</Option>
-              </Select>
-            </div>
-          </React.Fragment>
-        );
-      default:
-        return null;
-    }
+    return null;
   }
 
   function InputTypeSetting() {
@@ -294,14 +217,6 @@ export default function (props) {
     return (
       <form>
         <div className="input-setting-row">
-          <label>Title</label>
-          <Input
-            placeholder="Insert Title"
-            value={props.titleDesc}
-            onChange={(e) => props.changeTitleDesc(e.target.value)}
-          />
-        </div>
-        <div className="input-setting-row">
           <label>Description</label>
           <TextArea
             rows={4}
@@ -314,7 +229,9 @@ export default function (props) {
   }
 
   return (
+    
     <div className="setting-component">
+      <Input className="project-name" placeholder="Project Name" value={props.projectName} onChange={(e)=>{props.changeProjectName(e.target.value)}}/>
       <Dropdown
         text="Select Data Type"
         list={["Image", "Sound"]}
@@ -324,14 +241,6 @@ export default function (props) {
         dropdown={true}
         value={dataType}
       />
-      {dataTypeSettingOpen && dataType ? (
-        <div className="setting-sct setting-data">
-          <strong>
-            <p>{dataType} Setting</p>
-          </strong>
-          {DataTypeSetting()}
-        </div>
-      ) : null}
 
       <Dropdown
         dropdown={false}
