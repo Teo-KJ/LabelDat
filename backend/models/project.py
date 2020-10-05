@@ -62,5 +62,8 @@ class Project(db.Model):
         #             group by task_id
         #         '''
         # num_labelled = len(db.session.execute(percentage_labelled_query))
+        number_of_tasks = self.calculate_number_of_tasks()
+        if not number_of_tasks: # When there are no tasks
+            return 0
         num_labelled = len([task for task in self.tasks if len(task.labels) > 0])
         return (num_labelled // self.calculate_number_of_tasks()) * 100
