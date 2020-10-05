@@ -3,6 +3,7 @@ from werkzeug.exceptions import *
 
 from services import *
 from utilities import *
+from models.user_type import UserType
 
 project_controller = Blueprint("controllers/project_controller",
                                __name__, static_folder="static", template_folder="templates")
@@ -24,9 +25,17 @@ def get_projects():
     response = RestResponse()
     try:
         if request.method == "GET":
-            current_user_id = session.get(SESSION_USER_ID_KEY)
-            user_projects = ProjectService.get_projects_by_user_id(current_user_id)
-            response.data = user_projects
+            current_user_id = session[SESSION_USER_ID_KEY]
+            user_type = UserService.get_user_type(current_user_id)
+            print(user_type)
+            # Project Owner
+            if user_type == UserType.PROJECT_OWNER.name: 
+                user_projects = ProjectService.get_projects_by_user_id(current_user_id)
+                response.data = user_projects
+            # Labeller
+            elif user_type == UserType.LABELLER.name: 
+                open_source_projects = ProjectService.get_open_source_projects(current_user_id)
+                response.data = open_source_projects  
         elif request.method == "POST":
             print(f"The request data is: {request.data}")
             data = request.get_json()
@@ -34,7 +43,7 @@ def get_projects():
             newly_created_project = ProjectService.create_project(current_user_id, data.get("projectName"),
                                                                   data.get("itemDataType"), data.get("layout"),
                                                                   data.get("outsourceLabelling"))
-            response.data = newly_created_project
+            response.data = newly_created_project          
         return jsonify(response.to_dict()), 200
     except BadRequest as err:
         response.data = GenericErrorResponse(message=err.description).to_response()
@@ -98,20 +107,20 @@ def get_project_tasks_unlabelled(project_id):
         return jsonify(response.to_dict()), err.code
 
 
-@project_controller.route('/<project_id>/tasks/labelled', methods=['GET'])
-def get_project_tasks_labelled(project_id):
-    response = RestResponse()
-    try:
-        if request.method == "GET":
-            current_user_id = session.get(SESSION_USER_ID_KEY)
-            tasks_count = request.args.get('count')
-            labelled_tasks_and_layout = ProjectService.get_tasks_by_user_from_project(project_id, current_user_id,
-                                                                                      tasks_count, True)
-            response = labelled_tasks_and_layout
-        return jsonify(response.to_dict()), 200
-    except BadRequest as err:
-        response.data = GenericErrorResponse(message=err.description).to_response()
-        return jsonify(response.to_dict()), err.code
+# @project_controller.route('/<project_id>/tasks/labelled', methods=['GET'])
+# def get_project_tasks_labelled(project_id):
+#     response = RestResponse()
+#     try:
+#         if request.method == "GET":
+#             current_user_id = session.get(SESSION_USER_ID_KEY)
+#             tasks_count = request.args.get('count')
+#             labelled_tasks_and_layout = ProjectService.get_tasks_by_user_from_project(project_id, current_user_id,
+#                                                                                       tasks_count, True)
+#             response = labelled_tasks_and_layout
+#         return jsonify(response.to_dict()), 200
+#     except BadRequest as err:
+#         response.data = GenericErrorResponse(message=err.description).to_response()
+#         return jsonify(response.to_dict()), err.code
 
 
 @project_controller.route('/tasks', methods=['POST'])
