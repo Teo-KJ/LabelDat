@@ -54,7 +54,6 @@ export default function (props) {
       {dataTypes()}
       <div className="input-area-preview">
         <Description
-          title={props.titleDesc}
           description={props.desc}
         ></Description>
         {inputTypes()}

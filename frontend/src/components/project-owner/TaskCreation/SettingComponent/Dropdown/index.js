@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles.scss";
 
-import { Select } from "antd";
+import { Select, Input } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
