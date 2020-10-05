@@ -14,6 +14,7 @@ const generateApiTasksData = (count) => {
     //   description: "Label what you see",
     //   labelData: ["Dog", "Cat"],
     // },
+    projectName: "Project A",
     layout: {
       inputType: "checkbox",
       dataType: "image",
@@ -26,17 +27,11 @@ const generateApiTasksData = (count) => {
         taskId: 1,
         taskData:
           "https://cf.ltkcdn.net/dogs/images/std/248348-676x450-standing-pomeranian-dog.jpg",
-
-        width: 600,
-        height: 300,
       },
       {
         taskId: 2,
         taskData:
           "https://thehappypuppysite.com/wp-content/uploads/2018/07/white-pomeranian-long.jpg",
-
-        width: 600,
-        height: 400,
       },
     ],
   };
@@ -57,7 +52,7 @@ const LabelForm = (props) => {
   }, [props.location.search]);
 
   const handleSubmit = (values) => {
-    //TODO: Replace with POST call: /api/projects/:projectId/tasks
+    //TODO: Replace with POST call: /api/projects/tasks
 
     const results = tasksData.data.map(({ taskId }, index) => ({
       taskId,
@@ -71,7 +66,7 @@ const LabelForm = (props) => {
   return (
     <div>
       <Typography.Title level={2} className="project-title">
-        Insert Project Name Here
+        {tasksData.projectName}
       </Typography.Title>
 
       <Wizard
