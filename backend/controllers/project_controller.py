@@ -19,7 +19,7 @@ def require_login():
         return jsonify(response.to_dict()), 401
 
 
-@project_controller.route('', methods=['GET'])
+@project_controller.route('', methods=['GET', 'POST'])
 def get_projects():
     response = RestResponse()
     try:
