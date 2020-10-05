@@ -11,9 +11,9 @@ class LabelService:
     @staticmethod
     def create_label(user_id, labels):
         if not user_id:
-            raise BadRequest("The user id is missing")
+            raise BadRequest("LabelService :: create_label :: The user id is missing")
         if not labels:
-            raise BadRequest("The labels data is missing")
+            raise BadRequest("LabelService :: create_label :: The labels data is missing")
 
         # To add the limits for number of labels for user and a specific task?
         saved_labels = []
@@ -24,4 +24,6 @@ class LabelService:
             db.session.add(new_label)
             saved_labels.append(new_label)
         db.session.commit()
+
+        print(f"LabelService :: create_label :: New labels saved: {saved_labels}")
         return [saved_label.to_response() for saved_label in saved_labels]

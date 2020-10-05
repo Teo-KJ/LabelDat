@@ -13,7 +13,7 @@ class UserService:
     @staticmethod
     def create_user(org_id, username, password, name, user_type):
         if User.query.filter_by(username=username).first():
-            raise Conflict("Username already exists.")
+            raise Conflict("UserService :: create_user :: Username already exists.")
 
         org = Organisation.query.filter_by(id=org_id) if org_id else None
         if not org_id or not org:
@@ -35,12 +35,12 @@ class UserService:
     def get_user_by_id(id):
         found_user = User.query.filter_by(id=id).first()
         if not found_user:
-            raise BadRequest("There is no valid current user.")
+            raise BadRequest("UserService :: get_user_by_id :: There is no valid current user.")
         return found_user.to_response()
 
     @staticmethod
     def signin_user(username, password):
         found_user = User.query.filter_by(username=username, password=password).first()
         if not found_user:
-            raise Unauthorized("The login credentials are invalid.")
+            raise Unauthorized("UserService :: signin_user :: The login credentials are invalid.")
         return found_user.to_response()
