@@ -10,10 +10,7 @@ const LabelFormTask = ({ data, layout, taskIndex }) => {
     case "radio":
       return (
         <div>
-          <Image
-            img={data.taskData}
-            imgProps={{ style: { width: data.width, height: data.height } }}
-          />
+          <Image img={data.taskData} />
 
           <div className="container">
             <Description description="Label what you see in the picture" />
@@ -43,10 +40,7 @@ const LabelFormTask = ({ data, layout, taskIndex }) => {
     case "checkbox":
       return (
         <div>
-          <Image
-            img={data.taskData}
-            imgProps={{ style: { width: data.width, height: data.height } }}
-          />
+          <Image img={data.taskData} />
 
           <div className="container">
             <Description description={layout.description} />
