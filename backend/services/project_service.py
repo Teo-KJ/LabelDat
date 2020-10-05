@@ -107,15 +107,15 @@ class ProjectService:
                 INNER JOIN project p ON t.project_id = p.id
                 WHERE p.id = '{project_id}' and (t.id, '{user_id}') IN (SELECT l.task_id, l.user_id FROM label l)
                 ORDER BY t.created_at DESC
-                LIMIT 0 , {tasks_count};
+                LIMIT {tasks_count};
             '''
         else:
             query = f'''
                 SELECT t.id, t.project_id, t.filename, t.item_data, t.created_at FROM task t
                 INNER JOIN project p ON t.project_id = p.id
                 WHERE p.id = '{project_id}' and (t.id, '{user_id}') NOT IN (SELECT l.task_id, l.user_id FROM label l)
-                ORDER BY t.created_at DESC;
-                LIMIT 0 , {tasks_count};
+                ORDER BY t.created_at DESC
+                LIMIT {tasks_count};
             '''
         tasks = db.session.execute(query)   # .paginate(per_page=tasks_count)
         task_dicts = [dict(task) for task in tasks]
