@@ -1,10 +1,10 @@
 import React from "react";
 import "./index.css";
-import Table from "./ProjectTable";
+import Table from "./TasksTable";
 
 class Dashboard extends React.Component {
   render() {
-    return <Layoutz />;
+    return <Table />;
   }
 }
 

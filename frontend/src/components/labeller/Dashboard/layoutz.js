@@ -9,7 +9,7 @@ import {
   SettingOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-import Table from "./ProjectTable";
+import Table from "./TasksTable";
 import { Redirect } from "react-router-dom";
 
 const { Sider, Content } = Layout;
