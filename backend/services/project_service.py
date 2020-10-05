@@ -122,7 +122,8 @@ class ProjectService:
         tasks = [Task(id=d['id'], project_id=d['project_id'], filename=d['filename'], item_data=d['item_data'],
                       created_at=d['created_at']) for d in task_dicts]
         task_responses = [t.to_response() for t in tasks]
-        layout = Project.query.filter_by(id=project_id).first().layout
+        project = Project.query.filter_by(id=project_id).first()
+        project_name, project_layout = project.project_name, project.layout
 
         print(f"ProjectService :: get_tasks_unlabelled_by_user_from_project :: The tasks retrieved are: {tasks}")
-        return TasksAndLayoutResponse(layout, task_responses)
+        return TasksAndLayoutResponse(project_name, project_layout, task_responses)
