@@ -50,6 +50,13 @@ class ProjectService:
         return [pj.to_dashboard_response() for pj in projects]
 
     @staticmethod
+    def get_open_source_projects(user_id):
+        if not user_id:
+            raise BadRequest("ProjectService :: get_projects_by_user_id :: The user_id is absent.")
+        projects = Project.query.all()
+        return [pj.to_dashboard_response_by_user(user_id) for pj in projects]
+
+    @staticmethod
     def get_project_by_project_id(project_id):
         if not project_id:
             raise BadRequest("ProjectService :: get_project_by_project_id :: The project_id is absent.")

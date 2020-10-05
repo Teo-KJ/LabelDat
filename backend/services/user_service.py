@@ -44,3 +44,10 @@ class UserService:
         if not found_user:
             raise Unauthorized("UserService :: signin_user :: The login credentials are invalid.")
         return found_user.to_response()
+
+    @staticmethod
+    def get_user_type(id):
+        found_user = User.query.filter_by(id=id).first()
+        if not found_user:
+            raise BadRequest("There is no valid current user.")
+        return found_user.to_response()["userType"]

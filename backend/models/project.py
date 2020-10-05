@@ -1,5 +1,7 @@
 from extensions import db
 from models.item_data_type import ItemDataType
+from models.label import Label
+from models.task import Task
 
 
 class Project(db.Model):
@@ -47,6 +49,21 @@ class Project(db.Model):
             "overallPercentage": self.calculate_percentage_labelled()
         }
 
+    def to_dashboard_response_by_user(self, user_id):
+        return {
+            "id": self.id,
+            "orgId": self.org_id,
+            "projectName": self.project_name,
+            "itemDataType": self.item_data_type.name,
+            "layout": self.layout,
+            "outsourceLabelling": self.outsource_labelling,
+            "tasks": [t.to_response() for t in self.tasks],
+            "projectManagers": [pm.to_response() for pm in self.project_managers],
+            "tasksCount": self.calculate_number_of_tasks(),
+            "overallPercentage": self.calculate_percentage_labelled(),
+            "contributionPercentage": self.calculate_percentage_labelled_by_user(user_id)
+        }
+
     def calculate_number_of_tasks(self):
         return len(self.tasks)
 
@@ -66,4 +83,14 @@ class Project(db.Model):
         if not number_of_tasks: # When there are no tasks
             return 0
         num_labelled = len([task for task in self.tasks if len(task.labels) > 0])
-        return (num_labelled // self.calculate_number_of_tasks()) * 100
+        return (num_labelled / self.calculate_number_of_tasks()) * 100
+
+    def calculate_percentage_labelled_by_user(self, user_id):
+        """
+            Count number of tasks that have user has labelled
+        """
+        tasks_by_user = db.session.query(Task).filter_by(project_id=self.id).join(Label).filter_by(user_id=user_id).all()
+        num_labelled = len(tasks_by_user)
+        if not num_labelled: # When there are no tasks
+            return 0
+        return (num_labelled / self.calculate_number_of_tasks()) * 100
