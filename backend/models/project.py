@@ -44,7 +44,7 @@ class Project(db.Model):
             "tasks": [t.to_response() for t in self.tasks],
             "projectManagers": [pm.to_response() for pm in self.project_managers],
             "tasksCount": self.calculate_number_of_tasks(),
-            "percentageLabelled": self.calculate_percentage_labelled()
+            "overallPercentage": self.calculate_percentage_labelled()
         }
 
     def calculate_number_of_tasks(self):
