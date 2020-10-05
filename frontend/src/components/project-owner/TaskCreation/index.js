@@ -66,11 +66,11 @@ export default function () {
       case "options":
         form.layout.labels = [...optionsProps.values]
         break
-      case "text":
-        break
       case "slider":
         form.layout.min = sliderProps.min
         form.layout.max = sliderProps.max
+        break
+      default:
         break
     }
     

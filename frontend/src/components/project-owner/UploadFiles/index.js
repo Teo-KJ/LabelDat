@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { CloudUploadOutlined } from "@ant-design/icons";
 import "./styles.scss";
 
 export default function (props) {
-  const files = React.createRef();
-  const [uploadedFiles, changeUploadedFiles] = useState([]);
+  let files = React.createRef();
 
   function onChange(e) {
-    let files = files.current.files
+    files = files.current.files
 
     //upload the files
     
@@ -27,11 +26,6 @@ export default function (props) {
           <CloudUploadOutlined />
         </div>
         Drag and Drop<br></br>or<br></br>Upload Files
-      </div>
-      <div className="upload-files-log">
-        {uploadedFiles.map((_) => {
-          return <div className="log-suc">{_}</div>;
-        })}
       </div>
     </div>
   );
