@@ -1,171 +1,124 @@
-import React from "react";
-import "./index.css";
-import ReactToolTip from "react-tooltip";
-import { Button, Menu, Dropdown } from "antd";
-import { Link } from "react-router-dom";
+import React from 'react';
+import './index.css';
+import ReactToolTip from 'react-tooltip'
+import { Link } from 'react-router-dom'
+import { Button, Menu, Dropdown, Table, Space } from 'antd';
+
 //temporary file with fake data
 
-class Table extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      projects: [
-        {
-          projectname:
-            "lolxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-          datecreated: "09 Aug 2020",
-          amtcomplete: 40,
-          taskscount: 200,
-          label: true,
-          review: true,
-        },
-        {
-          projectname: "ddd",
-          datecreated: "09 Aug 2020",
-          amtcomplete: 41,
-          taskscount: 100,
-          label: true,
-          review: false,
-        },
-        {
-          projectname: "ssss",
-          datecreated: "20 Aug 2020",
-          amtcomplete: 40,
-          taskscount: 204,
-          label: false,
-          review: true,
-        },
-        {
-          projectname: "qqq",
-          datecreated: "20 Sep 2020",
-          amtcomplete: 80,
-          taskscount: 300,
-          label: true,
-          review: true,
-        },
-      ],
-    };
-  }
+const columns = [
+    {
+        title: 'Project Name',
+        dataIndex: 'projectname',
+        width: '360px',
+    },
+    {
+        title: 'Date Created',
+        dataIndex: 'datecreated',
+        width: '170px',
+    },
+    {
+        title: 'Amount Completed',
+        dataIndex: 'overallPercentage',
+        width: '170px',
+        render: (text, record) => <td data-for='custom-color' data-tip={
+            ((record.overallPercentage / 100) * record.taskscount).toFixed(0)
+            + "/" + record.taskscount + " Tasks Done"}>
+            <ReactToolTip className="hover-style" id='custom-color' place='right' border
+                textColor='#fff' backgroundColor='#00B7E0' borderColor='#00B7E0' />
+            {text}%</td>,
+    },
+    {
+        title: 'Your Contributions',
+        dataIndex: 'contributionPercentage',
+        width: '170px',
+        render: (text, record) => <td data-for='custom-color' data-tip={
+            ((record.contributionPercentage / 100) * record.taskscount).toFixed(0)
+            + "/" + record.taskscount + " Tasks Contributed"}>
+            <ReactToolTip className="hover-style" id='custom-color' place='right' border
+                textColor='#fff' backgroundColor='#00B7E0' borderColor='#00B7E0' />
+            {text}%</td>,
+    },
+    {
+        title: 'Action',
+        key: 'action',
+        render: (record) => (
+            <Space >
+                {renderButtons(record.label, record.review, record.projectid)}
+            </Space>
+        ),
+    },
+];
 
-  renderTableHeader() {
-    return (
-      <tr>
-        <td className="tableheader-style1">Project</td>
-        <td className="tableheader-style2">Amount Completed</td>
-        <td className="tableheader-style3">Actions</td>
-      </tr>
-    );
-  }
+const data = [
+    {
+        projectid: 'test',
+        projectname: 'lolxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        datecreated: '09 Aug 2020',
+        overallPercentage: 40,
+        contributionPercentage: 10,
+        taskscount: 200,
+        label: true, review: true
+    },
+    {
+        projectid: 'test2', projectname: 'ddd', datecreated: '09 Aug 2020', overallPercentage: 40,
+        contributionPercentage: 10, taskscount: 200, label: true, review: false
+    },
+    {
+        projectid: 'test3', projectname: 'ssss', datecreated: '20 Aug 2020', overallPercentage: 30,
+        contributionPercentage: 10, taskscount: 100, label: false, review: true
+    },
+    {
+        projectid: 'test4', projectname: 'qqq', datecreated: '20 Sep 2020', overallPercentage: 40,
+        contributionPercentage: 10, taskscount: 100, label: true, review: true
+    }
+]
 
-  renderTableData() {
-    return this.state.projects.map((project) => {
-      const {
-        projectname,
-        datecreated,
-        amtcomplete,
-        taskscount,
-        label,
-        review,
-      } = project;
-      return (
-        <tr key={projectname}>
-          <td
-            className="tablecontent-style1"
-            data-for="custom-color"
-            data-tip={"Date Created: " + datecreated}
-          >
-            <ReactToolTip
-              className="hover-style"
-              id="custom-color"
-              place="right"
-              border
-              textColor="#fff"
-              backgroundColor="#00B7E0"
-              borderColor="#00B7E0"
-            />
-            {projectname}
-          </td>
-          <td
-            className="tablecontent-style2"
-            data-for="custom-color"
-            data-tip={
-              ((amtcomplete / 100) * taskscount).toFixed(0) +
-              "/" +
-              taskscount +
-              " Tasks Done"
-            }
-          >
-            {amtcomplete + "%"}
-          </td>
-          {this.renderButtons(label, review)}
-        </tr>
-      );
-    });
-  }
-
-  dropdown() {
-    return (
-      <Menu className="dropdown-style">
-        <Menu.Item key="5">
-          <Link to="/projects/:projectId/tasks?count=5">5 Tasks</Link>
-        </Menu.Item>
-        <Menu.Item key="10">
-          <Link to="/projects/:projectId/tasks?count=10">10 Tasks</Link>
-        </Menu.Item>
-        <Menu.Item key="20">
-          <Link to="/projects/:projectId/tasks?count=20">20 Tasks</Link>
-        </Menu.Item>
-      </Menu>
-    );
-  }
-
-  renderButtons(label, review) {
+const renderButtons = (label, review, projectid) => {
     let labelbutton;
     let reviewbutton;
     if (label) {
-      labelbutton = (
-        <Dropdown overlay={this.dropdown()}>
-          <Button className="button-style"> Label </Button>
+        labelbutton = <Dropdown overlay={dropdown(projectid)}>
+            <Button type="link"> Label </Button>
         </Dropdown>
-      );
-    } else {
-      labelbutton = (
-        <Button className="button-style" disabled="true">
-          {" "}
-          Label{" "}
-        </Button>
-      );
+    }
+    else {
+        labelbutton = <Button type="link" disabled="true"> Label </Button>;
     }
     if (review) {
-      reviewbutton = <Button className="button-style"> Review </Button>;
-    } else {
-      reviewbutton = (
-        <Button className="button-style" disabled="true">
-          {" "}
-          Review{" "}
-        </Button>
-      );
+        reviewbutton = <Button type="link"> Review </Button>;
+    }
+    else {
+        reviewbutton = <Button type="link" disabled="true"> Review </Button>;
     }
     return (
-      <td className="tablecontent-style3">
-        <td>{labelbutton}</td>
-        <td style={{ paddingLeft: "10px" }}>{reviewbutton}</td>
-      </td>
-    );
-  }
-
-  render() {
-    return (
-      <div>
-        <table id="projects">
-          <tbody>
-            <tr>{this.renderTableHeader()}</tr>
-            <tr>{this.renderTableData()}</tr>
-          </tbody>
-        </table>
-      </div>
-    );
-  }
+        <div>
+            {labelbutton}
+            {reviewbutton}
+        </div>
+    )
 }
 
-export default Table;
+const dropdown = (projectId) => {
+    return (
+        <Menu className="dropdown-style">
+            <Menu.Item> <Link to={`/projects/:${projectId}/tasks?count=5`}>5 tasks</Link> </Menu.Item>
+            <Menu.Item> <Link to={`/projects/:${projectId}/tasks?count=10`}>10 tasks</Link> </Menu.Item>
+            <Menu.Item> <Link to={`/projects/:${projectId}/tasks?count=20`}>20 tasks</Link> </Menu.Item>
+        </Menu>
+    )
+}
+
+const CTable = () => {
+    return (
+        <Table
+            columns={columns}
+            dataSource={data}
+            size="small"
+            pagination={{ hideOnSinglePage: true }}
+        />
+    );
+
+}
+
+export default CTable 

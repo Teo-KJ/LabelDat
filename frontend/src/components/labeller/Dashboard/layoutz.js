@@ -10,14 +10,12 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 import Table from "./TasksTable";
-import { Redirect } from "react-router-dom";
 
 const { Sider, Content } = Layout;
 
 class Layoutz extends React.Component {
   state = {
     collapsed: true,
-    redirect: null,
   };
 
   toggle = () => {
@@ -45,25 +43,22 @@ class Layoutz extends React.Component {
             <Menu.Item
               key="1"
               icon={<AppstoreOutlined style={{ fontSize: "20px" }} />}
-              onClick={() => {
-                this.setState({ redirect: "/labellerdashboard" });
-              }}
             >
+              {/* <Link to={`/path`}>5 tasks</Link> */}
               Dashboard
             </Menu.Item>
             <Menu.Item
               key="2"
               icon={<UserOutlined style={{ fontSize: "20px" }} />}
-              onClick={() => {
-                this.setState({ redirect: "/profile" });
-              }}
             >
+               {/* <Link to={`/path`}>5 tasks</Link> */}
               Profile
             </Menu.Item>
             <Menu.Item
               key="3"
               icon={<SettingOutlined style={{ fontSize: "20px" }} />}
             >
+               {/* <Link to={`/path`}>5 tasks</Link> */}
               Manage Account
             </Menu.Item>
             <Menu.Item
