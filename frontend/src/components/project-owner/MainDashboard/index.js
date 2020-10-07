@@ -1,53 +1,17 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Typography, Divider, Table, Card } from "antd";
 import { Chart, Interval, Coordinate, Axis, Legend } from "bizcharts";
+import Loading from "../../shared/Loading";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import "./styles.scss";
-
-const data = [
-  {
-    projectId: "projectA",
-    projectName: "Project A",
-    percentageLabelled: 30,
-    dateCreated: "25 Aug 2020",
-    tasksCount: 100,
-  },
-  {
-    projectId: "projectB",
-    projectName: "Project B",
-    percentageLabelled: 50,
-    dateCreated: "26 Aug 2020",
-    tasksCount: 200,
-  },
-  {
-    projectId: "projectC",
-    projectName: "Project C",
-    percentageLabelled: 70,
-    dateCreated: "27 Aug 2020",
-    tasksCount: 50,
-  },
-  {
-    projectId: "projectD",
-    projectName: "Project D",
-    percentageLabelled: 98,
-    dateCreated: "28 Aug 2020",
-    tasksCount: 20,
-  },
-  {
-    projectId: "projectE",
-    projectName: "Project E",
-    percentageLabelled: 5,
-    dateCreated: "29 Aug 2020",
-    tasksCount: 50,
-  },
-];
 
 const columns = [
   {
     title: "Project Name",
     dataIndex: "projectName",
     render: (text, record) => {
-      return <Link to={`/projects/${record.projectId}`}>{text}</Link>;
+      return <Link to={`/projects/${record.id}`}>{text}</Link>;
     },
   },
   {
@@ -60,13 +24,35 @@ const columns = [
   },
   {
     title: "Percentage of Tasks Labelled",
-    dataIndex: "percentageLabelled",
-
+    dataIndex: "overallPercentage",
     render: (text) => <Fragment>{text}%</Fragment>,
   },
 ];
 
 const Dashboard = () => {
+  const [projects, setProjects] = useState(null);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const res = await axios.get("/api/projects");
+
+      if (res.status === 200)
+        setProjects(
+          res.data.data.map((project) => ({
+            ...project,
+            key: project.id,
+            dateCreated: new Date(
+              project.projectManagers[0].created_at
+            ).toDateString(),
+          }))
+        );
+    };
+
+    fetchProjects();
+  }, []);
+
+  if (!projects) return <Loading />;
+
   return (
     <div className="dashboard-container">
       <Divider orientation="left">
@@ -81,17 +67,17 @@ const Dashboard = () => {
         <Chart
           scale={{
             projectName: { alias: "Project Name" },
-            percentageLabelled: { alias: "Percentage of Tasks Labelled (%)" },
+            overallPercentage: { alias: "Percentage of Tasks Labelled (%)" },
           }}
           height={320}
           autoFit
-          data={[...data].reverse()}
+          data={[...projects].reverse()}
         >
           <Coordinate transpose />
           <Axis title name="projectName" />
-          <Axis title name="percentageLabelled" />
+          <Axis title name="overallPercentage" />
           <Interval
-            position="projectName*percentageLabelled"
+            position="projectName*overallPercentage"
             color="projectName"
           />
           <Legend reversed offsetY={2} />
@@ -105,7 +91,8 @@ const Dashboard = () => {
       >
         <Table
           columns={columns}
-          dataSource={data.map((row, index) => ({ ...row, key: index }))}
+          dataSource={projects}
+          // dataSource={data.map((row, index) => ({ ...row, key: index }))}
           size="small"
           pagination={{ hideOnSinglePage: true }}
         />
