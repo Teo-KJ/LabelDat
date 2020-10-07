@@ -65,7 +65,7 @@ const Dashboard = () => {
         description={<span>You have not created any projects.</span>}
       >
         <Button type="primary">
-          <Link to="/projects/create">Create Project</Link>
+          <Link to="/create-project">Create Project</Link>
         </Button>
       </Empty>
     );

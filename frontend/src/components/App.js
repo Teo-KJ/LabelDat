@@ -51,7 +51,7 @@ function App() {
       case "PROJECT_OWNER":
         return (
           <Fragment>
-            <Route exact component={TaskCreation} path="/projects/create" />
+            <Route exact component={TaskCreation} path="/create-project" />
             <Route exact path="/uploadfiles">
               <UploadFiles dataType={"image"}></UploadFiles>
             </Route>
