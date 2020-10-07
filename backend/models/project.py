@@ -30,12 +30,12 @@ class Project(db.Model):
             "itemDataType": self.item_data_type.name,
             "layout": self.layout,
             "outsourceLabelling": self.outsource_labelling,
-            "created_at": self.created_at,
             "tasks": [t.to_response() for t in self.tasks],
-            "projectManagers": [pm.to_response() for pm in self.project_managers]
+            "projectManagers": [pm.to_response() for pm in self.project_managers],
+            "created_at": self.created_at
         }
 
-    def to_dashboard_response(self):
+    def to_created_project_response(self):
         return {
             "id": self.id,
             "orgId": self.org_id,
@@ -46,10 +46,11 @@ class Project(db.Model):
             "tasks": [t.to_response() for t in self.tasks],
             "projectManagers": [pm.to_response() for pm in self.project_managers],
             "tasksCount": self.calculate_number_of_tasks(),
-            "overallPercentage": self.calculate_percentage_labelled()
+            "overallPercentage": self.calculate_tasks_labelled_percentage(),
+            "created_at": self.created_at
         }
 
-    def to_dashboard_response_by_user(self, user_id):
+    def to_contributed_project_response(self, user_id):
         return {
             "id": self.id,
             "orgId": self.org_id,
@@ -60,34 +61,27 @@ class Project(db.Model):
             "tasks": [t.to_response() for t in self.tasks],
             "projectManagers": [pm.to_response() for pm in self.project_managers],
             "tasksCount": self.calculate_number_of_tasks(),
-            "overallPercentage": self.calculate_percentage_labelled(),
-            "contributionPercentage": self.calculate_percentage_labelled_by_user(user_id)
+            "overallPercentage": self.calculate_tasks_labelled_percentage(),
+            "contributionPercentage": self.calculate_tasks_labelled_percentage_by_user(user_id),
+            "created_at": self.created_at
         }
 
     def calculate_number_of_tasks(self):
         return len(self.tasks)
 
-    def calculate_percentage_labelled(self):
+    def calculate_tasks_labelled_percentage(self):
         """
-            Count number of tasks that DO NOT have labels
+            Count % of tasks that have >= 1 label
         """
-        # percentage_labelled_query = f'''
-        #             SELECT task_id, COUNT(task_id) FROM project p
-        #             inner join task t on p.id = t.project_id
-        #             inner join label l on t.id = l.task_id
-        #             where p.id = {self.id}
-        #             group by task_id
-        #         '''
-        # num_labelled = len(db.session.execute(percentage_labelled_query))
         number_of_tasks = self.calculate_number_of_tasks()
         if not number_of_tasks: # When there are no tasks
             return 0
         num_labelled = len([task for task in self.tasks if len(task.labels) > 0])
         return (num_labelled / self.calculate_number_of_tasks()) * 100
 
-    def calculate_percentage_labelled_by_user(self, user_id):
+    def calculate_tasks_labelled_percentage_by_user(self, user_id):
         """
-            Count number of tasks that have user has labelled
+            Count % of tasks that a user has labelled
         """
         tasks_by_user = db.session.query(Task).filter_by(project_id=self.id).join(Label).filter_by(user_id=user_id).all()
         num_labelled = len(tasks_by_user)

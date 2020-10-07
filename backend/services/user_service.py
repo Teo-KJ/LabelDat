@@ -15,7 +15,7 @@ class UserService:
         if User.query.filter_by(username=username).first():
             raise Conflict("UserService :: create_user :: Username already exists.")
 
-        org = Organisation.query.filter_by(id=org_id) if org_id else None
+        org = Organisation.query.filter_by(id=org_id).first() if org_id else None
         if not org_id or not org:
             new_org_name = name
             new_org = Organisation(id=str(uuid.uuid4()), name=new_org_name, is_enterprise=False,

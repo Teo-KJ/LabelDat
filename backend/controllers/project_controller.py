@@ -26,16 +26,8 @@ def get_projects():
     try:
         if request.method == "GET":
             current_user_id = session[SESSION_USER_ID_KEY]
-            user_type = UserService.get_user_type(current_user_id)
-            print(user_type)
-            # Project Owner
-            if user_type == UserType.PROJECT_OWNER.name: 
-                user_projects = ProjectService.get_projects_by_user_id(current_user_id)
-                response.data = user_projects
-            # Labeller
-            elif user_type == UserType.LABELLER.name: 
-                open_source_projects = ProjectService.get_open_source_projects(current_user_id)
-                response.data = open_source_projects  
+            projects = ProjectService.get_projects_associated_to_user(current_user_id)
+            response.data = projects
         elif request.method == "POST":
             print(f"The request data is: {request.data}")
             data = request.get_json()
@@ -71,20 +63,6 @@ def add_project_task(project_id):
             files = request.get_json()
             newly_created_tasks = TaskService.create_task(project_id, files)
             response.data = newly_created_tasks
-        return jsonify(response.to_dict()), 200
-    except BadRequest as err:
-        response.data = GenericErrorResponse(message=err.description).to_response()
-        return jsonify(response.to_dict()), err.code
-
-
-@project_controller.route('/contribution', methods=['GET'])
-def get_user_contribution():
-    response = RestResponse()
-    try:
-        if request.method == "GET":
-            current_user_id = session.get(SESSION_USER_ID_KEY)
-            projects_contributed_to = ProjectService.get_projects_contributed_to_by_user_id(current_user_id)
-            response.data = projects_contributed_to
         return jsonify(response.to_dict()), 200
     except BadRequest as err:
         response.data = GenericErrorResponse(message=err.description).to_response()

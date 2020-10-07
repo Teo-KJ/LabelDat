@@ -4,7 +4,9 @@ from sqlalchemy.orm.exc import MultipleResultsFound
 from werkzeug.exceptions import BadRequest, Conflict
 from extensions import db
 from models import *
+from models.user_type import UserType
 from utilities import *
+from sqlalchemy import desc
 
 
 class ProjectService:
@@ -41,20 +43,22 @@ class ProjectService:
         return new_project.to_response()
 
     @staticmethod
-    def get_projects_by_user_id(user_id):
+    def get_projects_associated_to_user(user_id):
         if not user_id:
-            raise BadRequest("ProjectService :: get_projects_by_user_id :: The user_id is absent.")
-        project_manager_entries = ProjectManager.query.filter_by(user_id=user_id)
-        project_ids = [pme.project_id for pme in project_manager_entries]
-        projects = Project.query.filter(Project.id.in_(project_ids)).all()
-        return [pj.to_dashboard_response() for pj in projects]
+            raise BadRequest("ProjectService :: get_projects_associated_to_user :: The user_id is absent.")
 
-    @staticmethod
-    def get_open_source_projects(user_id):
-        if not user_id:
-            raise BadRequest("ProjectService :: get_projects_by_user_id :: The user_id is absent.")
-        projects = Project.query.all()
-        return [pj.to_dashboard_response_by_user(user_id) for pj in projects]
+        user = User.query.filter_by(id=user_id).first()
+        if not user:
+            raise BadRequest("ProjectService :: get_projects_associated_to_user :: The user_id is invalid.")
+
+        created_projects, contributed_projects = [], []
+        if user.user_type == UserType.PROJECT_OWNER:
+            project_manager_entries = ProjectManager.query.filter_by(user_id=user_id)
+            project_ids = [pme.project_id for pme in project_manager_entries]
+            created_projects = Project.query.filter(Project.id.in_(project_ids)).order_by(desc(Project.created_at)).all()
+        contributed_projects = ProjectService.query_user_contributed_projects(user_id)
+        results = UserProjectsResults(projects=created_projects, contributed_projects=contributed_projects)
+        return results.to_response(user_id)
 
     @staticmethod
     def get_project_by_project_id(project_id):
@@ -66,31 +70,6 @@ class ProjectService:
             raise BadRequest("ProjectService :: get_project_by_project_id :: "
                              "Multiple Projects with the same project_id found")
         return requested_project.to_response()
-
-    @staticmethod
-    def get_projects_contributed_to_by_user_id(user_id):
-        """
-            Get all projects the user has contributed to, i.e. has labelled files of the projects
-        """
-        if not user_id:
-            raise BadRequest("ProjectService :: get_projects_contributed_to_by_user_id :: The user is absent.")
-        query = f'''
-            SELECT p.id, p.org_id, p.project_name, p.item_data_type, p.layout, p.outsource_labelling, p.created_at 
-            FROM user u
-            inner join label l on u.id = l.user_id
-            inner join task t on l.task_id = t.id
-            inner join project p on t.project_id = p.id
-            where u.id = '{user_id}';
-        '''
-        project_dicts = [dict(row) for row in db.session.execute(query)]
-        projects = [Project.query.filter_by(id= project_dict['id']).first() for project_dict in project_dicts]
-        # projects = [Project(id=d['id'], org_id=d['org_id'], project_name=d['project_name'],
-        #                     item_data_type=d['item_data_type'], layout=d['layout'],
-        #                     outsource_labelling=d['outsource_labelling'], created_at=d['created_at'])
-        #             for d in project_dicts]
-        print(f"ProjectService :: get_projects_contributed_to_by_user_id :: The projects that the current user "
-              f"contributes to are: {projects}")
-        return [p.to_response() for p in projects]
 
     @staticmethod
     def get_tasks_by_user_from_project(project_id, user_id, tasks_count, labelled):
@@ -124,7 +103,7 @@ class ProjectService:
                 ORDER BY t.created_at DESC
                 LIMIT {tasks_count};
             '''
-        tasks = db.session.execute(query)   # .paginate(per_page=tasks_count)
+        tasks = db.session.execute(query)  # .paginate(per_page=tasks_count)
         task_dicts = [dict(task) for task in tasks]
         tasks = [Task(id=d['id'], project_id=d['project_id'], filename=d['filename'], item_data=d['item_data'],
                       created_at=d['created_at']) for d in task_dicts]
@@ -134,3 +113,22 @@ class ProjectService:
 
         print(f"ProjectService :: get_tasks_unlabelled_by_user_from_project :: The tasks retrieved are: {tasks}")
         return TasksAndLayoutResponse(project_name, project_layout, project_item_data_type.name, task_responses)
+
+    '''
+        Helper Methods
+    '''
+
+    @staticmethod
+    def query_user_contributed_projects(user_id):
+        query = f'''
+                SELECT p.id, p.org_id, p.project_name, p.item_data_type, p.layout, p.outsource_labelling, p.created_at 
+                FROM user u
+                INNER JOIN label l ON u.id = l.user_id
+                INNER JOIN task t ON l.task_id = t.id
+                INNER JOIN project p ON t.project_id = p.id
+                WHERE u.id = '{user_id}'
+                ORDER BY p.created_at DESC;
+                '''
+        print("HERE: ", [row.created_at for row in db.session.execute(query)])
+        project_dicts = [dict(row) for row in db.session.execute(query)]
+        return [Project.query.filter_by(id=project_dict['id']).first() for project_dict in project_dicts]
