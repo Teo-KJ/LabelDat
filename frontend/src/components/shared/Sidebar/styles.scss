@@ -32,13 +32,10 @@
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext");
 
 .trigger {
-  font-size: 18px;
-  line-height: 64px;
-  align-content: center;
-  width: 70px;
+  padding: 10px 30px;
+  line-height: 10px;
   cursor: pointer;
-  color: #000;
-  background: #00b7e0;
+  color: white;
 }
 
 .content-layout {
@@ -48,13 +45,25 @@
 }
 
 .sidebar-textstyle {
-  height: 100vh;
-  background: #00b7e0;
+  min-height: 100vh;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
   font-family: "Open Sans";
   font-size: 16px;
+
   color: #fff;
   padding-bottom: 450px;
   font-family: "Ubuntu";
   font-style: normal;
   font-weight: normal;
+}
+
+.link {
+  a,
+  a:hover,
+  a:visited,
+  a:active {
+    color: inherit;
+    text-decoration: none;
+  }
 }

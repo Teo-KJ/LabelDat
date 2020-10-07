@@ -35,21 +35,29 @@ class Sidebar extends React.Component {
     if (!Object.keys(user).length) {
       return (
         <Menu className="sidebar-textstyle" defaultSelectedKeys={["1"]}>
-          {React.createElement(MenuOutlined, {
-            className: "trigger",
-            onClick: this.toggle,
-          })}
+          <div className="trigger" onClick={this.toggle}>
+            <MenuOutlined />
+          </div>
+
           <Menu.Item
             key="1"
             icon={<LoginOutlined style={{ fontSize: "20px" }} />}
           >
-            <Link to="/signin">Sign In</Link>
+            <span className="link">
+              <Link to="/signin" className="link">
+                Sign In
+              </Link>
+            </span>
           </Menu.Item>
           <Menu.Item
             key="2"
             icon={<UserAddOutlined style={{ fontSize: "20px" }} />}
           >
-            <Link to="/signup">Sign Up</Link>
+            <span className="link">
+              <Link to="/signup" className="link">
+                Sign Up
+              </Link>
+            </span>
           </Menu.Item>
         </Menu>
       );
@@ -57,25 +65,29 @@ class Sidebar extends React.Component {
 
     return (
       <Menu className="sidebar-textstyle" defaultSelectedKeys={["1"]}>
-        {React.createElement(MenuOutlined, {
-          className: "trigger",
-          onClick: this.toggle,
-        })}
+        <div className="trigger" onClick={this.toggle}>
+          <MenuOutlined />
+        </div>
+
         <Menu.Item
           key="1"
           icon={<AppstoreOutlined style={{ fontSize: "20px" }} />}
         >
-          <Link to="/">Dashboard</Link>
+          <span className="link">
+            <Link to="/">Dashboard</Link>
+          </span>
         </Menu.Item>
         <Menu.Item key="2" icon={<UserOutlined style={{ fontSize: "20px" }} />}>
-          <Link to="/profile">Profile</Link>
+          <span className="link">
+            <Link to="/profile">Profile</Link>
+          </span>
         </Menu.Item>
         <Menu.Item
           key="3"
           icon={<LogoutOutlined style={{ fontSize: "20px" }} />}
           onClick={() => this.context.signOut()}
         >
-          Sign Out
+          <span className="link">Sign Out</span>
         </Menu.Item>
       </Menu>
     );
@@ -83,12 +95,7 @@ class Sidebar extends React.Component {
 
   render() {
     return (
-      <Sider
-        style={{ background: "#00B7E0", height: "100vh" }}
-        trigger={null}
-        collapsible
-        collapsed={this.state.collapsed}
-      >
+      <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
         {this.renderMenuItems()}
       </Sider>
     );
