@@ -1,11 +1,18 @@
 import React from "react";
 import "./index.css";
-import Table from "./TasksTable";
+import ContributionsTable from "./ContributionsTable";
+import { Typography, Divider } from "antd";
 
-class Dashboard extends React.Component {
-  render() {
-    return <Table />;
-  }
-}
+const Dashboard = () => {
+  return (
+    <div className="dashboard-container">
+      <Divider orientation="left">
+        <Typography.Title>Dashboard</Typography.Title>
+      </Divider>
+
+      <ContributionsTable />
+    </div>
+  );
+};
 
 export default Dashboard;

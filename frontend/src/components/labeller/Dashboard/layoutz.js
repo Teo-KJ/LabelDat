@@ -9,7 +9,7 @@ import {
   SettingOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-import Table from "./TasksTable";
+import Table from "./ContributionsTable";
 
 const { Sider, Content } = Layout;
 
@@ -25,7 +25,6 @@ class Layoutz extends React.Component {
   };
 
   render() {
-   
     return (
       <Layout>
         <Sider
@@ -51,14 +50,14 @@ class Layoutz extends React.Component {
               key="2"
               icon={<UserOutlined style={{ fontSize: "20px" }} />}
             >
-               {/* <Link to={`/path`}>5 tasks</Link> */}
+              {/* <Link to={`/path`}>5 tasks</Link> */}
               Profile
             </Menu.Item>
             <Menu.Item
               key="3"
               icon={<SettingOutlined style={{ fontSize: "20px" }} />}
             >
-               {/* <Link to={`/path`}>5 tasks</Link> */}
+              {/* <Link to={`/path`}>5 tasks</Link> */}
               Manage Account
             </Menu.Item>
             <Menu.Item
