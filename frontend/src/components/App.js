@@ -51,16 +51,16 @@ function App() {
       case "PROJECT_OWNER":
         return (
           <Fragment>
+            <Route exact component={TaskCreation} path="/projects/create" />
+            <Route exact path="/uploadfiles">
+              <UploadFiles dataType={"image"}></UploadFiles>
+            </Route>
             <Route exact component={MainDashboard} path="/" />
             <Route
               exact
               component={ProjectDashboard}
               path="/projects/:projectId"
             />
-            <Route exact component={TaskCreation} path="/taskcreation" />
-            <Route exact path="/uploadfiles">
-              <UploadFiles dataType={"image"}></UploadFiles>
-            </Route>
             <Route
               exact
               component={LabelForm}

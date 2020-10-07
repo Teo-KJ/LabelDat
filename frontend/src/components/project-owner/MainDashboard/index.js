@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Typography, Divider, Table, Card } from "antd";
+import { Typography, Divider, Table, Card, Empty, Button } from "antd";
 import { Chart, Interval, Coordinate, Axis, Legend } from "bizcharts";
 import Loading from "../../shared/Loading";
 import { Link } from "react-router-dom";
@@ -37,21 +37,38 @@ const Dashboard = () => {
       const res = await axios.get("/api/projects");
 
       if (res.status === 200)
-        setProjects(
-          res.data.data.map((project) => ({
-            ...project,
-            key: project.id,
-            dateCreated: new Date(
-              project.projectManagers[0].created_at
-            ).toDateString(),
-          }))
-        );
+        if (res.data.data.length) {
+          setProjects(
+            res.data.data.map((project) => ({
+              ...project,
+              key: project.id,
+              dateCreated: new Date(
+                project.projectManagers[0].created_at
+              ).toDateString(),
+            }))
+          );
+        } else setProjects([]);
     };
 
     fetchProjects();
   }, []);
-
+  console.log(projects);
   if (!projects) return <Loading />;
+
+  if (!projects.length)
+    return (
+      <Empty
+        image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+        imageStyle={{
+          height: 60,
+        }}
+        description={<span>You have not created any projects.</span>}
+      >
+        <Button type="primary">
+          <Link to="/projects/create">Create Project</Link>
+        </Button>
+      </Empty>
+    );
 
   return (
     <div className="dashboard-container">
