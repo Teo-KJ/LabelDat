@@ -1,137 +1,106 @@
 import React from 'react';
 import './index.css';
 import ReactToolTip from 'react-tooltip'
-import { Button } from 'antd';
+import { Link } from 'react-router-dom'
+import { Button, Menu, Dropdown, Table, Space } from 'antd';
 //actual one with axios get
 
-class Project extends React.Component {
-    constructor() {
-        super()
-        this.state = {
-            projects: [
-                {
-                    projectid: '',
-                    projectname: '',
-                    datecreated: '',
-                    amtcompleted: '',
-                    taskscount: '',
-                    label: '',
-                    review: ''
-                },
-            ],
-        }
+const columns = [
+    {
+        title: 'Project Name',
+        dataIndex: 'projectname',
+        width: '360px',
+    },
+    {
+        title: 'Date Created',
+        dataIndex: 'datecreated',
+        width: '170px',
+    },
+    {
+        title: 'Amount Completed',
+        dataIndex: 'overallPercentage',
+        width: '170px',
+        render: (text, record) => <td data-for='custom-color' data-tip={
+            ((record.overallPercentage / 100) * record.taskscount).toFixed(0)
+            + "/" + record.taskscount + " Tasks Done"}>
+            <ReactToolTip className="hover-style" id='custom-color' place='right' border
+                textColor='#fff' backgroundColor='#00B7E0' borderColor='#00B7E0' />
+            {text}%</td>,
+    },
+    {
+        title: 'Your Contributions',
+        dataIndex: 'contributionPercentage',
+        width: '170px',
+        render: (text, record) => <td data-for='custom-color' data-tip={
+            ((record.contributionPercentage / 100) * record.taskscount).toFixed(0)
+            + "/" + record.taskscount + " Tasks Contributed"}>
+            <ReactToolTip className="hover-style" id='custom-color' place='right' border
+                textColor='#fff' backgroundColor='#00B7E0' borderColor='#00B7E0' />
+            {text}%</td>,
+    },
+    {
+        title: 'Action',
+        key: 'action',
+        render: (record) => (
+            <Space >
+                {renderButtons(record.overallPercentage, record.projectid)}
+            </Space>
+        ),
+    },
+];
+
+const data = componentDidMount();
+
+componentDidMount = () => {
+    axios.get('/projects')
+}
+
+const renderButtons = (overallPercentage, projectid) => {
+    let labelbutton;
+    let reviewbutton;
+    if (overallPercentage == 100) {
+        labelbutton = <Button type="link" disabled="true"> Label </Button>;
     }
-
-    componentDidMount() {
-        axios
-            .get('/projects')
-            .then(({ data }) => {
-                this.setState({
-                    projectid: data.projectid,
-                    projectname: data.projectName,
-                    datacreated: data.dateCreated,
-                    amtcompleted: ((data.percentageLabelled / 100) * taskscount).toFixed(0),
-                    taskscount: data.tasksCount,
-                    label: this.setBoolean(data.percentageLabelled),
-                    review: this.setBoolean(data.percentageLabelled),
-                });
-            })
+    else if(overallPercentage == 0) {
+        reviewbutton = <Button type="link" disabled="true"> Review </Button>;
+        labelbutton = <Dropdown overlay={dropdown(projectid)}>
+            <Button type="link"> Label </Button>
+        </Dropdown>
     }
-
-    renderTableHeader() {
-        return (
-            <tr>
-                <td className="tableheader-style1">Project</td>
-                <td className="tableheader-style2">Amount Completed</td>
-                <td className="tableheader-style3">Actions</td>
-            </tr>)
+    else {
+        labelbutton = <Dropdown overlay={dropdown(projectid)}>
+        <Button type="link"> Label </Button>
+        </Dropdown>
+        reviewbutton = <Button type="link"> Review </Button>;
     }
+    return (
+        <div>
+            {labelbutton}
+            {reviewbutton}
+        </div>
+    )
+}
 
-    renderTableData() {
-        return this.state.projects.map((project) => {
-            const { projectname, datecreated, amtcomplete, taskscount, label, review } = project
-            return (
-                <tr key={projectname}>
-                    <td className="tablecontent-style1" data-for='custom-color' data-tip={"Date Created: " + datecreated}>
-                        <ReactToolTip className="hover-style" id='custom-color' place='right' border
-                            textColor='#fff' backgroundColor='#00B7E0' borderColor='#00B7E0' />{projectname}</td>
-                    <td className="tablecontent-style2" data-for='custom-color' data-tip={((amtcomplete / 100) * taskscount).toFixed(0)
-                        + "/" + taskscount + " Tasks Done"}>
-                        {amtcomplete + "%"}</td>
-                    {this.renderButtons(label, review)}
-                </tr>
-            )
-        })
-    }
+const dropdown = (projectId) => {
+    return (
+        <Menu className="dropdown-style">
+            <Menu.Item> <Link to={`/projects/:${projectId}/tasks?count=5`}>5 tasks</Link> </Menu.Item>
+            <Menu.Item> <Link to={`/projects/:${projectId}/tasks?count=10`}>10 tasks</Link> </Menu.Item>
+            <Menu.Item> <Link to={`/projects/:${projectId}/tasks?count=20`}>20 tasks</Link> </Menu.Item>
+        </Menu>
+    )
+}
 
-    //redirect() { return (<Redirect push to={{pathname: '/projects/:projectId/tasks?count=5',}} /> )}
+const Project = () => {
+    return (
+        <Table
+            columns={columns}
+            dataSource={data}
+            size="small"
+            pagination={{ hideOnSinglePage: true }}
+        />
+    );
 
-    dropdown() {
-        if (this.state.redirect) {
-            return <Redirect to={this.state.redirect} />;
-        }
-        return (
-            <Menu className="dropdown-style" >
-                <Menu.Item key="5" onClick={() => { this.setState({ redirect: "/projects/:projectId/tasks?count=5" }); }}>
-                    <a>5 tasks</a></Menu.Item>
-                <Menu.Item key="10" onClick={() => { this.setState({ redirect: "/projects/:projectId/tasks?count=10" }); }}>
-                    <a>10 tasks</a></Menu.Item>
-                <Menu.Item key="20" onClick={() => { this.setState({ redirect: "/projects/:projectId/tasks?count=20" }); }}>
-                    <a>20 tasks</a></Menu.Item>
-            </Menu>
-        )
-    }
-
-    renderButtons(label, review) {
-        let labelbutton;
-        let reviewbutton;
-        if (label) {
-            labelbutton = <Dropdown overlay={this.dropdown()}>
-                <Button className="button-style"> Label </Button>
-            </Dropdown>
-
-        } else {
-            labelbutton = <Button className="button-style" disabled="true"> Label </Button>;
-        }
-        if (review) {
-            reviewbutton = <Button className="button-style"> Review </Button>;
-        }
-        else {
-            reviewbutton = <Button className="button-style" disabled="true"> Review </Button>;
-        }
-        return (
-            <td className="tablecontent-style3">
-                <td>{labelbutton}</td>
-                <td style={{ paddingLeft: '10px' }}>{reviewbutton}</td>
-            </td>
-        )
-    }
-
-    render() {
-        return (
-            <div>
-                <table id='projects'>
-                    <tbody>
-                        <tr>{this.renderTableHeader()}
-                        </tr>
-                        <tr>{this.renderTableData()}</tr>
-                    </tbody>
-                </table>
-            </div>
-        )
-    }
-
-    setBoolean(props) {
-        if (props == 0) {
-            return false;
-        }
-        else if (props == 0) {
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
 }
 
 export default Project

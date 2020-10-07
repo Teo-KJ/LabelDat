@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Input, Select, Button } from "antd";
+import { Input, Button } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 
 import "./styles.scss";
@@ -14,21 +14,11 @@ export default function (props) {
   const dataType = props.dataType;
   const inputType = props.inputType;
 
-  /* 
-  For Data Type Template Setting =================================================================================
-  */
-
-  /* 
-  For Input Type Template Setting =================================================================================
-  */
-
   const [textInputPlaceholder, changeTextInputPlaceholder] = useState(
     "What do you think about the image?"
   );
 
-  useEffect(() => {
-    newTextInputStyle();
-  }, [textInputPlaceholder]);
+  useEffect(newTextInputStyle, [textInputPlaceholder]);
 
   function newTextInputStyle() {
     let style = {
@@ -40,12 +30,9 @@ export default function (props) {
   const [maxSlider, changeMaxSlider] = useState(10);
   const [minSlider, changeMinSlider] = useState(0);
 
-  useEffect(() => {
-    newSliderProps();
-  }, [maxSlider, minSlider]);
+  useEffect(newSliderProps, [maxSlider, minSlider]);
 
   function newSliderProps() {
-    console.log(minSlider);
     props.changeSliderProps({
       min: minSlider,
       max: maxSlider,
@@ -55,10 +42,6 @@ export default function (props) {
   /* 
   For Input Type Template Setting =================================================================================
   */
-
-  function DataTypeSetting() {
-    return null;
-  }
 
   function InputTypeSetting() {
     switch (inputType) {
