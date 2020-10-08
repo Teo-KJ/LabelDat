@@ -40,16 +40,26 @@ const Dashboard = () => {
       const res = await axios.get("/api/projects");
 
       if (res.status === 200) {
-        if (res.data.data.projects.length) {
-          setProjects(
-            res.data.data.projects.map((project) => ({
+        if (
+          res.data.data.projects.length ||
+          res.data.data.contributedProjects.length
+        ) {
+          setProjects({
+            poProjects: res.data.data.projects.map((project) => ({
               ...project,
               key: project.id,
               dateCreated: new Date(
                 project.projectManagers[0].created_at
               ).toDateString(),
-            }))
-          );
+            })),
+            contributedProjects: res.data.data.contributedProjects.map(
+              (project) => ({
+                ...project,
+                key: project.id,
+                dateCreated: new Date(project.created_at).toDateString(),
+              })
+            ),
+          });
         } else setProjects([]);
       }
     };
@@ -57,22 +67,37 @@ const Dashboard = () => {
     fetchProjects();
   }, []);
 
-  if (!projects) return <Loading />;
+  const renderPOProjectsTable = () => {
+    if (!projects.poProjects.length)
+      return (
+        <Card>
+          <Empty
+            image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+            imageStyle={{
+              height: 60,
+            }}
+            description={<span>You have not created any projects.</span>}
+          >
+            <Button type="primary">
+              <Link to="/create-project">Create Project</Link>
+            </Button>
+          </Empty>
+        </Card>
+      );
 
-  if (!projects.length)
     return (
-      <Empty
-        image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-        imageStyle={{
-          height: 60,
-        }}
-        description={<span>You have not created any projects.</span>}
-      >
-        <Button type="primary">
-          <Link to="/create-project">Create Project</Link>
-        </Button>
-      </Empty>
+      <Card title={<b>Your Projects</b>} bordered={false}>
+        <Table
+          columns={columns}
+          dataSource={projects.poProjects}
+          size="small"
+          pagination={{ hideOnSinglePage: true }}
+        />
+      </Card>
     );
+  };
+
+  if (!projects) return <Loading />;
 
   return (
     <div className="dashboard-container">
@@ -80,30 +105,32 @@ const Dashboard = () => {
         <Typography.Title>Dashboard</Typography.Title>
       </Divider>
 
-      <Card
-        title={<b>Progress of Labelling for Your Projects</b>}
-        bordered={false}
-        className="main-chart"
-      >
-        <Chart
-          scale={{
-            projectName: { alias: "Project Name" },
-            overallPercentage: { alias: "Percentage of Tasks Labelled (%)" },
-          }}
-          height={320}
-          autoFit
-          data={[...projects].reverse()}
+      {projects.poProjects.length ? (
+        <Card
+          title={<b>Progress of Labelling for Your Projects</b>}
+          bordered={false}
+          className="main-chart"
         >
-          <Coordinate transpose />
-          <Axis title name="projectName" />
-          <Axis title name="overallPercentage" />
-          <Interval
-            position="projectName*overallPercentage"
-            color="projectName"
-          />
-          <Legend reversed offsetY={2} />
-        </Chart>
-      </Card>
+          <Chart
+            scale={{
+              projectName: { alias: "Project Name" },
+              overallPercentage: { alias: "Percentage of Tasks Labelled (%)" },
+            }}
+            height={320}
+            autoFit
+            data={[...projects.poProjects].reverse()}
+          >
+            <Coordinate transpose />
+            <Axis title name="projectName" />
+            <Axis title name="overallPercentage" />
+            <Interval
+              position="projectName*overallPercentage"
+              color="projectName"
+            />
+            <Legend reversed offsetY={2} />
+          </Chart>
+        </Card>
+      ) : null}
 
       <Tabs
         centered
@@ -112,17 +139,12 @@ const Dashboard = () => {
         tabBarStyle={{ marginBottom: 0 }}
       >
         <TabPane tab="Projects" key="1" className="projects-table">
-          <Card title={<b>Your Projects</b>} bordered={false}>
-            <Table
-              columns={columns}
-              dataSource={projects}
-              size="small"
-              pagination={{ hideOnSinglePage: true }}
-            />
-          </Card>
+          {renderPOProjectsTable()}
         </TabPane>
         <TabPane tab="Contributions" key="2" className="projects-table">
-          <ContributionsTable />
+          <ContributionsTable
+            contributedProjects={projects.contributedProjects}
+          />
         </TabPane>
       </Tabs>
     </div>
