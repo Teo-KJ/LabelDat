@@ -21,7 +21,7 @@ class Task(db.Model):
             "id": self.id,
             "projectId": self.project_id,
             "filename": self.filename,
-            # "itemData": self.item_data,
+            "itemData": self.item_data,
             "created_at": self.created_at,
             "labels": [label.to_response() for label in self.labels]
         }
