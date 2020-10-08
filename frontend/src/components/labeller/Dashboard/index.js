@@ -1,5 +1,5 @@
 import React from "react";
-import "./index.css";
+import "./styles.scss";
 import ContributionsTable from "./ContributionsTable";
 import { Typography, Divider } from "antd";
 

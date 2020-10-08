@@ -1,178 +1,135 @@
-import React from "react";
-import "./index.css";
-import ReactToolTip from "react-tooltip";
+import React, { Fragment } from "react";
+import "./styles.scss";
 import { Link } from "react-router-dom";
-import { Button, Menu, Dropdown, Table, Space, Card } from "antd";
-
-//temporary file with fake data
+import { Button, Menu, Dropdown, Table, Card, Tooltip } from "antd";
 
 const columns = [
   {
     title: "Project Name",
-    dataIndex: "projectname",
+    dataIndex: "projectName",
     width: "170px",
   },
   {
     title: "Date Created",
-    dataIndex: "datecreated",
+    dataIndex: "dateCreated",
     width: "170px",
   },
   {
-    title: "Amount Completed",
+    title: "Overall Completion Rate",
     dataIndex: "overallPercentage",
     width: "170px",
     render: (text, record) => (
-      <td
-        data-for="custom-color"
-        data-tip={
-          ((record.overallPercentage / 100) * record.taskscount).toFixed(0) +
-          "/" +
-          record.taskscount +
-          " Tasks Done"
-        }
+      <Tooltip
+        title={`${Math.floor(
+          (record.tasksCount * record.overallPercentage) / 100
+        )}/${record.tasksCount} Tasks Labelled`}
       >
-        <ReactToolTip
-          className="hover-style"
-          id="custom-color"
-          place="right"
-          border
-          textColor="#fff"
-          backgroundColor="#00B7E0"
-          borderColor="#00B7E0"
-        />
         {text}%
-      </td>
+      </Tooltip>
     ),
   },
   {
-    title: "Your Contributions",
+    title: "Contribution Rate",
     dataIndex: "contributionPercentage",
     width: "170px",
     render: (text, record) => (
-      <td
-        data-for="custom-color"
-        data-tip={
-          ((record.contributionPercentage / 100) * record.taskscount).toFixed(
-            0
-          ) +
-          "/" +
-          record.taskscount +
-          " Tasks Contributed"
-        }
+      <Tooltip
+        title={`${record.contributionCount}/${record.tasksCount} Tasks Contributed`}
       >
-        <ReactToolTip
-          className="hover-style"
-          id="custom-color"
-          place="right"
-          border
-          textColor="#fff"
-          backgroundColor="#00B7E0"
-          borderColor="#00B7E0"
-        />
         {text}%
-      </td>
+      </Tooltip>
     ),
   },
   {
     title: "Action",
     key: "action",
+    align: "center",
     render: (record) => (
-      <Space>
-        {renderButtons(record.label, record.review, record.projectid)}
-      </Space>
+      <Fragment>
+        <Tooltip
+          title={
+            record.contributionCount < record.tasksCount
+              ? ""
+              : "You have finshed labelling all tasks for this project."
+          }
+        >
+          {record.contributionCount < record.tasksCount ? (
+            <Dropdown overlay={renderDropdown(record.projectId)}>
+              <Button type="link">Label</Button>
+            </Dropdown>
+          ) : (
+            <Button type="link" disabled>
+              Label
+            </Button>
+          )}
+        </Tooltip>
+
+        <Tooltip
+          title={
+            record.contributionCount === 0
+              ? "You have not labelled any tasks yet."
+              : ""
+          }
+        >
+          <Button type="link" disabled={record.contributionCount === 0}>
+            <Link to={`/projects/${record.projectId}/review`}>Review</Link>
+          </Button>
+        </Tooltip>
+      </Fragment>
     ),
   },
 ];
 
 const data = [
   {
-    projectid: "test",
-    projectname: "Project A",
-    datecreated: "09 Aug 2020",
+    projectId: "projectA",
+    projectName: "Project A",
+    dateCreated: "09 Aug 2020",
     overallPercentage: 40,
-    contributionPercentage: 10,
-    taskscount: 200,
-    label: true,
-    review: true,
+    contributionPercentage: 0,
+    contributionCount: 0,
+    tasksCount: 200,
   },
   {
-    projectid: "test2",
-    projectname: "Project B",
-    datecreated: "09 Aug 2020",
+    projectId: "projectB",
+    projectName: "Project B",
+    dateCreated: "09 Aug 2020",
     overallPercentage: 40,
-    contributionPercentage: 10,
-    taskscount: 200,
-    label: true,
-    review: false,
+    contributionPercentage: 100,
+    contributionCount: 200,
+    tasksCount: 200,
   },
   {
-    projectid: "test3",
-    projectname: "Project C",
-    datecreated: "20 Aug 2020",
+    projectId: "projectC",
+    projectName: "Project C",
+    dateCreated: "20 Aug 2020",
     overallPercentage: 30,
     contributionPercentage: 10,
-    taskscount: 100,
-    label: false,
-    review: true,
+    contributionCount: 10,
+    tasksCount: 100,
   },
   {
-    projectid: "test4",
-    projectname: "Project D",
-    datecreated: "20 Sep 2020",
+    projectId: "projectD",
+    projectName: "Project D",
+    dateCreated: "20 Sep 2020",
     overallPercentage: 40,
     contributionPercentage: 10,
-    taskscount: 100,
-    label: true,
-    review: true,
+    contributionCount: 10,
+    tasksCount: 100,
   },
 ];
 
-const renderButtons = (label, review, projectid) => {
-  let labelbutton;
-  let reviewbutton;
-  if (label) {
-    labelbutton = (
-      <Dropdown overlay={dropdown(projectid)}>
-        <Button type="link"> Label </Button>
-      </Dropdown>
-    );
-  } else {
-    labelbutton = (
-      <Button type="link" disabled="true">
-        {" "}
-        Label{" "}
-      </Button>
-    );
-  }
-  if (review) {
-    reviewbutton = <Button type="link"> Review </Button>;
-  } else {
-    reviewbutton = (
-      <Button type="link" disabled="true">
-        {" "}
-        Review{" "}
-      </Button>
-    );
-  }
-  return (
-    <div>
-      {labelbutton}
-      {reviewbutton}
-    </div>
-  );
-};
-
-const dropdown = (projectId) => {
+const renderDropdown = (projectId) => {
   return (
     <Menu className="dropdown-style">
       <Menu.Item>
-        <Link to={`/projects/:${projectId}/tasks?count=5`}>5 tasks</Link>{" "}
+        <Link to={`/projects/${projectId}/tasks?count=5`}>5 tasks</Link>{" "}
       </Menu.Item>
       <Menu.Item>
-        <Link to={`/projects/:${projectId}/tasks?count=10`}>10 tasks</Link>{" "}
+        <Link to={`/projects/${projectId}/tasks?count=10`}>10 tasks</Link>{" "}
       </Menu.Item>
       <Menu.Item>
-        <Link to={`/projects/:${projectId}/tasks?count=20`}>20 tasks</Link>{" "}
+        <Link to={`/projects/${projectId}/tasks?count=20`}>20 tasks</Link>{" "}
       </Menu.Item>
     </Menu>
   );
@@ -183,7 +140,7 @@ const ContributionsTable = () => {
     <Card title={<b>Your Contributions</b>} bordered={false}>
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={data.map((project, index) => ({ ...project, key: index }))}
         size="small"
         pagination={{ hideOnSinglePage: true }}
       />
