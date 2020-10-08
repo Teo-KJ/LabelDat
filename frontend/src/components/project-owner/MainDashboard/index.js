@@ -36,10 +36,10 @@ const Dashboard = () => {
     const fetchProjects = async () => {
       const res = await axios.get("/api/projects");
 
-      if (res.status === 200)
-        if (res.data.data.length) {
+      if (res.status === 200) {
+        if (res.data.data.projects.length) {
           setProjects(
-            res.data.data.map((project) => ({
+            res.data.data.projects.map((project) => ({
               ...project,
               key: project.id,
               dateCreated: new Date(
@@ -48,11 +48,12 @@ const Dashboard = () => {
             }))
           );
         } else setProjects([]);
+      }
     };
 
     fetchProjects();
   }, []);
-  console.log(projects);
+
   if (!projects) return <Loading />;
 
   if (!projects.length)
