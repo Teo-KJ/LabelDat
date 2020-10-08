@@ -71,7 +71,7 @@ class ProjectService:
         return results.to_response(user_id)
 
     @staticmethod
-    def get_project_by_project_id(project_id):
+    def get_project_by_project_id(project_id, user_id):
         if not project_id:
             raise BadRequest("ProjectService :: get_project_by_project_id :: The project_id is absent.")
         try:
@@ -79,7 +79,7 @@ class ProjectService:
         except MultipleResultsFound:
             raise BadRequest("ProjectService :: get_project_by_project_id :: "
                              "Multiple Projects with the same project_id found")
-        return requested_project.to_response()
+        return requested_project.to_project_for_user_response(user_id)
 
     @staticmethod
     def get_tasks_by_user_from_project(project_id, user_id, tasks_count, labelled):

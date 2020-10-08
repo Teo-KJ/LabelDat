@@ -47,7 +47,8 @@ def get_project(project_id):
     response = RestResponse()
     try:
         if request.method == "GET":
-            project = ProjectService.get_project_by_project_id(project_id)
+            current_user_id = session.get(SESSION_USER_ID_KEY)
+            project = ProjectService.get_project_by_project_id(project_id, current_user_id)
             response.data = project
         return jsonify(response.to_dict()), 200
     except BadRequest as err:

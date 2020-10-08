@@ -2,6 +2,7 @@ from extensions import db
 from models.item_data_type import ItemDataType
 from models.label import Label
 from models.task import Task
+from copy import deepcopy
 
 
 class Project(db.Model):
@@ -34,6 +35,34 @@ class Project(db.Model):
             "projectManagers": [pm.to_response() for pm in self.project_managers],
             "created_at": self.created_at
         }
+
+    def to_project_for_user_response(self, user_id):
+        return {
+            "id": self.id,
+            "orgId": self.org_id,
+            "projectName": self.project_name,
+            "itemDataType": self.item_data_type.name,
+            "layout": self.layout,
+            "outsourceLabelling": self.outsource_labelling,
+            "tasksLabelled": [t.to_response() for t in self.tasks_and_labels_from_user(user_id)],
+            "projectManagers": [pm.to_response() for pm in self.project_managers],
+            "created_at": self.created_at
+        }
+
+    def tasks_and_labels_from_user(self, user_id):
+        resulting_tasks = []
+        for task in self.tasks:
+            labels_for_user = []
+            for label in task.labels:
+                if label.user_id == user_id:
+                    labels_for_user.append(label)
+            if not labels_for_user:
+                continue
+            task.labels = labels_for_user
+            resulting_tasks.append(task)
+        return resulting_tasks
+
+
 
     def to_created_project_response(self):
         return {
