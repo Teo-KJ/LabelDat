@@ -44,7 +44,8 @@ class Project(db.Model):
             "itemDataType": self.item_data_type.name,
             "layout": self.layout,
             "outsourceLabelling": self.outsource_labelling,
-            "tasksLabelled": [t.to_response() for t in self.tasks_and_labels_from_user(user_id)],
+            "tasksLabelled": [t.to_response_with_labels_from_user(user_id)
+                              for t in self.tasks_and_labels_from_user(user_id)],
             "projectManagers": [pm.to_response() for pm in self.project_managers],
             "created_at": self.created_at
         }
@@ -52,17 +53,11 @@ class Project(db.Model):
     def tasks_and_labels_from_user(self, user_id):
         resulting_tasks = []
         for task in self.tasks:
-            labels_for_user = []
             for label in task.labels:
                 if label.user_id == user_id:
-                    labels_for_user.append(label)
-            if not labels_for_user:
-                continue
-            task.labels = labels_for_user
-            resulting_tasks.append(task)
+                    resulting_tasks.append(task)
+                    break
         return resulting_tasks
-
-
 
     def to_created_project_response(self):
         return {

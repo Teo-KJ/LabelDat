@@ -25,3 +25,13 @@ class Task(db.Model):
             "created_at": self.created_at,
             "labels": [label.to_response() for label in self.labels]
         }
+
+    def to_response_with_labels_from_user(self, user_id):
+        return {
+            "id": self.id,
+            "projectId": self.project_id,
+            "filename": self.filename,
+            "itemData": self.item_data,
+            "created_at": self.created_at,
+            "labels": [label.to_response() for label in self.labels if label.user_id == user_id]
+        }
