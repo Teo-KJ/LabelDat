@@ -62,6 +62,7 @@ class Project(db.Model):
             "projectManagers": [pm.to_response() for pm in self.project_managers],
             "tasksCount": self.calculate_number_of_tasks(),
             "overallPercentage": self.calculate_tasks_labelled_percentage(),
+            "contributionCount": self.calculate_tasks_labelled_by_user(user_id),
             "contributionPercentage": self.calculate_tasks_labelled_percentage_by_user(user_id),
             "created_at": self.created_at
         }
@@ -74,17 +75,24 @@ class Project(db.Model):
             Count % of tasks that have >= 1 label
         """
         number_of_tasks = self.calculate_number_of_tasks()
-        if not number_of_tasks: # When there are no tasks
+        if not number_of_tasks:  # When there are no tasks
             return 0
         num_labelled = len([task for task in self.tasks if len(task.labels) > 0])
-        return (num_labelled / self.calculate_number_of_tasks()) * 100
+        return round(float((num_labelled / self.calculate_number_of_tasks()) * 100), 1)
 
     def calculate_tasks_labelled_percentage_by_user(self, user_id):
         """
             Count % of tasks that a user has labelled
         """
-        tasks_by_user = db.session.query(Task).filter_by(project_id=self.id).join(Label).filter_by(user_id=user_id).all()
+
+        num_labelled = self.calculate_tasks_labelled_by_user(user_id)
+        return round(float((num_labelled / self.calculate_number_of_tasks()) * 100), 1)
+
+    def calculate_tasks_labelled_by_user(self, user_id):
+        """
+            Count % of tasks that a user has labelled
+        """
+        tasks_by_user = db.session.query(Task).filter_by(project_id=self.id).join(Label).filter_by(
+            user_id=user_id).all()
         num_labelled = len(tasks_by_user)
-        if not num_labelled: # When there are no tasks
-            return 0
-        return (num_labelled / self.calculate_number_of_tasks()) * 100
+        return num_labelled

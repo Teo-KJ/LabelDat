@@ -55,9 +55,19 @@ class ProjectService:
         if user.user_type == UserType.PROJECT_OWNER:
             project_manager_entries = ProjectManager.query.filter_by(user_id=user_id)
             project_ids = [pme.project_id for pme in project_manager_entries]
-            created_projects = Project.query.filter(Project.id.in_(project_ids)).order_by(desc(Project.created_at)).all()
+            created_projects = Project.query.filter(Project.id.in_(project_ids)).order_by(
+                desc(Project.created_at)).all()
+
         contributed_projects = ProjectService.query_user_contributed_projects(user_id)
-        results = UserProjectsResults(projects=created_projects, contributed_projects=contributed_projects)
+        projects_not_contributed_to = Project.query.filter(
+            Project.id.notin_([pj.id for pj in contributed_projects])).all()
+        contributions = sorted(contributed_projects + projects_not_contributed_to,
+                               key=lambda x: x.created_at, reverse=True)
+        results = UserProjectsResults(projects=created_projects, contributed_projects=contributions)
+
+        print(f"ProjectService :: get_projects_associated_to_user :: "
+              f"Projects: {[p.id for p in results.projects]},"
+              f"Project Contribution:  {[p.id for p in results.contributed_projects]}")
         return results.to_response(user_id)
 
     @staticmethod
@@ -120,15 +130,19 @@ class ProjectService:
 
     @staticmethod
     def query_user_contributed_projects(user_id):
+        """
+            Get all pr
+        """
+
         query = f'''
-                SELECT p.id, p.org_id, p.project_name, p.item_data_type, p.layout, p.outsource_labelling, p.created_at 
-                FROM user u
-                INNER JOIN label l ON u.id = l.user_id
-                INNER JOIN task t ON l.task_id = t.id
-                INNER JOIN project p ON t.project_id = p.id
-                WHERE u.id = '{user_id}'
-                ORDER BY p.created_at DESC;
-                '''
-        print("HERE: ", [row.created_at for row in db.session.execute(query)])
-        project_dicts = [dict(row) for row in db.session.execute(query)]
-        return [Project.query.filter_by(id=project_dict['id']).first() for project_dict in project_dicts]
+        SELECT DISTINCT p.id, p.created_at
+        FROM user u
+        INNER JOIN label l ON u.id = l.user_id
+        INNER JOIN task t ON l.task_id = t.id
+        INNER JOIN project p ON t.project_id = p.id
+        WHERE u.id = '{user_id}'
+        ORDER BY p.created_at DESC;
+        '''
+
+        project_ids = [dict(row)['id'] for row in db.session.execute(query)]
+        return [Project.query.filter_by(id=project_id).first() for project_id in project_ids]
