@@ -1,10 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Typography, Divider, Table, Card, Empty, Button } from "antd";
+import { Typography, Divider, Table, Card, Empty, Button, Tabs } from "antd";
 import { Chart, Interval, Coordinate, Axis, Legend } from "bizcharts";
-import Loading from "../../shared/Loading";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import "./styles.scss";
+import Loading from "../../shared/Loading";
+import ContributionsTable from "../../labeller/Dashboard/ContributionsTable";
+
+const { TabPane } = Tabs;
 
 const columns = [
   {
@@ -102,19 +105,26 @@ const Dashboard = () => {
         </Chart>
       </Card>
 
-      <Card
-        title={<b>Your Projects</b>}
-        bordered={false}
-        className="projects-table"
+      <Tabs
+        centered
+        className="tabs-container"
+        type="card"
+        tabBarStyle={{ marginBottom: 0 }}
       >
-        <Table
-          columns={columns}
-          dataSource={projects}
-          // dataSource={data.map((row, index) => ({ ...row, key: index }))}
-          size="small"
-          pagination={{ hideOnSinglePage: true }}
-        />
-      </Card>
+        <TabPane tab="Projects" key="1" className="projects-table">
+          <Card title={<b>Your Projects</b>} bordered={false}>
+            <Table
+              columns={columns}
+              dataSource={projects}
+              size="small"
+              pagination={{ hideOnSinglePage: true }}
+            />
+          </Card>
+        </TabPane>
+        <TabPane tab="Contributions" key="2" className="projects-table">
+          <ContributionsTable />
+        </TabPane>
+      </Tabs>
     </div>
   );
 };

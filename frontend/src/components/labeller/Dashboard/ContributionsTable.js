@@ -166,15 +166,12 @@ const dropdown = (projectId) => {
   return (
     <Menu className="dropdown-style">
       <Menu.Item>
-        {" "}
         <Link to={`/projects/:${projectId}/tasks?count=5`}>5 tasks</Link>{" "}
       </Menu.Item>
       <Menu.Item>
-        {" "}
         <Link to={`/projects/:${projectId}/tasks?count=10`}>10 tasks</Link>{" "}
       </Menu.Item>
       <Menu.Item>
-        {" "}
         <Link to={`/projects/:${projectId}/tasks?count=20`}>20 tasks</Link>{" "}
       </Menu.Item>
     </Menu>
@@ -183,7 +180,7 @@ const dropdown = (projectId) => {
 
 const ContributionsTable = () => {
   return (
-    <Card title={<b>Your contributions</b>} bordered={false}>
+    <Card title={<b>Your Contributions</b>} bordered={false}>
       <Table
         columns={columns}
         dataSource={data}

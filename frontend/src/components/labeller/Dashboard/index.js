@@ -10,7 +10,9 @@ const Dashboard = () => {
         <Typography.Title>Dashboard</Typography.Title>
       </Divider>
 
-      <ContributionsTable />
+      <div className="projects-table">
+        <ContributionsTable />
+      </div>
     </div>
   );
 };
