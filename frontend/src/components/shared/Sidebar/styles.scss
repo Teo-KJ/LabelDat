@@ -1,0 +1,69 @@
+@media screen {
+  @font-face {
+    font-family: "Ubuntu";
+    font-style: italic;
+    font-weight: normal;
+    src: local("Ubuntu Italic"), local("Ubuntu-Italic"),
+      url("http://themes.googleusercontent.com/static/fonts/ubuntu/v4/kbP_6ONYVgE-bLa9ZRbvvvesZW2xOQ-xsNqO47m55DA.woff")
+        format("woff");
+  }
+}
+@media screen {
+  @font-face {
+    font-family: "Ubuntu";
+    font-style: normal;
+    font-weight: normal;
+    src: local("Ubuntu"),
+      url("http://themes.googleusercontent.com/static/fonts/ubuntu/v4/_xyN3apAT_yRRDeqB3sPRg.woff")
+        format("woff");
+  }
+}
+@media screen {
+  @font-face {
+    font-family: "Ubuntu";
+    font-style: normal;
+    font-weight: bold;
+    src: local("Ubuntu Bold"), local("Ubuntu-Bold"),
+      url("http://themes.googleusercontent.com/static/fonts/ubuntu/v4/0ihfXUL2emPh0ROJezvraD8E0i7KZn-EPnyo3HZu7kw.woff")
+        format("woff");
+  }
+}
+
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext");
+
+.trigger {
+  padding: 10px 30px;
+  line-height: 10px;
+  cursor: pointer;
+  color: white;
+}
+
+.content-layout {
+  background: #fff;
+  padding-left: 50px;
+  padding-top: 20px;
+}
+
+.sidebar-textstyle {
+  min-height: 100vh;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  font-family: "Open Sans";
+  font-size: 16px;
+
+  color: #fff;
+  padding-bottom: 450px;
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: normal;
+}
+
+.link {
+  a,
+  a:hover,
+  a:visited,
+  a:active {
+    color: inherit;
+    text-decoration: none;
+  }
+}

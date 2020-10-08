@@ -3,9 +3,15 @@ import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
 import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
-import './index.scss'
+import "./index.scss";
+import AuthContextProvider from "./context/auth-context";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(
+  <AuthContextProvider>
+    <App />
+  </AuthContextProvider>,
+  document.getElementById("root")
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

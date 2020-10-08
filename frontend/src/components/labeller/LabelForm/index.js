@@ -1,77 +1,64 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Loading from "../../shared/Loading";
 import { Form, Formik } from "formik";
 import validate from "../validate";
 import LabelFormTask from "../LabelFormTask";
-import { Typography, Button } from "antd";
+import { Typography, Button, Alert } from "antd";
 import "./styles.scss";
-
-// Mock API Data
-const generateApiTasksData = (count) => {
-  const tasksData = {
-    // layout: {
-    //   inputType: "radio",
-    //   dataType: "image",
-    //   description: "Label what you see",
-    //   labelData: ["Dog", "Cat"],
-    // },
-    layout: {
-      inputType: "checkbox",
-      dataType: "image",
-      description: "Label what you see in the picture",
-      labelData: ["Dog", "Cat", "Rabbit", "Bird"],
-    },
-    //Length of data array as determined by count query param
-    data: [
-      {
-        taskId: 1,
-        taskData:
-          "https://cf.ltkcdn.net/dogs/images/std/248348-676x450-standing-pomeranian-dog.jpg",
-
-        width: 600,
-        height: 300,
-      },
-      {
-        taskId: 2,
-        taskData:
-          "https://thehappypuppysite.com/wp-content/uploads/2018/07/white-pomeranian-long.jpg",
-
-        width: 600,
-        height: 400,
-      },
-    ],
-  };
-
-  return tasksData;
-};
+import history from "../../../history";
 
 const LabelForm = (props) => {
   const [tasksData, setTasksData] = useState({});
 
   useEffect(() => {
-    //TODO: Replace with GET call: /api/projects/:projectId/tasks?count=5
-    setTasksData({
-      ...generateApiTasksData(
-        new URLSearchParams(props.location.search).get("count")
-      ),
-    });
-  }, [props.location.search]);
+    const fetchTasks = async () => {
+      const res = await axios.get(
+        `/api/projects/${
+          props.match.params.projectId
+        }/tasks?count=${new URLSearchParams(props.location.search).get(
+          "count"
+        )}`
+      );
 
-  const handleSubmit = (values) => {
-    //TODO: Replace with POST call: /api/projects/:projectId/tasks
+      setTasksData(res.data);
+    };
 
-    const results = tasksData.data.map(({ taskId }, index) => ({
-      taskId,
-      picked: values.picked[index],
+    fetchTasks();
+  }, [props.location.search, props.match.params.projectId]);
+
+  const handleSubmit = async (values) => {
+    const results = tasksData.data.map(({ id }, index) => ({
+      taskId: id,
+      data: {
+        picked: values.picked[index],
+      },
     }));
-    console.log(props.match.params.projectId);
-    console.log(results);
+
+    const res = await axios.post("/api/projects/tasks", results);
+
+    if (res.status === 200) history.push("/");
   };
 
-  if (!tasksData.data) return <div>Loading...</div>;
+  // Fetching
+  if (!tasksData.data) return <Loading />;
+
+  // No more tasks to label
+  if (!Object.keys(tasksData.data).length)
+    return (
+      <Alert
+        className="completed-message"
+        message="Completed"
+        description={`You have finished labelling all the tasks for ${tasksData.projectName}.`}
+        type="success"
+        showIcon
+      />
+    );
+
   return (
     <div>
       <Typography.Title level={2} className="project-title">
-        Insert Project Name Here
+        {tasksData.projectName}
       </Typography.Title>
 
       <Wizard
@@ -88,6 +75,7 @@ const LabelForm = (props) => {
             onSubmit={() => console.log("page submit")}
           >
             <LabelFormTask
+              itemDataType={tasksData.itemDataType}
               taskIndex={index}
               data={task}
               layout={tasksData.layout}

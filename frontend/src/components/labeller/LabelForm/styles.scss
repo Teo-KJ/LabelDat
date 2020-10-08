@@ -1,6 +1,7 @@
 .project-title {
   width: 60%;
   margin: 0 auto;
+  margin-top: 20px;
 }
 
 .main-form-container {
@@ -20,4 +21,9 @@
 
 .task-counter {
   cursor: default;
+}
+
+.completed-message {
+  width: 80%;
+  margin: 0 auto;
 }

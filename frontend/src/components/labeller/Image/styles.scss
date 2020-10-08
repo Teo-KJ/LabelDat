@@ -1,0 +1,15 @@
+$margintop: 20px;
+
+.image-preview {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  img {
+    background-color: black;
+    max-height: 500px;
+    width: auto;
+    transition: 0.2s;
+    margin-top: $margintop;
+    object-fit: cover;
+  }
+}

@@ -1,16 +1,17 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
+
 import "../styles.scss";
 import { Form, Input, Select, Row, Col, Card, Button } from "antd";
+import { AuthContext } from "../../../context/auth-context";
 
 const { Option } = Select;
 
 const SignIn = () => {
   const [form] = Form.useForm();
+  const authContext = useContext(AuthContext);
 
   const onFinish = (values) => {
-    //TODO: POST to route /signin
-    //TODO: Redirect to another page
-    console.log("Received values of form: ", values);
+    authContext.signIn(values);
   };
 
   return (

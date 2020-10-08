@@ -1,23 +1,20 @@
 import React from "react";
 import { Field, ErrorMessage } from "formik";
 import { Radio, Checkbox, Alert } from "antd";
-import Image from "../../project-owner/DataTypes/Image";
+import Image from "../Image";
 import Description from "../../project-owner/Description";
 import "./styles.scss";
 
-const LabelFormTask = ({ data, layout, taskIndex }) => {
-  switch (layout.inputType) {
+const LabelFormTask = ({ data, layout, taskIndex, itemDataType }) => {
+  switch (layout.type) {
     case "radio":
       return (
         <div>
-          <Image
-            img={data.taskData}
-            imgProps={{ style: { width: data.width, height: data.height } }}
-          />
+          {itemDataType === "IMAGE" ? <Image img={data.itemData} /> : null}
 
           <div className="container">
-            <Description description="Label what you see in the picture" />
-            {layout.labelData.map((value) => (
+            <Description description={layout.description} />
+            {layout.labels.map((value) => (
               <React.Fragment key={value}>
                 <Field
                   name={`picked[${taskIndex}]`}
@@ -43,14 +40,11 @@ const LabelFormTask = ({ data, layout, taskIndex }) => {
     case "checkbox":
       return (
         <div>
-          <Image
-            img={data.taskData}
-            imgProps={{ style: { width: data.width, height: data.height } }}
-          />
+          {itemDataType === "IMAGE" ? <Image img={data.itemData} /> : null}
 
           <div className="container">
             <Description description={layout.description} />
-            {layout.labelData.map((value) => (
+            {layout.labels.map((value) => (
               <React.Fragment key={value}>
                 <Field
                   name={`picked[${taskIndex}]`}
