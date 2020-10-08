@@ -78,15 +78,17 @@ class Project(db.Model):
         if not number_of_tasks:  # When there are no tasks
             return 0
         num_labelled = len([task for task in self.tasks if len(task.labels) > 0])
-        return round(float((num_labelled / self.calculate_number_of_tasks()) * 100), 1)
+        return round(float((num_labelled / number_of_tasks * 100)), 1)
 
     def calculate_tasks_labelled_percentage_by_user(self, user_id):
         """
             Count % of tasks that a user has labelled
         """
-
-        num_labelled = self.calculate_tasks_labelled_by_user(user_id)
-        return round(float((num_labelled / self.calculate_number_of_tasks()) * 100), 1)
+        number_of_tasks = self.calculate_number_of_tasks()
+        if not number_of_tasks:  # When there are no tasks
+            return 0
+        num_labelled_by_user = self.calculate_tasks_labelled_by_user(user_id)
+        return round(float((num_labelled_by_user / number_of_tasks) * 100), 1)
 
     def calculate_tasks_labelled_by_user(self, user_id):
         """
