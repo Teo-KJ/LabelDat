@@ -1,0 +1,16 @@
+.review-container {
+  width: 70%;
+  margin: 0 auto;
+  padding: 30px;
+  background: rgba(128, 128, 128, 0.08);
+}
+
+.review-content {
+  margin-top: 20px;
+}
+
+.review-list {
+  .ant-spin-nested-loading {
+    min-height: 800px;
+  }
+}

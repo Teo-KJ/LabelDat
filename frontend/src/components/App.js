@@ -12,6 +12,7 @@ import { AuthContext } from "../context/auth-context";
 import Loading from "./shared/Loading";
 import Sidebar from "./shared/Sidebar";
 import LabellerDashboard from "./labeller/Dashboard";
+import ProjectLabelReview from "./labeller/ProjectLabelReview";
 import { Layout } from "antd";
 
 const { Content } = Layout;
@@ -66,6 +67,11 @@ function App() {
               component={LabelForm}
               path="/projects/:projectId/tasks"
             />
+            <Route
+              exact
+              component={ProjectLabelReview}
+              path="/projects/:projectId/review"
+            />
           </Fragment>
         );
       // Render routes for Labeller
@@ -77,6 +83,11 @@ function App() {
               exact
               component={LabelForm}
               path="/projects/:projectId/tasks"
+            />
+            <Route
+              exact
+              component={ProjectLabelReview}
+              path="/projects/:projectId/review"
             />
           </Fragment>
         );
