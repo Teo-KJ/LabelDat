@@ -136,7 +136,7 @@ const Dashboard = () => {
         centered
         className="tabs-container"
         type="card"
-        tabBarStyle={{ marginBottom: 0 }}
+        tabBarStyle={{ width: "60%", margin: "0 auto" }}
       >
         <TabPane tab="Projects" key="1" className="projects-table">
           {renderPOProjectsTable()}
