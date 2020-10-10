@@ -1,15 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { CloudUploadOutlined } from "@ant-design/icons";
 import "./styles.scss";
+import axios from 'axios';
+import history from '../../../history';
 
 export default function (props) {
   let files = React.createRef();
 
-  function onChange(e) {
-    files = files.current.files
+  const [error, changeError] = useState("");
 
-    //upload the files
-    
+  function onChange(e) {
+    files = files.current.files;
+    let location = history.location.pathname;
+
+    // Request to backend
+    // send the files
+
+    let url = `/api${location}`;
+    axios.post(url, files)
+      .then(res => res.data)
+      .then(res => {
+        history.push(`/`);
+      })
+      .catch(e => {
+        changeError("Failed to process.");
+      })
+
   }
 
   return (
@@ -27,6 +43,7 @@ export default function (props) {
         </div>
         Drag and Drop<br></br>or<br></br>Upload Files
       </div>
+      <div className="feedback">{error}</div>
     </div>
   );
 }
