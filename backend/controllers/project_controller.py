@@ -85,6 +85,21 @@ def get_project_tasks_unlabelled(project_id):
         response.data = GenericErrorResponse(message=err.description).to_response()
         return jsonify(response.to_dict()), err.code
 
+@project_controller.route('/<project_id>/analytics', methods=['GET'])
+def get_project_analytics(project_id):
+    response = RestResponse()
+    try:
+        if request.method == "GET":
+            current_user_id = session.get(SESSION_USER_ID_KEY)
+            days_count = request.args.get('days')
+            analytics = ProjectService.get_project_analytics(project_id, days_count)
+
+            response = analytics
+        return jsonify(response.to_dict()), 200
+    except BadRequest as err:
+        response.data = GenericErrorResponse(message=err.description).to_response()
+        return jsonify(response.to_dict()), err.code
+
 
 # @project_controller.route('/<project_id>/tasks/labelled', methods=['GET'])
 # def get_project_tasks_labelled(project_id):
