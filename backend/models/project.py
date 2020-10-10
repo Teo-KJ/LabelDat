@@ -116,7 +116,7 @@ class Project(db.Model):
 
     def calculate_tasks_labelled_by_user(self, user_id):
         """
-            Count % of tasks that a user has labelled
+            Count number of tasks that a user has labelled
         """
         tasks_by_user = db.session.query(Task).filter_by(project_id=self.id).join(Label).filter_by(
             user_id=user_id).all()
