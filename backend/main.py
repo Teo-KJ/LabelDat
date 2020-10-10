@@ -10,16 +10,13 @@ from extensions import db
 
 URI = 'mysql+pymysql://{0}:{1}@{2}:{3}/{4}'.format(USER, PASSWORD, HOST, PORT, SCHEMA)
 
-
 # Function to create blueprints and initialise db
 def register_extensions(app_obj):
     app_obj.app_context().push()
     app_obj.register_blueprint(home_controller, url_prefix="/")
-    app_obj.register_blueprint(user_controller, url_prefix="/api/users")
-    app_obj.register_blueprint(project_controller, url_prefix="/api/projects")
+    app_obj.register_blueprint(user_controller, url_prefix="/api/user")
     db.init_app(app_obj)
     db.create_all()
-
 
 # Function to configure database with Flask
 def create_app(name):
