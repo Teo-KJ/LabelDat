@@ -1,5 +1,8 @@
 from extensions import db
 from models.item_data_type import ItemDataType
+from models.label import Label
+from models.task import Task
+from copy import deepcopy
 
 
 class Project(db.Model):
@@ -10,6 +13,7 @@ class Project(db.Model):
     item_data_type = db.Column(db.Enum(ItemDataType), nullable=False)
     layout = db.Column(db.JSON, nullable=False)
     outsource_labelling = db.Column(db.Boolean, nullable=False)
+    created_at = db.Column(db.DateTime(), nullable=False)
 
     # parent 1-to-many w Task
     tasks = db.relationship('Task', backref='task', lazy=True)
@@ -17,16 +21,104 @@ class Project(db.Model):
     project_managers = db.relationship('ProjectManager', backref='project', lazy=True)
 
     def __repr__(self):
-        return f"<Project {self.project_id} | {self.project_name} | Organisation : {self.org_id}>"
+        return f"<Project {self.id} | {self.project_name} | Organisation : {self.org_id}>"
 
     def to_response(self):
         return {
             "id": self.id,
             "orgId": self.org_id,
             "projectName": self.project_name,
-            "itemDataType": self.item_data_type,
+            "itemDataType": self.item_data_type.name,
             "layout": self.layout,
             "outsourceLabelling": self.outsource_labelling,
-            "tasks": self.tasks,
-            "projectManagers": self.project_managers
+            "tasks": [t.to_response() for t in self.tasks],
+            "projectManagers": [pm.to_response() for pm in self.project_managers],
+            "created_at": self.created_at
         }
+
+    def to_project_for_user_response(self, user_id):
+        return {
+            "id": self.id,
+            "orgId": self.org_id,
+            "projectName": self.project_name,
+            "itemDataType": self.item_data_type.name,
+            "layout": self.layout,
+            "outsourceLabelling": self.outsource_labelling,
+            "tasksLabelled": [t.to_response_with_labels_from_user(user_id)
+                              for t in self.tasks_and_labels_from_user(user_id)],
+            "projectManagers": [pm.to_response() for pm in self.project_managers],
+            "created_at": self.created_at
+        }
+
+    def tasks_and_labels_from_user(self, user_id):
+        resulting_tasks = []
+        for task in self.tasks:
+            for label in task.labels:
+                if label.user_id == user_id:
+                    resulting_tasks.append(task)
+                    break
+        return resulting_tasks
+
+    def to_created_project_response(self):
+        return {
+            "id": self.id,
+            "orgId": self.org_id,
+            "projectName": self.project_name,
+            "itemDataType": self.item_data_type.name,
+            "layout": self.layout,
+            "outsourceLabelling": self.outsource_labelling,
+            "tasks": [t.to_response() for t in self.tasks],
+            "projectManagers": [pm.to_response() for pm in self.project_managers],
+            "tasksCount": self.calculate_number_of_tasks(),
+            "overallPercentage": self.calculate_tasks_labelled_percentage(),
+            "created_at": self.created_at
+        }
+
+    def to_contributed_project_response(self, user_id):
+        return {
+            "id": self.id,
+            "orgId": self.org_id,
+            "projectName": self.project_name,
+            "itemDataType": self.item_data_type.name,
+            "layout": self.layout,
+            "outsourceLabelling": self.outsource_labelling,
+            "tasks": [t.to_response() for t in self.tasks],
+            "projectManagers": [pm.to_response() for pm in self.project_managers],
+            "tasksCount": self.calculate_number_of_tasks(),
+            "overallPercentage": self.calculate_tasks_labelled_percentage(),
+            "contributionCount": self.calculate_tasks_labelled_by_user(user_id),
+            "contributionPercentage": self.calculate_tasks_labelled_percentage_by_user(user_id),
+            "created_at": self.created_at
+        }
+
+    def calculate_number_of_tasks(self):
+        return len(self.tasks)
+
+    def calculate_tasks_labelled_percentage(self):
+        """
+            Count % of tasks that have >= 1 label
+        """
+        number_of_tasks = self.calculate_number_of_tasks()
+        if not number_of_tasks:  # When there are no tasks
+            return 0
+        num_labelled = len([task for task in self.tasks if len(task.labels) > 0])
+        return round(float((num_labelled / number_of_tasks * 100)), 1)
+
+    def calculate_tasks_labelled_percentage_by_user(self, user_id):
+        """
+            Count % of tasks that a user has labelled
+        """
+        number_of_tasks = self.calculate_number_of_tasks()
+        if not number_of_tasks:  # When there are no tasks
+            return 0
+        num_labelled_by_user = self.calculate_tasks_labelled_by_user(user_id)
+        return round(float((num_labelled_by_user / number_of_tasks) * 100), 1)
+
+    def calculate_tasks_labelled_by_user(self, user_id):
+        """
+            Count number of tasks that a user has labelled
+        """
+        tasks_by_user = db.session.query(Task).filter_by(project_id=self.id).join(Label).filter_by(
+            user_id=user_id).all()
+        num_labelled = len(tasks_by_user)
+        return num_labelled
