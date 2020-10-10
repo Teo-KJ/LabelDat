@@ -1,12 +1,13 @@
 import uuid
 from datetime import datetime
-from sqlalchemy.orm.exc import MultipleResultsFound
-from werkzeug.exceptions import BadRequest, Conflict
+
 from extensions import db
 from models import *
 from models.user_type import UserType
-from utilities import *
 from sqlalchemy import desc
+from sqlalchemy.orm.exc import MultipleResultsFound
+from utilities import *
+from werkzeug.exceptions import BadRequest, Conflict
 
 
 class ProjectService:
@@ -146,3 +147,22 @@ class ProjectService:
 
         project_ids = [dict(row)['id'] for row in db.session.execute(query)]
         return [Project.query.filter_by(id=project_id).first() for project_id in project_ids]
+
+
+    @staticmethod
+    def get_project_analytics(project_id, days):
+        project = Project.query.filter_by(id=project_id).first()
+        project_name, project_layout, project_item_data_type = project.project_name, project.layout, project.item_data_type
+        overallPercentage = project.calculate_tasks_labelled_percentage()
+        query = f'''
+            SELECT date(l.created_at) as "date", COUNT(*) as "labelCount"
+            FROM task t
+            INNER JOIN label l ON t.id = l.task_id
+            WHERE t.project_id = "76bac0ee-3dc7-4da7-bd9e-9033793a1e99"
+            AND l.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND NOW()
+            GROUP BY date(l.created_at)
+            ORDER BY date(l.created_at)
+        '''
+        labelProgress = [dict(row) for row in db.session.execute(query)]
+
+        return AnalyticsResponse(project_name, overallPercentage, labelProgress)
