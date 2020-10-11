@@ -1,12 +1,14 @@
+import csv
 import uuid
 from datetime import datetime
-from sqlalchemy.orm.exc import MultipleResultsFound
-from werkzeug.exceptions import BadRequest, Conflict
+
 from extensions import db
 from models import *
 from models.user_type import UserType
-from utilities import *
 from sqlalchemy import desc
+from sqlalchemy.orm.exc import MultipleResultsFound
+from utilities import *
+from werkzeug.exceptions import BadRequest, Conflict
 
 
 class ProjectService:
@@ -146,3 +148,46 @@ class ProjectService:
 
         project_ids = [dict(row)['id'] for row in db.session.execute(query)]
         return [Project.query.filter_by(id=project_id).first() for project_id in project_ids]
+
+
+    @staticmethod
+    def get_project_analytics(project_id, days):
+        project = Project.query.filter_by(id=project_id).first()
+        project_name, project_layout, project_item_data_type = project.project_name, project.layout, project.item_data_type
+        overallPercentage = project.calculate_tasks_labelled_percentage()
+        query = f'''
+            SELECT date(l.created_at) as "date", COUNT(*) as "labelCount"
+            FROM task t
+            INNER JOIN label l ON t.id = l.task_id
+            WHERE t.project_id = "{project_id}"
+            AND l.created_at BETWEEN DATE_SUB(NOW(), INTERVAL {days} DAY) AND NOW()
+            GROUP BY date(l.created_at)
+            ORDER BY date(l.created_at)
+        '''
+        labelProgress = [dict(row) for row in db.session.execute(query)]
+
+        return AnalyticsResponse(project_name, overallPercentage, labelProgress)
+
+    @staticmethod
+    def get_project_csv(project_id):
+        project = Project.query.filter_by(id=project_id).first()
+        query = f'''
+            SELECT t.filename, l.*
+            FROM task t
+            INNER JOIN label l ON t.id = l.task_id
+            WHERE t.project_id = "{project_id}"
+            ORDER BY t.filename, date(l.created_at)
+        '''
+        csv_dict_list = [dict(row) for row in db.session.execute(query)]
+        csv_list_cols = list(csv_dict_list[0].keys())
+        
+        csv_list = [row.values() for row in csv_dict_list]
+        csv_list.insert(0, csv_list_cols)
+
+        return csv_list
+
+    @staticmethod
+    def get_project_info(project_id):
+        project = Project.query.filter_by(id=project_id).first()
+        project_name, project_layout, project_item_data_type = project.project_name, project.layout, project.item_data_type
+        return (project_name, project_layout, project_item_data_type)
