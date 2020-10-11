@@ -175,7 +175,7 @@ class ProjectService:
             SELECT t.filename, l.*
             FROM task t
             INNER JOIN label l ON t.id = l.task_id
-            WHERE t.project_id = "76bac0ee-3dc7-4da7-bd9e-9033793a1e99"
+            WHERE t.project_id = "{project_id}"
             ORDER BY t.filename, date(l.created_at)
         '''
         csv_dict_list = [dict(row) for row in db.session.execute(query)]
