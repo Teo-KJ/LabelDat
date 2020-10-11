@@ -158,8 +158,8 @@ class ProjectService:
             SELECT date(l.created_at) as "date", COUNT(*) as "labelCount"
             FROM task t
             INNER JOIN label l ON t.id = l.task_id
-            WHERE t.project_id = "76bac0ee-3dc7-4da7-bd9e-9033793a1e99"
-            AND l.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND NOW()
+            WHERE t.project_id = "{project_id}"
+            AND l.created_at BETWEEN DATE_SUB(NOW(), INTERVAL {days} DAY) AND NOW()
             GROUP BY date(l.created_at)
             ORDER BY date(l.created_at)
         '''
