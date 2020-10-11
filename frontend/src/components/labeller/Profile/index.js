@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import 'antd/dist/antd.css';
 import './index.css';
-import { Descriptions } from 'antd';
+import { Descriptions, Pagination } from 'antd';
 
 const Profile = (props) => {
     const [profileInfo, setProfileInfo] = useState(null);
@@ -10,20 +10,55 @@ const Profile = (props) => {
     useEffect(() => {
         const fetchProfileInfo = async () => {
             const res = await axios.get(
-                `/api/users/${props.match.params.id}`
+                `/api/profile`
             );
-
             setProfileInfo({
-                name: res.data.data.name,
-                username: res.data.data.username,
-                userid: res.data.data.id,
-                email: res.data.data.email,
-                //signupdate: res.data.data.signupdate
+                name: res.data.data2.name,
+                username: res.data.data2.username,
+                userid: res.data.data2.id,
+                signupdate: res.data.data2.signupdate,
+                contributionP: res.data.data.contributionPercentage,
+                projects: res.data.data.projects.map((project) => ({
+                    ...project,
+                    key: project.projectName,
+                    projectName: project.projectName,
+                    user: project.overallPercentage.username,
+                    contributionPercentage: project.overallPercentage.contributionPercentage,
+                })),
             });
         };
-
         fetchProfileInfo();
-    }, [props.match.params.id]);
+    }, []);
+
+    const columns = [
+        {
+            title: "Project Name",
+            dataIndex: "projectName",
+        },
+        {
+            title: "Username",
+            dataIndex: "user",
+        },
+        {
+            title: "Contribution",
+            dataIndex: "contributionPercentage",
+            sorter: {
+                compare: (a, b) => a.math - b.math,
+                multiple: 2,
+            },
+        },
+    ];
+
+
+    function onChange(pagination, filters, sorter, extra) {
+        console.log('params', pagination, filters, sorter, extra);
+    }
+
+    function createTable() {
+        profileInfo.projects.map(() => (
+            <Table columns={columns} dataSource={profileInfo.projects} onChange={onChange} pagination={{ hideOnSinglePage: true }} />
+        ))
+    }
 
     return (
 
@@ -31,12 +66,12 @@ const Profile = (props) => {
             <Descriptions.Item label="Name">{profileInfo.name}</Descriptions.Item>
             <Descriptions.Item label="Username">{profileInfo.username}</Descriptions.Item>
             <Descriptions.Item label="User ID">{profileInfo.id}</Descriptions.Item>
-            <Descriptions.Item label="Email">{profileInfo.email}</Descriptions.Item>
-            <Descriptions.Item label="Sign Up Date" span={2}>{profileInfo.signupdate}</Descriptions.Item>
+            <Descriptions.Item label="Sign Up Date" span={3}>{profileInfo.signupdate}</Descriptions.Item>
+            <Descriptions.Item label="Leaderboard" layout="vertical" >
+                {createTable()}
+            </Descriptions.Item>
         </Descriptions>
-
-      
-      );
+    );
 }
 
 export default Profile;
