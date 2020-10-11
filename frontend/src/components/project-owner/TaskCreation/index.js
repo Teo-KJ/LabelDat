@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import axios from 'axios';
+import history from '../../../history';
 import "./styles.scss";
-
 import SettingComponent from "./SettingComponent";
 import Preview from "./Preview";
 
@@ -74,10 +75,20 @@ export default function () {
         break
     }
     
+    if (error) return;
+
     // Request to backend
     // send the form
-
+    axios.post("/api/projects", form)
+      .then(res => res.data)
+      .then(res => {
+        history.push(`/projects/${res.projectId}/tasks`);
+      })
+      .catch(e => {
+        changeError("Failed to process.");
+      })
   }
+
   return (
     <div className="task-creation">
       <div className="editor">

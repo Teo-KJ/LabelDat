@@ -5,8 +5,6 @@ import { Slider } from "antd";
 import "./styles.scss";
 
 export default function (props) {
-  console.log(props);
-
   let min = 0;
   let max = 10;
 
