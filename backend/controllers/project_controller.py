@@ -1,9 +1,11 @@
-from flask import Blueprint, jsonify, request, session
-from werkzeug.exceptions import *
+import csv
+import os
 
+from flask import Blueprint, jsonify, request, send_file, session
+from models.user_type import UserType
 from services import *
 from utilities import *
-from models.user_type import UserType
+from werkzeug.exceptions import *
 
 project_controller = Blueprint("controllers/project_controller",
                                __name__, static_folder="static", template_folder="templates")
@@ -100,6 +102,23 @@ def get_project_analytics(project_id):
         response.data = GenericErrorResponse(message=err.description).to_response()
         return jsonify(response.to_dict()), err.code
 
+@project_controller.route('/<project_id>/export', methods=['GET'])
+def export_project_labels(project_id):
+    response = RestResponse()
+    try:
+        if request.method == "GET":
+            current_user_id = session.get(SESSION_USER_ID_KEY)
+            ext = request.args.get('ext')
+            project_name, project_layout, project_item_data_type = ProjectService.get_project_info(project_id)
+
+            if ext == "csv":
+                csv_list = ProjectService.get_project_csv(project_id)
+                response = FileResponseCSV(project_name, csv_list)
+
+            return response.to_file_output()
+    except BadRequest as err:
+        response.data = GenericErrorResponse(message=err.description).to_response()
+        return jsonify(response.to_dict()), err.code
 
 # @project_controller.route('/<project_id>/tasks/labelled', methods=['GET'])
 # def get_project_tasks_labelled(project_id):
