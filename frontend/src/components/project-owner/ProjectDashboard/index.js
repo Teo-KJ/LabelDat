@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, Divider, Row, Col, Card, Button } from "antd";
 import { ExportOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import axios from "axios";
+import Loading from "../../shared/Loading";
 
 import {
   Chart,
@@ -13,52 +15,49 @@ import {
 } from "bizcharts";
 import "./styles.scss";
 
-const data = {
-  projectName: "Project Alpha",
-  overallTasksProgress: [
-    {
-      type: "Unlabelled",
-      percentage: 80,
-    },
-    {
-      type: "Labelled",
-      percentage: 20,
-    },
-  ],
-  weeklyTasksProgress: [
-    {
-      date: "23 Sep",
-      tasksCount: 8, // Refer to the number of tasks completed in a day
-    },
-    {
-      date: "24 Sep",
-      tasksCount: 11,
-    },
-    {
-      date: "25 Sep",
-      tasksCount: 15,
-    },
-    {
-      date: "26 Sep",
-      tasksCount: 17,
-    },
-    {
-      date: "27 Sep",
-      tasksCount: 16,
-    },
-    {
-      date: "28 Sep",
-      tasksCount: 14,
-    },
-    {
-      date: "29 Sep",
-      tasksCount: 10,
-    },
-  ],
-};
+const Dashboard = (props) => {
+  const [projectAnalytics, setProjectAnalytics] = useState(null);
 
-const Dashboard = () => {
-  const { projectName, weeklyTasksProgress, overallTasksProgress } = data;
+  useEffect(() => {
+    const fetchProjectAnalytics = async () => {
+      const res = await axios.get(
+        `/api/projects/${props.match.params.projectId}/analytics?days=7`
+      );
+      const { labelProgress, overallPercentage, projectName } = res.data;
+
+      setProjectAnalytics({
+        projectName,
+        overallTasksProgress: [
+          {
+            type: "Unlabelled",
+            percentage: 100 - overallPercentage,
+          },
+          {
+            type: "Labelled",
+            percentage: overallPercentage,
+          },
+        ],
+        weeklyTasksProgress: labelProgress.map(({ labelCount, date }) => ({
+          labelCount,
+          date: new Date(date).toLocaleDateString(undefined, {
+            weekday: "short",
+            day: "numeric",
+            month: "short",
+          }),
+        })),
+      });
+    };
+
+    fetchProjectAnalytics();
+  }, [props.match.params.projectId]);
+
+  if (!projectAnalytics) return <Loading />;
+  const {
+    projectName,
+    weeklyTasksProgress,
+    overallTasksProgress,
+  } = projectAnalytics;
+
   return (
     <div className="dashboard-container">
       <Divider orientation="left">
@@ -94,7 +93,7 @@ const Dashboard = () => {
             <Chart
               scale={{
                 date: { alias: "Date" },
-                tasksCount: { alias: "Number of Tasks Completed" },
+                labelCount: { alias: "Number of Tasks Completed", min: 0 },
               }}
               autoFit
               height={320}
@@ -104,7 +103,7 @@ const Dashboard = () => {
                 shape="smooth"
                 point
                 area
-                position="date*tasksCount"
+                position="date*labelCount"
               />
             </Chart>
           </Card>
