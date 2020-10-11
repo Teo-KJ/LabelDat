@@ -1,3 +1,4 @@
+import csv
 import uuid
 from datetime import datetime
 
@@ -166,3 +167,27 @@ class ProjectService:
         labelProgress = [dict(row) for row in db.session.execute(query)]
 
         return AnalyticsResponse(project_name, overallPercentage, labelProgress)
+
+    @staticmethod
+    def get_project_csv(project_id):
+        project = Project.query.filter_by(id=project_id).first()
+        query = f'''
+            SELECT t.filename, l.*
+            FROM task t
+            INNER JOIN label l ON t.id = l.task_id
+            WHERE t.project_id = "76bac0ee-3dc7-4da7-bd9e-9033793a1e99"
+            ORDER BY t.filename, date(l.created_at)
+        '''
+        csv_dict_list = [dict(row) for row in db.session.execute(query)]
+        csv_list_cols = list(csv_dict_list[0].keys())
+        
+        csv_list = [row.values() for row in csv_dict_list]
+        csv_list.insert(0, csv_list_cols)
+
+        return csv_list
+
+    @staticmethod
+    def get_project_info(project_id):
+        project = Project.query.filter_by(id=project_id).first()
+        project_name, project_layout, project_item_data_type = project.project_name, project.layout, project.item_data_type
+        return (project_name, project_layout, project_item_data_type)
