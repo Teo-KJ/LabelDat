@@ -51,7 +51,26 @@ const Dashboard = (props) => {
     fetchProjectAnalytics();
   }, [props.match.params.projectId]);
 
+  const fetchCSV = async () => {
+    const res = await axios.get(
+      `/api/projects/${props.match.params.projectId}/export?ext=csv`
+    );
+
+    let csvContent = "data:text/csv;charset=utf-8," + res.data;
+    var encodedUri = encodeURI(csvContent);
+    let link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute(
+      "download",
+      `${projectAnalytics.projectName} Label Data.csv`
+    );
+    document.body.appendChild(link);
+
+    link.click();
+  };
+
   if (!projectAnalytics) return <Loading />;
+
   const {
     projectName,
     weeklyTasksProgress,
@@ -65,8 +84,12 @@ const Dashboard = (props) => {
       </Divider>
 
       <div className="project-button-group">
-        {/* TODO: Export Data Functionality */}
         <Button
+          disabled={
+            overallTasksProgress.filter(({ type }) => type === "Labelled")[0]
+              .percentage === 0
+          }
+          onClick={fetchCSV}
           className="project-button"
           type="primary"
           shape="round"
