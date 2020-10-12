@@ -8,8 +8,8 @@ import "./styles.scss";
 import Dropdown from "./Dropdown";
 
 export default function (props) {
-  const [dataTypeSettingOpen, toggleDataTypeSetting] = useState(true);
-  const [inputTypeSettingOpen, toggleInputTypeSetting] = useState(true);
+  const [dataTypeSettingOpen, toggleDataTypeSetting] = useState(false);
+  const [inputTypeSettingOpen, toggleInputTypeSetting] = useState(false);
   const [descriptionSettingOpen, toggleDescriptionSetting] = useState(false);
   const dataType = props.dataType;
   const inputType = props.inputType;
@@ -223,7 +223,19 @@ export default function (props) {
         selectType={props.changeDataType}
         dropdown={true}
         value={dataType}
+        isSetting={false}
       />
+      {dataTypeSettingOpen ? (
+        <div className="setting-sct setting-data">
+          <strong>
+            <p>Help</p>
+          </strong>
+          <p style={{textAlign: 'justify'}}>This option allows you and your labellers to 
+            label data. Some of the recommended labellling 
+            options include checkbox, radio buttons, 
+            bounding boxes, joint-markings &amp; drawing polygons</p>
+        </div>
+      ) : null}
 
       <Dropdown
         dropdown={false}
@@ -247,6 +259,7 @@ export default function (props) {
         selectType={props.changeInputType}
         dropdown={true}
         value={inputType}
+        isSetting={true}
       />
       {inputTypeSettingOpen && inputType ? (
         <div className="setting-sct setting-data">
