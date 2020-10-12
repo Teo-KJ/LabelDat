@@ -224,7 +224,7 @@ export default function (props) {
       />
       <Dropdown
         text="Select Data Type"
-        list={["Image", "Sound"]}
+        list={["Image", "Audio"]}
         toggle={toggleDataTypeSetting}
         settingIsOpen={dataTypeSettingOpen}
         selectType={props.changeDataType}

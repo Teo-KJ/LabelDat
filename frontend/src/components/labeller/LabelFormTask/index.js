@@ -2,6 +2,7 @@ import React from "react";
 import { Field, ErrorMessage } from "formik";
 import { Radio, Checkbox, Alert } from "antd";
 import Image from "../Image";
+import Audio from "../Audio";
 import Description from "../../project-owner/Description";
 import "./styles.scss";
 
@@ -10,7 +11,11 @@ const LabelFormTask = ({ data, layout, taskIndex, itemDataType }) => {
     case "radio":
       return (
         <div>
-          {itemDataType === "IMAGE" ? <Image img={data.itemData} /> : null}
+          {itemDataType === "IMAGE" ? (
+            <Image img={data.itemData} />
+          ) : itemDataType === "AUDIO" ? (
+            <Audio audio={data.itemData} />
+          ) : null}
 
           <div className="container">
             <Description description={layout.description} />
@@ -40,7 +45,11 @@ const LabelFormTask = ({ data, layout, taskIndex, itemDataType }) => {
     case "checkbox":
       return (
         <div>
-          {itemDataType === "IMAGE" ? <Image img={data.itemData} /> : null}
+          {itemDataType === "IMAGE" ? (
+            <Image img={data.itemData} />
+          ) : itemDataType === "AUDIO" ? (
+            <Audio audio={data.itemData} />
+          ) : null}
 
           <div className="container">
             <Description description={layout.description} />

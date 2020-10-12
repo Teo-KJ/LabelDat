@@ -17,7 +17,7 @@ export default function (props) {
     switch (props.dataType) {
       case "Image":
         return <ImageDataType imgProps={props.imgProps} />;
-      case "Sound":
+      case "Audio":
         return <SoundDataType></SoundDataType>;
 
       default:

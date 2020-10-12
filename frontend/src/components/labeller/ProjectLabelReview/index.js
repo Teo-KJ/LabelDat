@@ -61,6 +61,10 @@ const ProjectLabelReview = (props) => {
                   alt=""
                   src={item.itemData}
                 />
+              ) : projectReviewData.itemDataType === "AUDIO" ? (
+                <div className="review-data audio-preview">
+                  <audio controls="disabled" src={item.itemData}></audio>
+                </div>
               ) : null}
               <List.Item.Meta
                 className="review-content"
@@ -97,7 +101,9 @@ const processTitle = (inputType, itemDataType, picked) => {
     str = `You picked ${picked}`;
   }
 
-  str += ` for this ${itemDataType === "IMAGE" ? "image" : "audio"}.`;
+  str += ` for this ${
+    itemDataType === "IMAGE" ? "image" : itemDataType === "AUDIO" ? "audio" : ""
+  }.`;
   return str;
 };
 
