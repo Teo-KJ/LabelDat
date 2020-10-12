@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment, useContext } from "react";
-import { Router, Route, Redirect } from "react-router-dom";
+import { Router, Route } from "react-router-dom";
 import history from "../history";
 import ProjectDashboard from "./project-owner/ProjectDashboard";
 import LabelForm from "./labeller/LabelForm";
@@ -11,7 +11,7 @@ import TaskCreation from "./project-owner/TaskCreation";
 import { AuthContext } from "../context/auth-context";
 import Loading from "./shared/Loading";
 import Sidebar from "./shared/Sidebar";
-import Landing from './shared/Landing';
+import Landing from "./shared/Landing";
 import LabellerDashboard from "./labeller/Dashboard";
 import ProjectLabelReview from "./labeller/ProjectLabelReview";
 import { Layout } from "antd";
@@ -35,11 +35,7 @@ function App() {
     if (!Object.keys(authContext.user).length) {
       return (
         <Fragment>
-          {history.location.pathname === "/signup" ? (
-            <Redirect to="/signup" />
-          ) : (
-            <Redirect to="/signin" />
-          )}
+          <Route exact component={Landing} path="/" />
           <Route exact component={SignUp} path="/signup" />
           <Route exact component={SignIn} path="/signin" />
         </Fragment>
