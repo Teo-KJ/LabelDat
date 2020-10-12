@@ -3,11 +3,11 @@ import { Router, Route, Redirect } from "react-router-dom";
 import history from "../history";
 import ProjectDashboard from "./project-owner/ProjectDashboard";
 import LabelForm from "./labeller/LabelForm";
-import TaskCreation from "./project-owner/TaskCreation";
+import ProjectCreation from "./project-owner/ProjectCreation";
 import MainDashboard from "./project-owner/MainDashboard";
 import SignIn from "./shared/SignIn";
 import SignUp from "./shared/SignUp";
-import UploadFiles from "./project-owner/UploadFiles";
+import TaskCreation from "./project-owner/TaskCreation";
 import { AuthContext } from "../context/auth-context";
 import Loading from "./shared/Loading";
 import Sidebar from "./shared/Sidebar";
@@ -52,10 +52,12 @@ function App() {
       case "PROJECT_OWNER":
         return (
           <Fragment>
-            <Route exact component={TaskCreation} path="/create-project" />
-            <Route exact path="/uploadfiles/:projectId">
-              <UploadFiles dataType={"image"}></UploadFiles>
-            </Route>
+            <Route exact component={ProjectCreation} path="/create-project" />
+            <Route
+              exact
+              component={TaskCreation}
+              path="/projects/:projectId/add-tasks"
+            />
             <Route exact component={MainDashboard} path="/" />
             <Route
               exact

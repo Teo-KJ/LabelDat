@@ -115,7 +115,7 @@ export default function (props) {
             </div>
           </React.Fragment>
         );
-      case "Options":
+      case "Radio":
         return (
           <React.Fragment>
             <div className="input-setting-row">
@@ -133,8 +133,9 @@ export default function (props) {
             <div className="input-setting-row input-setting-row-sp">
               {props.optionsProps
                 ? props.optionsProps.values
-                  ? props.optionsProps.values.map((_) => (
+                  ? props.optionsProps.values.map((_, i) => (
                       <Button
+                        key={i}
                         type="primary"
                         danger
                         onClick={() => deleteCheckboxValue(_)}
@@ -212,9 +213,15 @@ export default function (props) {
   }
 
   return (
-    
     <div className="setting-component">
-      <Input className="project-name" placeholder="Project Name" value={props.projectName} onChange={(e)=>{props.changeProjectName(e.target.value)}}/>
+      <Input
+        className="project-name"
+        placeholder="Project Name"
+        value={props.projectName}
+        onChange={(e) => {
+          props.changeProjectName(e.target.value);
+        }}
+      />
       <Dropdown
         text="Select Data Type"
         list={["Image", "Sound"]}
@@ -230,10 +237,11 @@ export default function (props) {
           <strong>
             <p>Help</p>
           </strong>
-          <p style={{textAlign: 'justify'}}>This option allows you and your labellers to 
-            label data. Some of the recommended labellling 
-            options include checkbox, radio buttons, 
-            bounding boxes, joint-markings &amp; drawing polygons</p>
+          <p style={{ textAlign: "justify" }}>
+            This option allows you and your labellers to label data. Some of the
+            recommended labellling options include checkbox, radio buttons,
+            bounding boxes, joint-markings &amp; drawing polygons
+          </p>
         </div>
       ) : null}
 
@@ -253,7 +261,7 @@ export default function (props) {
 
       <Dropdown
         text="Select Input Type"
-        list={["Text", "Slider", "Options", "Checkbox"]}
+        list={["Text", "Slider", "Radio", "Checkbox"]}
         toggle={toggleInputTypeSetting}
         settingIsOpen={inputTypeSettingOpen}
         selectType={props.changeInputType}
