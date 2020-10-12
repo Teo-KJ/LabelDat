@@ -20,11 +20,11 @@ export default function () {
 
   //Checkbox Input Type Styling
   const [checkBoxProps, changeCheckBoxProps] = useState({
-    values: ["default"],
+    values: [],
   });
 
   //Options Input Type Styling
-  const [optionsProps, changeOptionsProps] = useState({ values: ["default"] });
+  const [optionsProps, changeOptionsProps] = useState({ values: [] });
 
   //Data Types Selection
   const [dataType, changeDataType] = useState("");
@@ -51,23 +51,38 @@ export default function () {
   function submitTask() {
     let form = {};
     if (!projectName) {
-      changeError("Project name is empty!");
+      return changeError("Project name is empty!");
     }
     if (!dataType) {
-      changeError("Data type is empty!");
+      return changeError("Data type is empty!");
     }
     if (!desc) {
-      changeError("Description is empty!");
+      return changeError("Description is empty!");
     }
     if (!inputType) {
-      changeError("Input type is empty!");
+      return changeError("Input type is empty!");
+    }
+
+    if (
+      inputType.toLowerCase() === "checkbox" &&
+      checkBoxProps.values.length < 2
+    ) {
+      return changeError(
+        "You need at least two values for your label checkbox options!"
+      );
+    }
+
+    if (inputType.toLowerCase() === "radio" && optionsProps.values.length < 2) {
+      return changeError(
+        "You need at least two values for your label radio options!"
+      );
     }
     form.projectName = projectName;
     form.itemDataType = dataType.toUpperCase();
-    form.description = desc;
     form.layout = {
       type: inputType.toLowerCase(),
     };
+    form.layout.description = desc;
     switch (inputType.toLowerCase()) {
       case "checkbox":
         form.layout.labels = [...checkBoxProps.values];

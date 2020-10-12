@@ -104,7 +104,7 @@ export default function (props) {
                       <Button
                         type="primary"
                         danger
-                        onClick={() => deleteCheckboxValue(_)}
+                        onClick={() => deleteValue(_, "checkbox")}
                       >
                         <DeleteOutlined />
                         {_}
@@ -138,7 +138,7 @@ export default function (props) {
                         key={i}
                         type="primary"
                         danger
-                        onClick={() => deleteCheckboxValue(_)}
+                        onClick={() => deleteValue(_, "radio")}
                       >
                         <DeleteOutlined />
                         {_}
@@ -156,15 +156,6 @@ export default function (props) {
 
   const [optionsValue, addOptionsValue] = useState("");
 
-  // function deleteOptionsValue(value) {
-  //   let newList = [...props.optionsProps.values];
-  //   newList = newList.filter((_) => _ !== value);
-  //   props.changeCheckBoxProps({
-  //     ...props.optionsProps,
-  //     values: newList,
-  //   });
-  // }
-
   function newOptionsValue() {
     props.changeOptionsProps({
       ...props.optionsProps,
@@ -177,13 +168,22 @@ export default function (props) {
 
   const [checkboxValue, addCheckboxValue] = useState("");
 
-  function deleteCheckboxValue(value) {
-    let newList = [...props.checkBoxProps.values];
-    newList = newList.filter((_) => _ !== value);
-    props.changeCheckBoxProps({
-      ...props.checkBoxProps,
-      values: newList,
-    });
+  function deleteValue(value, type) {
+    if (type === "checkbox") {
+      let newList = [...props.checkBoxProps.values];
+      newList = newList.filter((_) => _ !== value);
+      props.changeCheckBoxProps({
+        ...props.checkBoxProps,
+        values: newList,
+      });
+    } else if (type === "radio") {
+      let newList = [...props.optionsProps.values];
+      newList = newList.filter((_) => _ !== value);
+      props.changeOptionsProps({
+        ...props.optionsProps,
+        values: newList,
+      });
+    }
   }
 
   function newCheckboxValue() {
