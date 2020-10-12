@@ -98,13 +98,12 @@ function App() {
 
   // Insert routes here
   return (
-    // <Router history={history}>
-    //   <Layout>
-    //     <Sidebar />
-    //     <Content>{renderRoutes()}</Content>
-    //   </Layout>
-    // </Router>
-    <UploadFiles></UploadFiles>
+    <Router history={history}>
+      <Layout>
+        <Sidebar />
+        <Content>{renderRoutes()}</Content>
+      </Layout>
+    </Router>
   );
 }
 
