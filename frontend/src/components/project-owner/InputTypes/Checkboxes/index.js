@@ -27,8 +27,9 @@ export default function (props) {
 
   return (
     <div className="checkbox-container">
-      {values.map((_) => (
+      {values.map((_, i) => (
         <Checkbox
+          key={i}
           checkChange={checkChange}
           checkBoxProps={{ text: _ }}
         ></Checkbox>

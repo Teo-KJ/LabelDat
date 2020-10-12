@@ -39,7 +39,7 @@ export default function (props) {
             checkBoxProps={props.checkBoxProps}
           ></CheckboxInputType>
         );
-      case "Options":
+      case "Radio":
         return (
           <OptionsInputType
             optionsProps={props.optionsProps}
@@ -53,9 +53,7 @@ export default function (props) {
     <div>
       {dataTypes()}
       <div className="input-area-preview">
-        <Description
-          description={props.desc}
-        ></Description>
+        <Description description={props.desc}></Description>
         {inputTypes()}
       </div>
     </div>

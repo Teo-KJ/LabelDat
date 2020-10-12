@@ -8,6 +8,7 @@ import {
   LoginOutlined,
   LogoutOutlined,
   UserAddOutlined,
+  PlusCircleOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../context/auth-context";
@@ -77,6 +78,16 @@ class Sidebar extends React.Component {
             <Link to="/">Dashboard</Link>
           </span>
         </Menu.Item>
+        {user.userType === "PROJECT_OWNER" ? (
+          <Menu.Item
+            key="4"
+            icon={<PlusCircleOutlined style={{ fontSize: "20px" }} />}
+          >
+            <span className="link">
+              <Link to="/create-project">Create Project</Link>
+            </span>
+          </Menu.Item>
+        ) : null}
         <Menu.Item key="2" icon={<UserOutlined style={{ fontSize: "20px" }} />}>
           <span className="link">
             <Link to="/profile">Profile</Link>

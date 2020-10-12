@@ -23,7 +23,9 @@ export default function (props) {
         }}
       >
         {values.map((_, i) => (
-          <Radio value={i}>{_}</Radio>
+          <Radio key={i} value={i}>
+            {_}
+          </Radio>
         ))}
       </Radio.Group>
     </div>

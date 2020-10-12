@@ -3,6 +3,7 @@ import { Typography, Divider, Row, Col, Card, Button } from "antd";
 import { ExportOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
 import Loading from "../../shared/Loading";
+import history from "../../../history";
 
 import {
   Chart,
@@ -12,6 +13,7 @@ import {
   Interaction,
   Coordinate,
   LineAdvance,
+  Annotation,
 } from "bizcharts";
 import "./styles.scss";
 
@@ -23,10 +25,16 @@ const Dashboard = (props) => {
       const res = await axios.get(
         `/api/projects/${props.match.params.projectId}/analytics?days=7`
       );
-      const { labelProgress, overallPercentage, projectName } = res.data;
+      const {
+        labelProgress,
+        overallPercentage,
+        projectName,
+        numTasks,
+      } = res.data;
 
       setProjectAnalytics({
         projectName,
+        numTasks,
         overallTasksProgress: [
           {
             type: "Unlabelled",
@@ -75,6 +83,7 @@ const Dashboard = (props) => {
     projectName,
     weeklyTasksProgress,
     overallTasksProgress,
+    numTasks,
   } = projectAnalytics;
 
   return (
@@ -98,8 +107,11 @@ const Dashboard = (props) => {
         >
           Export Data
         </Button>
-        {/* TODO: Direct to another page to upload more tasks */}
+
         <Button
+          onClick={() =>
+            history.push(`/projects/${props.match.params.projectId}/add-tasks`)
+          }
           className="project-button"
           type="primary"
           shape="round"
@@ -145,6 +157,16 @@ const Dashboard = (props) => {
                 position="percentage"
                 color="type"
                 shape="sliceShape"
+              />
+              <Annotation.Text
+                position={["50%", "50%"]}
+                content={`Task Count: ${numTasks}`}
+                style={{
+                  lineHeight: "240px",
+                  fontSize: "20",
+                  fill: "#262626",
+                  textAlign: "center",
+                }}
               />
               <Interaction type="element-single-selected" />
             </Chart>

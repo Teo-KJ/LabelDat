@@ -36,21 +36,21 @@ export default function (props) {
               );
             })}
           </Select>
-          {props.isSetting ? 
+          {props.isSetting ? (
             <div
               className={`icon ${props.settingIsOpen ? " rotated-icon" : ""}`}
               onClick={() => props.toggle(!props.settingIsOpen)}
             >
               <SettingOutlined style={{ color: "#b6b6b6" }} />
-            </div> 
-            : 
+            </div>
+          ) : (
             <div
               onClick={() => props.toggle(!props.settingIsOpen)}
-              className={'icon'}
+              className={"icon"}
             >
               <QuestionCircleOutlined style={{ color: "#b6b6b6" }} />
             </div>
-          }
+          )}
         </React.Fragment>
       ) : (
         <React.Fragment>
