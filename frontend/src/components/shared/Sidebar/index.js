@@ -42,21 +42,21 @@ class Sidebar extends React.Component {
 
           <Menu.Item
             key="1"
-            icon={<LoginOutlined style={{ fontSize: "20px" }} />}
-          >
-            <span className="link">
-              <Link to="/signin" className="link">
-                Sign In
-              </Link>
-            </span>
-          </Menu.Item>
-          <Menu.Item
-            key="2"
             icon={<UserAddOutlined style={{ fontSize: "20px" }} />}
           >
             <span className="link">
               <Link to="/signup" className="link">
                 Sign Up
+              </Link>
+            </span>
+          </Menu.Item>
+          <Menu.Item
+            key="2"
+            icon={<LoginOutlined style={{ fontSize: "20px" }} />}
+          >
+            <span className="link">
+              <Link to="/signin" className="link">
+                Sign In
               </Link>
             </span>
           </Menu.Item>
@@ -69,7 +69,6 @@ class Sidebar extends React.Component {
         <div className="trigger" onClick={this.toggle}>
           <MenuOutlined />
         </div>
-
         <Menu.Item
           key="1"
           icon={<AppstoreOutlined style={{ fontSize: "20px" }} />}
