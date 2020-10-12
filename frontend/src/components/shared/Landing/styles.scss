@@ -1,0 +1,39 @@
+.landing {
+  transition: 2s;
+  width: 100vw;
+  height: 100vh;
+  margin-top: -50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  .left-segment {
+    text-align: justify;
+    width: 30%;
+    max-width: 500px;
+    p {
+      margin: 0;
+    }
+    .title {
+      font-size: 3em;
+      margin-top: -0.5em;
+    }
+    .text {
+      margin: 10px 0 15px 0;
+    }
+  }
+  .right-segment {
+    width: 40%;
+    max-width: 500px;
+  }
+}
+
+.landing-start {
+  transform: translateY(50px);
+  opacity: 0;
+}
+
+.landing-stop {
+  transform: translateY(0px);
+  opacity: 1;
+}

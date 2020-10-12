@@ -11,6 +11,7 @@ import UploadFiles from "./project-owner/UploadFiles";
 import { AuthContext } from "../context/auth-context";
 import Loading from "./shared/Loading";
 import Sidebar from "./shared/Sidebar";
+import Landing from './shared/Landing';
 import LabellerDashboard from "./labeller/Dashboard";
 import ProjectLabelReview from "./labeller/ProjectLabelReview";
 import { Layout } from "antd";
