@@ -53,7 +53,7 @@ function App() {
         return (
           <Fragment>
             <Route exact component={TaskCreation} path="/create-project" />
-            <Route exact path="/uploadfiles">
+            <Route exact path="/uploadfiles/:projectId">
               <UploadFiles dataType={"image"}></UploadFiles>
             </Route>
             <Route exact component={MainDashboard} path="/" />
@@ -98,12 +98,13 @@ function App() {
 
   // Insert routes here
   return (
-    <Router history={history}>
-      <Layout>
-        <Sidebar />
-        <Content>{renderRoutes()}</Content>
-      </Layout>
-    </Router>
+    // <Router history={history}>
+    //   <Layout>
+    //     <Sidebar />
+    //     <Content>{renderRoutes()}</Content>
+    //   </Layout>
+    // </Router>
+    <UploadFiles></UploadFiles>
   );
 }
 

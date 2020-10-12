@@ -12,11 +12,12 @@ export default function (props) {
   function onChange(e) {
     files = files.current.files;
     let location = history.location.pathname;
+    location = location.split("/")[2];
 
     // Request to backend
     // send the files
 
-    let url = `/api${location}`;
+    let url = `/api/projects/${location}/tasks`;
     axios.post(url, files)
       .then(res => res.data)
       .then(res => {
@@ -25,7 +26,6 @@ export default function (props) {
       .catch(e => {
         changeError("Failed to process.");
       })
-
   }
 
   return (

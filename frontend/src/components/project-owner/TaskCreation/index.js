@@ -81,8 +81,8 @@ export default function () {
     // send the form
     axios.post("/api/projects", form)
       .then(res => res.data)
-      .then(res => {
-        history.push(`/projects/${res.projectId}/tasks`);
+      .then(res => { 
+        history.push(`/uploadfiles/${res.id}`);
       })
       .catch(e => {
         changeError("Failed to process.");
