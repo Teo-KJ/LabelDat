@@ -5,12 +5,25 @@
   background: rgba(128, 128, 128, 0.08);
 }
 
-.review-content {
-  margin-top: 20px;
+.review-data {
+  vertical-align: middle;
+  display: inline-block;
 }
 
-.review-list {
-  .ant-spin-nested-loading {
-    min-height: 800px;
-  }
+.review-content {
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.review-content .ant-list-item-meta-content {
+  width: 100%;
+  margin-left: 75px;
+}
+
+.review-list .ant-spin-nested-loading {
+  min-height: 800px;
+}
+
+.review-list .ant-list-pagination {
+  margin-top: 0px;
 }

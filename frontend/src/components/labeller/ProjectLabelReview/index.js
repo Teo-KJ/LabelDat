@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { List, Row, Col, Divider, Typography } from "antd";
+import { List, Divider, Typography } from "antd";
 import "./styles.scss";
 import Loading from "../../shared/Loading";
 
@@ -46,7 +46,6 @@ const ProjectLabelReview = (props) => {
 
       <div className="review-list">
         <List
-          className="ant-spin-nested-loading"
           itemLayout="vertical"
           size="small"
           pagination={{
@@ -55,28 +54,27 @@ const ProjectLabelReview = (props) => {
           dataSource={projectReviewData.tasksLabelled}
           renderItem={(item) => (
             <List.Item key={item.title}>
-              <Row gutter={120}>
-                <Col sm={12} md={8}>
-                  {projectReviewData.itemDataType === "IMAGE" ? (
-                    <img width={272} alt="" src={item.itemData} />
-                  ) : null}
-                </Col>
-                <Col sm={12} md={16}>
-                  <List.Item.Meta
-                    className="review-content"
-                    title={
-                      <span>
-                        {processTitle(
-                          projectReviewData.inputType,
-                          projectReviewData.itemDataType,
-                          item.picked
-                        )}
-                      </span>
-                    }
-                    description={item.dateLabelled}
-                  />
-                </Col>
-              </Row>
+              {projectReviewData.itemDataType === "IMAGE" ? (
+                <img
+                  className="review-data"
+                  width={272}
+                  alt=""
+                  src={item.itemData}
+                />
+              ) : null}
+              <List.Item.Meta
+                className="review-content"
+                title={
+                  <span>
+                    {processTitle(
+                      projectReviewData.inputType,
+                      projectReviewData.itemDataType,
+                      item.picked
+                    )}
+                  </span>
+                }
+                description={item.dateLabelled}
+              />
             </List.Item>
           )}
         />
