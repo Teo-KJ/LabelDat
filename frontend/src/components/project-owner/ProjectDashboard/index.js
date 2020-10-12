@@ -25,10 +25,16 @@ const Dashboard = (props) => {
       const res = await axios.get(
         `/api/projects/${props.match.params.projectId}/analytics?days=7`
       );
-      const { labelProgress, overallPercentage, projectName } = res.data;
+      const {
+        labelProgress,
+        overallPercentage,
+        projectName,
+        numTasks,
+      } = res.data;
 
       setProjectAnalytics({
         projectName,
+        numTasks,
         overallTasksProgress: [
           {
             type: "Unlabelled",
@@ -77,6 +83,7 @@ const Dashboard = (props) => {
     projectName,
     weeklyTasksProgress,
     overallTasksProgress,
+    numTasks,
   } = projectAnalytics;
 
   return (
@@ -153,7 +160,7 @@ const Dashboard = (props) => {
               />
               <Annotation.Text
                 position={["50%", "50%"]}
-                content="Tasks Count: 5"
+                content={`Task Count: ${numTasks}`}
                 style={{
                   lineHeight: "240px",
                   fontSize: "20",

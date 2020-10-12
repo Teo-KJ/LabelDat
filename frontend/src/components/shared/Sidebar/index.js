@@ -30,7 +30,7 @@ class Sidebar extends React.Component {
 
   renderMenuItems = () => {
     const { user } = this.context;
-    console.log(user);
+
     if (!user) return null;
 
     if (!Object.keys(user).length) {
