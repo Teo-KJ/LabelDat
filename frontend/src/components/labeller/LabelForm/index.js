@@ -4,7 +4,7 @@ import Loading from "../../shared/Loading";
 import { Form, Formik } from "formik";
 import validate from "../validate";
 import LabelFormTask from "../LabelFormTask";
-import { Typography, Button, Alert } from "antd";
+import { Typography, Button, Alert, Row, Col } from "antd";
 import "./styles.scss";
 import history from "../../../history";
 
@@ -128,34 +128,39 @@ const Wizard = ({ children, initialValues, onSubmit }) => {
         <Form>
           <div className="main-form-container">
             {step}
-            <div className="button-group">
-              {stepNumber > 0 && (
-                <Button
-                  className="form-button"
-                  onClick={() => previous(formik.values)}
-                  shape="round"
-                >
-                  Back
-                </Button>
-              )}
-              <Button
-                className="form-button"
-                disabled={formik.isSubmitting}
-                type="primary"
-                htmlType="submit"
-                shape="round"
-              >
-                {isLastStep ? "Submit" : "Next"}
-              </Button>
-              <Button
-                type="dashed"
-                className="task-counter"
-                shape="round"
-                size="small"
-              >
-                {stepNumber + 1}/{totalSteps}
-              </Button>
-            </div>
+            <Row justify="end">
+              <Col span={8}>
+                <div>
+                  {stepNumber > 0 && (
+                    <Button
+                      className="form-button"
+                      onClick={() => previous(formik.values)}
+                      shape="round"
+                    >
+                      Back
+                    </Button>
+                  )}
+
+                  <Button
+                    className="form-button"
+                    disabled={formik.isSubmitting}
+                    type="primary"
+                    htmlType="submit"
+                    shape="round"
+                  >
+                    {isLastStep ? "Submit" : "Next"}
+                  </Button>
+                  <Button
+                    type="dashed"
+                    className="task-counter"
+                    shape="round"
+                    size="small"
+                  >
+                    {stepNumber + 1}/{totalSteps}
+                  </Button>
+                </div>
+              </Col>
+            </Row>
           </div>
         </Form>
       )}

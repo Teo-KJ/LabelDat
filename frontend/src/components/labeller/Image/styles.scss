@@ -1,13 +1,11 @@
 $margintop: 20px;
 
 .image-preview {
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
+  text-align: center;
   img {
     background-color: black;
-    max-height: 500px;
-    width: auto;
+    max-width: 560px;
+    max-height: 450px;
     transition: 0.2s;
     margin-top: $margintop;
     object-fit: cover;
