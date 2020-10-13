@@ -51,3 +51,19 @@ class UserService:
         if not found_user:
             raise BadRequest("There is no valid current user.")
         return found_user.to_response()["userType"]
+
+    @staticmethod
+    def get_user_profile(user_id):
+        user = User.query.filter_by(id=user_id).first()
+
+        if not user:
+            raise BadRequest("There is no valid current user.")
+
+        query1 = f'''
+            select id, name, username, created_at as signupDate from user
+            where id="{user_id}";
+        '''
+
+        query1List = [dict(row) for row in db.session.execute(query1)]
+        return query1List
+        # project = Project.query.filter_by(id=user_id).first()

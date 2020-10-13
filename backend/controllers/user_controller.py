@@ -76,3 +76,18 @@ def logout():
     except BadRequest as err:
         response.data = GenericErrorResponse(message=err.description).to_response()
         return jsonify(response.to_dict()), err.code
+
+@user_controller.route('/userProfile', methods=['GET'])
+def userProfile():
+    response = RestResponse()
+    try:
+        if request.method == "GET":
+            current_user_id = session[SESSION_USER_ID_KEY]
+            current_user = UserService.get_user_profile(current_user_id)
+            response.data = current_user
+            del session[SESSION_USER_ID_KEY]
+        return jsonify(response.to_dict()), 200
+    
+    except BadRequest as err:
+        response.data = GenericErrorResponse(message=err.description).to_response()
+        return jsonify(response.to_dict()), err.code
