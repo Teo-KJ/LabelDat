@@ -20,7 +20,7 @@ const columns = [
     width: "170px",
     render: (text, record) => (
       <Tooltip
-        title={`${Math.floor(
+        title={`${Math.ceil(
           (record.tasksCount * record.overallPercentage) / 100
         )}/${record.tasksCount} Tasks Labelled`}
       >
