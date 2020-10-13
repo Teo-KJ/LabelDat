@@ -53,17 +53,16 @@ class UserService:
         return found_user.to_response()["userType"]
 
     @staticmethod
-    def get_user_profile(user_id):
-        user = User.query.filter_by(id=user_id).first()
-
-        if not user:
-            raise BadRequest("There is no valid current user.")
-
-        query1 = f'''
-            select id, name, username, created_at as signupDate from user
-            where id="{user_id}";
+    def get_user_profile():
+        queryProject = '''
+            select user_id,
+            count(user_id) * 100.0 / (select count(*) from  label) as contributionPercentage
+            from label
+            group by user_id;
         '''
-
-        query1List = [dict(row) for row in db.session.execute(query1)]
-        return query1List
-        # project = Project.query.filter_by(id=user_id).first()
+        queryList = [dict(row) for row in db.session.execute(queryProject)]
+        
+        for i in queryList:
+            i['contributionPercentage'] = str(i['contributionPercentage'])
+        
+        return queryList

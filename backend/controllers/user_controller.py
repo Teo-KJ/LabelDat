@@ -82,9 +82,8 @@ def userProfile():
     response = RestResponse()
     try:
         if request.method == "GET":
-            current_user_id = session[SESSION_USER_ID_KEY]
-            current_user = UserService.get_user_profile(current_user_id)
-            response.data = current_user
+            profile = UserService.get_user_profile()
+            response.data = profile
             del session[SESSION_USER_ID_KEY]
         return jsonify(response.to_dict()), 200
     
