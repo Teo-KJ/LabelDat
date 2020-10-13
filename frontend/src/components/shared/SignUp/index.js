@@ -88,13 +88,14 @@ const SignUp = () => {
                 </Select>
               </Form.Item>
 
-              <Form.Item
+              {/* Toggle this off first */}
+              {/* <Form.Item
                 className="form-item"
                 name="orgId"
                 label="Organization ID"
               >
                 <Input />
-              </Form.Item>
+              </Form.Item> */}
 
               <Form.Item
                 className="form-item"
