@@ -49,13 +49,13 @@ function App() {
       case "PROJECT_OWNER":
         return (
           <Fragment>
+            <Route exact component={MainDashboard} path="/" />
             <Route exact component={ProjectCreation} path="/create-project" />
             <Route
               exact
               component={TaskCreation}
               path="/projects/:projectId/add-tasks"
             />
-            <Route exact component={MainDashboard} path="/" />
             <Route
               exact
               component={ProjectDashboard}
@@ -99,7 +99,9 @@ function App() {
   return (
     <Router history={history}>
       <Layout>
-        <Sidebar />
+        <Sidebar
+          key={authContext.user ? Object.keys(authContext.user).length : null}
+        />
         <Content>{renderRoutes()}</Content>
       </Layout>
     </Router>

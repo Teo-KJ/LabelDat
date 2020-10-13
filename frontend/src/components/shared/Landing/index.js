@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./styles.scss";
 import landingImage from "./landing.svg";
 import { Button } from "antd";
-import history from "../../../history";
 
 export default function () {
   const [loaded, setLoaded] = useState(false);
@@ -19,10 +18,6 @@ export default function () {
     }
   }
 
-  function onClick() {
-    history.push("/signup");
-  }
-
   return (
     <div className={`landing` + genClass()}>
       <div className="left-segment">
@@ -34,8 +29,11 @@ export default function () {
           Our platform offers a streamlined, smooth data labelling system for
           research and professional work.
         </p>
-        <Button type="primary" onClick={onClick}>
-          Try for free
+        <Button
+          type="primary"
+          onClick={() => document.getElementById("signin-item").click()}
+        >
+          Try for Free
         </Button>
       </div>
       <div className="right-segment">
