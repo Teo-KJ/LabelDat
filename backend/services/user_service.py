@@ -56,7 +56,7 @@ class UserService:
     def get_user_profile():
         queryProject = '''
             select user_id,
-            count(user_id) * 100.0 / (select count(*) from  label) as contributionPercentage
+            count(user_id) as NumOfTasks
             from label
             group by user_id;
         '''
