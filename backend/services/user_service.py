@@ -55,9 +55,10 @@ class UserService:
     @staticmethod
     def get_leaderboard():
         queryProject = '''
-            select user_id,
+            select username,
             count(user_id) as NumOfTasks
-            from label
+            from label, user
+            where user.id = label.user_id
             group by user_id;
         '''
         queryList = [dict(row) for row in db.session.execute(queryProject)]
