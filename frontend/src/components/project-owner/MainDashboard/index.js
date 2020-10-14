@@ -40,27 +40,22 @@ const Dashboard = () => {
       const res = await axios.get("/api/projects");
 
       if (res.status === 200) {
-        if (
-          res.data.data.projects.length ||
-          res.data.data.contributedProjects.length
-        ) {
-          setProjects({
-            poProjects: res.data.data.projects.map((project) => ({
+        setProjects({
+          poProjects: res.data.data.projects.map((project) => ({
+            ...project,
+            key: project.id,
+            dateCreated: new Date(
+              project.projectManagers[0].created_at
+            ).toDateString(),
+          })),
+          contributedProjects: res.data.data.contributedProjects.map(
+            (project) => ({
               ...project,
               key: project.id,
-              dateCreated: new Date(
-                project.projectManagers[0].created_at
-              ).toDateString(),
-            })),
-            contributedProjects: res.data.data.contributedProjects.map(
-              (project) => ({
-                ...project,
-                key: project.id,
-                dateCreated: new Date(project.created_at).toDateString(),
-              })
-            ),
-          });
-        } else setProjects([]);
+              dateCreated: new Date(project.created_at).toDateString(),
+            })
+          ),
+        });
       }
     };
 
