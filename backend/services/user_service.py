@@ -53,7 +53,7 @@ class UserService:
         return found_user.to_response()["userType"]
 
     @staticmethod
-    def get_user_profile():
+    def get_leaderboard():
         queryProject = '''
             select user_id,
             count(user_id) as NumOfTasks
@@ -63,6 +63,6 @@ class UserService:
         queryList = [dict(row) for row in db.session.execute(queryProject)]
         
         for i in queryList:
-            i['contributionPercentage'] = str(i['contributionPercentage'])
+            i['NumOfTasks'] = str(i['NumOfTasks'])
         
         return queryList
