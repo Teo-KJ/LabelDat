@@ -1,15 +1,15 @@
-$borderColor: #D6D6D6;
+$borderColor: #d6d6d6;
 $borderRadius: 10px;
 
 .upload-files-container {
-  width: 100%;
+  margin: 0 auto;
+  width: 70%;
   height: 100%;
-  padding: 100px 0;
   .upload-files:hover {
     border: 1px dashed rgb(0, 166, 255);
     box-shadow: 0px 0px 5px #6dcff669;
     .icon {
-      color: rgb(0, 166, 255)
+      color: rgb(0, 166, 255);
     }
   }
   .upload-files-log {
@@ -23,7 +23,7 @@ $borderRadius: 10px;
     }
   }
   .upload-files {
-    transition: .5s;
+    transition: 0.5s;
     max-width: 500px;
     box-sizing: border-box;
     padding: 20px;
@@ -35,7 +35,7 @@ $borderRadius: 10px;
     border-radius: $borderRadius;
     text-align: center;
     .icon {
-      transition: .5s;
+      transition: 0.5s;
       font-size: 5em;
       color: $borderColor;
     }

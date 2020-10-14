@@ -1,12 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CloudUploadOutlined } from "@ant-design/icons";
+import { Divider, Typography } from "antd";
+import Loading from "../../shared/Loading";
 import "./styles.scss";
 import axios from "axios";
 import history from "../../../history";
 
 export default function (props) {
-  let files = React.createRef();
   const [error, changeError] = useState("");
+  const [project, setProject] = useState(null);
+
+  useEffect(() => {
+    const getProject = async () => {
+      const res = await axios.get("/api/projects");
+      console.log(res);
+      if (res.status === 200) {
+        let { itemDataType, projectName } = res.data.data.projects.filter(
+          ({ id }) => id === props.match.params.projectId
+        )[0];
+        setProject({
+          itemDataType,
+          projectName,
+        });
+      }
+    };
+
+    getProject();
+  }, [props.match.params.projectId]);
+
+  let files = React.createRef();
+
   const toBase64 = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -48,11 +71,23 @@ export default function (props) {
     });
   }
 
+  if (!project) return <Loading />;
+
   return (
     <div className="upload-files-container">
+      <Divider orientation="left">
+        <Typography.Title>Add Tasks for {project.projectName}</Typography.Title>
+      </Divider>
       <div className="upload-files">
         <input
           type="file"
+          accept={
+            project.itemDataType === "AUDIO"
+              ? "audio/*"
+              : project.itemDataType === "IMAGE"
+              ? "image/*"
+              : null
+          }
           multiple
           title=""
           ref={files}
@@ -61,7 +96,7 @@ export default function (props) {
         <div className="icon">
           <CloudUploadOutlined />
         </div>
-        Drag and Drop<br></br>or<br></br>Upload Files
+        Drag and Drop<br></br>or<br></br>Click to Upload Files
       </div>
       <div className="feedback">{error}</div>
     </div>
