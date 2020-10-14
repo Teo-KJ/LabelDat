@@ -160,6 +160,7 @@ class ProjectService:
         project = Project.query.filter_by(id=project_id).first()
         project_name, project_layout, project_item_data_type = project.project_name, project.layout, project.item_data_type
         overallPercentage = project.calculate_tasks_labelled_percentage()
+        num_tasks = project.calculate_number_of_tasks()
         query = f'''
             SELECT date(l.created_at) as "date", COUNT(*) as "labelCount"
             FROM task t
@@ -171,7 +172,7 @@ class ProjectService:
         '''
         labelProgress = [dict(row) for row in db.session.execute(query)]
 
-        return AnalyticsResponse(project_name, overallPercentage, labelProgress)
+        return AnalyticsResponse(project_name, num_tasks, overallPercentage, labelProgress)
 
     @staticmethod
     def get_project_csv(project_id):
