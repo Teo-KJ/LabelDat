@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { List, Divider, Typography } from "antd";
+import { List, Divider, Typography, Row, Col } from "antd";
 import "./styles.scss";
 import Loading from "../../shared/Loading";
 
@@ -54,31 +54,31 @@ const ProjectLabelReview = (props) => {
           dataSource={projectReviewData.tasksLabelled}
           renderItem={(item) => (
             <List.Item key={item.title}>
-              {projectReviewData.itemDataType === "IMAGE" ? (
-                <img
-                  className="review-data"
-                  width={272}
-                  alt=""
-                  src={item.itemData}
-                />
-              ) : projectReviewData.itemDataType === "AUDIO" ? (
-                <div className="review-data audio-preview">
-                  <audio controls="disabled" src={item.itemData}></audio>
-                </div>
-              ) : null}
-              <List.Item.Meta
-                className="review-content"
-                title={
-                  <span>
-                    {processTitle(
-                      projectReviewData.inputType,
-                      projectReviewData.itemDataType,
-                      item.picked
-                    )}
-                  </span>
-                }
-                description={item.dateLabelled}
-              />
+              <Row align="middle" gutter={[16, 16]}>
+                <Col className="review-data" lg={10} span={24}>
+                  {projectReviewData.itemDataType === "IMAGE" ? (
+                    <img width={272} alt="" src={item.itemData} />
+                  ) : projectReviewData.itemDataType === "AUDIO" ? (
+                    <div className="review-data audio-preview">
+                      <audio controls="disabled" src={item.itemData}></audio>
+                    </div>
+                  ) : null}
+                </Col>
+                <Col lg={14} span={24}>
+                  <List.Item.Meta
+                    title={
+                      <span>
+                        {processTitle(
+                          projectReviewData.inputType,
+                          projectReviewData.itemDataType,
+                          item.picked
+                        )}
+                      </span>
+                    }
+                    description={item.dateLabelled}
+                  />
+                </Col>
+              </Row>
             </List.Item>
           )}
         />
