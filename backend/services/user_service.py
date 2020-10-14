@@ -11,7 +11,7 @@ from models import *
 class UserService:
 
     @staticmethod
-    def create_user(org_id, username, password, name, user_type):
+    def create_user(org_id, username, email, password, name, user_type):
         if User.query.filter_by(username=username).first():
             raise Conflict("UserService :: create_user :: Username already exists.")
 
@@ -25,7 +25,7 @@ class UserService:
             db.session.add(new_org)
 
         user_type = user_type.upper()
-        new_user = User(id=str(uuid.uuid4()), org_id=org_id, username=username,
+        new_user = User(id=str(uuid.uuid4()), org_id=org_id, username=username, email=email,
                         password=password, name=name, user_type=user_type, created_at=datetime.now())
         org.users.append(new_user)  # Resolves new organisation not existing before creating new user in 1 transaction.
         db.session.commit()

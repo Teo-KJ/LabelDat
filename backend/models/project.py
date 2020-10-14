@@ -2,7 +2,6 @@ from extensions import db
 from models.item_data_type import ItemDataType
 from models.label import Label
 from models.task import Task
-from copy import deepcopy
 
 
 class Project(db.Model):
@@ -31,7 +30,7 @@ class Project(db.Model):
             "itemDataType": self.item_data_type.name,
             "layout": self.layout,
             "outsourceLabelling": self.outsource_labelling,
-            "tasks": [t.to_response() for t in self.tasks],
+            "tasks": [t.to_response_without_item_data() for t in self.tasks],
             "projectManagers": [pm.to_response() for pm in self.project_managers],
             "created_at": self.created_at
         }
@@ -50,15 +49,6 @@ class Project(db.Model):
             "created_at": self.created_at
         }
 
-    def tasks_and_labels_from_user(self, user_id):
-        resulting_tasks = []
-        for task in self.tasks:
-            for label in task.labels:
-                if label.user_id == user_id:
-                    resulting_tasks.append(task)
-                    break
-        return resulting_tasks
-
     def to_created_project_response(self):
         return {
             "id": self.id,
@@ -67,7 +57,7 @@ class Project(db.Model):
             "itemDataType": self.item_data_type.name,
             "layout": self.layout,
             "outsourceLabelling": self.outsource_labelling,
-            "tasks": [t.to_response() for t in self.tasks],
+            "tasks": [t.to_response_without_item_data() for t in self.tasks],
             "projectManagers": [pm.to_response() for pm in self.project_managers],
             "tasksCount": self.calculate_number_of_tasks(),
             "overallPercentage": self.calculate_tasks_labelled_percentage(),
@@ -82,7 +72,7 @@ class Project(db.Model):
             "itemDataType": self.item_data_type.name,
             "layout": self.layout,
             "outsourceLabelling": self.outsource_labelling,
-            "tasks": [t.to_response() for t in self.tasks],
+            "tasks": [t.to_response_without_item_data() for t in self.tasks],
             "projectManagers": [pm.to_response() for pm in self.project_managers],
             "tasksCount": self.calculate_number_of_tasks(),
             "overallPercentage": self.calculate_tasks_labelled_percentage(),
@@ -90,6 +80,15 @@ class Project(db.Model):
             "contributionPercentage": self.calculate_tasks_labelled_percentage_by_user(user_id),
             "created_at": self.created_at
         }
+
+    def tasks_and_labels_from_user(self, user_id):
+        resulting_tasks = []
+        for task in self.tasks:
+            for label in task.labels:
+                if label.user_id == user_id:
+                    resulting_tasks.append(task)
+                    break
+        return resulting_tasks
 
     def calculate_number_of_tasks(self):
         return len(self.tasks)

@@ -87,6 +87,7 @@ def get_project_tasks_unlabelled(project_id):
         response.data = GenericErrorResponse(message=err.description).to_response()
         return jsonify(response.to_dict()), err.code
 
+
 @project_controller.route('/<project_id>/analytics', methods=['GET'])
 def get_project_analytics(project_id):
     response = RestResponse()
@@ -101,6 +102,7 @@ def get_project_analytics(project_id):
     except BadRequest as err:
         response.data = GenericErrorResponse(message=err.description).to_response()
         return jsonify(response.to_dict()), err.code
+
 
 @project_controller.route('/<project_id>/export', methods=['GET'])
 def export_project_labels(project_id):

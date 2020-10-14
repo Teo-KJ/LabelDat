@@ -26,6 +26,15 @@ class Task(db.Model):
             "labels": [label.to_response() for label in self.labels]
         }
 
+    def to_response_without_item_data(self):
+        return {
+            "id": self.id,
+            "projectId": self.project_id,
+            "filename": self.filename,
+            "created_at": self.created_at,
+            "labels": [label.to_response() for label in self.labels]
+        }
+
     def to_response_with_labels_from_user(self, user_id):
         return {
             "id": self.id,

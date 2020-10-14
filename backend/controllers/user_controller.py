@@ -54,7 +54,7 @@ def signup():
     try:
         if request.method == "POST":
             data = request.get_json()
-            newly_created_user = UserService.create_user(data.get("orgId"), data.get("username"),
+            newly_created_user = UserService.create_user(data.get("orgId"), data.get("username"), data.get("email"),
                                                          data.get("password"), data.get("name"), data.get("userType"))
             response.data = newly_created_user
         return jsonify(response.to_dict())
