@@ -5,6 +5,7 @@ from flask import Blueprint, jsonify, request, send_file, session
 from models.user_type import UserType
 from services import *
 from utilities import *
+from keras_predictor import get_suggestion
 from werkzeug.exceptions import *
 
 project_controller = Blueprint("controllers/project_controller",
@@ -52,7 +53,8 @@ def get_project(project_id):
             current_user_id = session.get(SESSION_USER_ID_KEY)
             project = ProjectService.get_project_by_project_id(project_id, current_user_id)
             response.data = project
-        return jsonify(response.to_dict()), 200
+            response = get_suggestion(response.to_dict())
+        return jsonify(response), 200
     except BadRequest as err:
         response.data = GenericErrorResponse(message=err.description).to_response()
         return jsonify(response.to_dict()), err.code
