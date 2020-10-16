@@ -53,8 +53,7 @@ def get_project(project_id):
             current_user_id = session.get(SESSION_USER_ID_KEY)
             project = ProjectService.get_project_by_project_id(project_id, current_user_id)
             response.data = project
-            response = get_suggestion(response.to_dict())
-        return jsonify(response), 200
+        return jsonify(response.to_dict()), 200
     except BadRequest as err:
         response.data = GenericErrorResponse(message=err.description).to_response()
         return jsonify(response.to_dict()), err.code
@@ -68,7 +67,8 @@ def add_project_task(project_id):
             files = request.get_json()
             newly_created_tasks = TaskService.create_task(project_id, files)
             response.data = newly_created_tasks
-        return jsonify(response.to_dict()), 200
+            response = get_suggestion(response.to_dict())
+        return jsonify(response), 200
     except BadRequest as err:
         response.data = GenericErrorResponse(message=err.description).to_response()
         return jsonify(response.to_dict()), err.code
