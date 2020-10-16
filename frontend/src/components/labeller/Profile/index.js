@@ -11,7 +11,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchLeaderboardInfo = async () => {
             const res = await axios.get(
-                `/api/userProfile`
+                `/api/users/leaderboard`
             );
             setLeaderboard(
                 res.data.data.map((contributer) => ({
