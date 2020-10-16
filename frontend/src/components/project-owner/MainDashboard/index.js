@@ -20,15 +20,23 @@ const columns = [
   {
     title: "Date Created",
     dataIndex: "dateCreated",
+    // sorter: (a, b) =>
+    //   new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime(),
   },
   {
     title: "Total Number of Tasks",
     dataIndex: "tasksCount",
+    sorter: (a, b) => {
+      console.log(a.overallPercentage);
+
+      return a.tasksCount - b.tasksCount;
+    },
   },
   {
     title: "Percentage of Tasks Labelled",
     dataIndex: "overallPercentage",
     render: (text) => <Fragment>{text}%</Fragment>,
+    sorter: (a, b) => a.overallPercentage - b.overallPercentage,
   },
 ];
 
@@ -93,7 +101,7 @@ const Dashboard = () => {
   };
 
   if (!projects) return <Loading />;
-
+  console.log(projects);
   return (
     <div className="dashboard-container">
       <Divider orientation="left">
