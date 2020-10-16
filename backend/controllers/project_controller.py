@@ -5,7 +5,7 @@ from flask import Blueprint, jsonify, request, send_file, session
 from models.user_type import UserType
 from services import *
 from utilities import *
-from keras_predictor import get_suggestion
+from keras_predictor.keras_predictor import get_suggestion
 from werkzeug.exceptions import *
 
 project_controller = Blueprint("controllers/project_controller",
