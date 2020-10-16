@@ -5,6 +5,7 @@ For Text: TODO Find pre-built sentiment analysis model
 import tensorflow as tf
 import efficientnet.keras as efn
 import numpy as np
+import re
 
 def get_suggestion(response):
 	"""
@@ -15,12 +16,12 @@ def get_suggestion(response):
 		response (dict): Query response to send to API.
 	"""
 	label_type = response['itemDataType']
-	if label_type == 'image':
+	if label_type.lower() == 'image':
 		response = __image_classifier(response)
-	elif label_type == 'text':
-		response = __text_sentiment(response)
+	# elif label_type.lower() == 'text':
+	# 	response = __text_sentiment(response)
 	else:
-		return
+		return response
 	
 	return response
 
@@ -38,7 +39,8 @@ def __image_classifier(response):
 
 	# Process images
 	for index, item in enumerate(response['data']):
-		image = item['taskData']
+		image_base64 = item['itemData']
+		image = __image_decoder(image_base64)
 		image = efn.center_crop_and_resize(image=image, image_size=IMG_SIZE)
 		image = efn.preprocess_input(image)
 		img_array = tf.keras.preprocessing.image.img_to_array(image)
@@ -48,17 +50,39 @@ def __image_classifier(response):
 		prediction = model.predict(img_array)
 		prediction = tf.keras.applications.imagenet_utils.decode_predictions(prediction)
 
+		print(prediction)
+
 		# Append prediction to response
 		response['data'][index]['ml_suggest'] = prediction[0][0][1]
 
 	return response
 
-def __text_sentiment(response):
+# def __text_sentiment(response):
+# 	"""
+# 	WIP text sentiment analysis model.
+
+# 	Args:
+# 		response (dict): Query response to send to API. Should be of itemDataType text.
+# 	"""
+
+# 	return response
+
+def __image_decoder(base64_str):
 	"""
-	WIP text sentiment analysis model.
+	Decodes a base64 encoded image into a usable image file for EfficientNet
 
 	Args:
-		response (dict): Query response to send to API. Should be of itemDataType text.
+		base64_str (string): base64 encoded image file
 	"""
+	# Remove header string
+	str_match = re.match(r"data:image/\w\w*;base64,(.*)", base64_str)
+	base64_str = str_match.group(1)
 
-	return response
+	# Convert string to web-safe
+	base64_str = re.sub(r"/", "_", base64_str)
+	base64_str = re.sub(r"\+", "-", base64_str)
+
+	image_bytes = tf.io.decode_base64(base64_str)
+	image = tf.io.decode_image(image_bytes)
+
+	return image

@@ -67,8 +67,7 @@ def add_project_task(project_id):
             files = request.get_json()
             newly_created_tasks = TaskService.create_task(project_id, files)
             response.data = newly_created_tasks
-            response = get_suggestion(response.to_dict())
-        return jsonify(response), 200
+        return jsonify(response.to_dict()), 200
     except BadRequest as err:
         response.data = GenericErrorResponse(message=err.description).to_response()
         return jsonify(response.to_dict()), err.code
@@ -84,7 +83,8 @@ def get_project_tasks_unlabelled(project_id):
             unlabelled_tasks_and_layout = ProjectService.get_tasks_by_user_from_project(project_id, current_user_id,
                                                                                         tasks_count, False)
             response = unlabelled_tasks_and_layout
-        return jsonify(response.to_dict()), 200
+            response = get_suggestion(response.to_dict())
+        return jsonify(response), 200
     except BadRequest as err:
         response.data = GenericErrorResponse(message=err.description).to_response()
         return jsonify(response.to_dict()), err.code
