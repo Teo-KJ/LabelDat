@@ -48,11 +48,7 @@ def __image_classifier(response):
 		img_array = tf.expand_dims(img_array, 0)
 	
 		# Predict
-		try:
-			prediction = model.predict(img_array)
-		except ValueError:
-			response['data'][index]['ml_suggest'] = None
-			continue
+		prediction = model.predict(img_array)
 		prediction = tf.keras.applications.imagenet_utils.decode_predictions(prediction)
 
 		print(prediction)
@@ -88,6 +84,6 @@ def __image_decoder(base64_str):
 	base64_str = re.sub(r"\+", "-", base64_str)
 
 	image_bytes = tf.io.decode_base64(base64_str)
-	image = tf.io.decode_image(image_bytes)
+	image = tf.io.decode_image(image_bytes, channels=3, expand_animations=False)
 
 	return image
