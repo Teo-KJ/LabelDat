@@ -84,7 +84,6 @@ def leaderboard():
         if request.method == "GET":
             lb = UserService.get_leaderboard()
             response.data = lb
-            del session[SESSION_USER_ID_KEY]
         return jsonify(response.to_dict()), 200
     
     except BadRequest as err:
