@@ -1,8 +1,18 @@
 $margintop: 20px;
 
-.container {
-  width: 30%;
-  margin: 0 auto;
-  margin-top: $margintop;
-  justify-content: center;
+.image-task-container {
+  height: 600px;
+}
+
+.task-description {
+  text-align: center;
+}
+
+.flex-item {
+  text-align: center;
+  min-width: 90px;
+}
+
+.req-error {
+  margin-top: 16px;
 }

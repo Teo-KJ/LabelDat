@@ -8,11 +8,14 @@ const columns = [
     title: "Project Name",
     dataIndex: "projectName",
     width: "170px",
+    sorter: (a, b) => a.projectName.localeCompare(b.projectName),
   },
   {
     title: "Date Created",
     dataIndex: "dateCreated",
     width: "170px",
+    sorter: (a, b) =>
+      new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime(),
   },
   {
     title: "Overall Completion Rate",
@@ -20,13 +23,14 @@ const columns = [
     width: "170px",
     render: (text, record) => (
       <Tooltip
-        title={`${Math.floor(
+        title={`${Math.ceil(
           (record.tasksCount * record.overallPercentage) / 100
         )}/${record.tasksCount} Tasks Labelled`}
       >
         {text}%
       </Tooltip>
     ),
+    sorter: (a, b) => a.overallPercentage - b.overallPercentage,
   },
   {
     title: "Contribution Rate",
@@ -39,6 +43,7 @@ const columns = [
         {text}%
       </Tooltip>
     ),
+    sorter: (a, b) => a.contributionPercentage - b.contributionPercentage,
   },
   {
     title: "Action",

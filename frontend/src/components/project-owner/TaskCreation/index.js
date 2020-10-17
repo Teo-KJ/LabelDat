@@ -1,124 +1,104 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { CloudUploadOutlined } from "@ant-design/icons";
+import { Divider, Typography } from "antd";
+import Loading from "../../shared/Loading";
 import "./styles.scss";
+import axios from "axios";
+import history from "../../../history";
 
-import SettingComponent from "./SettingComponent";
-import Preview from "./Preview";
+export default function (props) {
+  const [error, changeError] = useState("");
+  const [project, setProject] = useState(null);
 
-import {Button} from 'antd'
+  useEffect(() => {
+    const getProject = async () => {
+      const res = await axios.get("/api/projects");
+      console.log(res);
+      if (res.status === 200) {
+        let { itemDataType, projectName } = res.data.data.projects.filter(
+          ({ id }) => id === props.match.params.projectId
+        )[0];
+        setProject({
+          itemDataType,
+          projectName,
+        });
+      }
+    };
 
-export default function () {
+    getProject();
+  }, [props.match.params.projectId]);
 
-  const [projectName, changeProjectName] = useState("")
+  let files = React.createRef();
 
-  const [error, changeError] = useState("")  
+  const toBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
 
-  //Text Input Type Styling
-  const [textInputStyle, changeTextInputStyle] = useState({});
+  async function onChange(e) {
+    files = files.current.files;
+    let promises = [];
+    let names = [];
+    let p;
 
-  //Slider Input Type Styling
-  const [sliderProps, changeSliderProps] = useState({});
-
-  //Checkbox Input Type Styling
-  const [checkBoxProps, changeCheckBoxProps] = useState({
-    values: ["default"],
-  });
-
-  //Options Input Type Styling
-  const [optionsProps, changeOptionsProps] = useState({ values: ["default"] });
-
-  //Data Types Selection
-  const [dataType, changeDataType] = useState("");
-
-  //Input Types Selection
-  const [inputType, changeInputType] = useState("");
-
-  //Description
-  const [desc, changeDesc] = useState("Please tell your labellers what to do.");
-  
-  useEffect(()=>{
-    changeError("")
-  }, [textInputStyle, sliderProps, checkBoxProps, optionsProps, dataType, inputType, desc, projectName])
-  
-  function submitTask () {
-    let form = {}
-    if (!projectName) {
-      changeError("Project name is empty!")
-    } 
-    if (!dataType) {
-      changeError("Data type is empty!")
+    for (let i = 0; i < files.length; i++) {
+      names.push(files[i].name);
+      p = toBase64(files[i]);
+      promises.push(p);
     }
-    if (!desc) {
-      changeError("Description is empty!")
-    }
-    if (!inputType) {
-      changeError("Input type is empty!")
-    }
-    form.projectName = projectName
-    form.itemDataType = dataType.toUpperCase()
-    form.description = desc
-    form.layout = {
-      type: inputType.toLowerCase()
-    }
-    switch (inputType.toLowerCase()) {
-      case "checkbox":
-        form.layout.labels = [...checkBoxProps.values]
-        break
-      case "options":
-        form.layout.labels = [...optionsProps.values]
-        break
-      case "slider":
-        form.layout.min = sliderProps.min
-        form.layout.max = sliderProps.max
-        break
-      default:
-        break
-    }
-    
-    // Request to backend
-    // send the form
+    Promise.all(promises).then((res) => {
+      files = [];
+      for (let i = 0; i < res.length; i++) {
+        files.push({
+          filename: names[i],
+          itemData: res[i],
+        });
+      }
 
+      let url = `/api/projects/${props.match.params.projectId}/tasks`;
+      axios
+        .post(url, files)
+        .then((res) => res.data)
+        .then((res) => {
+          history.push(`/`);
+        })
+        .catch((e) => {
+          changeError("Failed to process.");
+        });
+    });
   }
+
+  if (!project) return <Loading />;
+
   return (
-    <div className="task-creation">
-      <div className="editor">
-        <div className="title">Editor</div>
-        <div style={{
-          width: '100%', 
-          textAlign:"center",
-          color: 'red',
-        }}><i>{error}</i></div>
-        <div className="editor-setting">
-          <SettingComponent
-            projectName={projectName}
-            changeProjectName={changeProjectName}
-            dataType={dataType}
-            inputType={inputType}
-            changeDataType={changeDataType}
-            changeInputType={changeInputType}
-            changeTextInputStyle={changeTextInputStyle}
-            changeSliderProps={changeSliderProps}
-            changeCheckBoxProps={changeCheckBoxProps}
-            checkBoxProps={checkBoxProps}
-            changeOptionsProps={changeOptionsProps}
-            optionsProps={optionsProps}
-            desc={desc}
-            changeDesc={changeDesc}
-          ></SettingComponent>
+    <div className="upload-files-container">
+      <Divider orientation="left">
+        <Typography.Title>Add Tasks for {project.projectName}</Typography.Title>
+      </Divider>
+      <div className="upload-files">
+        <input
+          type="file"
+          accept={
+            project.itemDataType === "AUDIO"
+              ? "audio/*"
+              : project.itemDataType === "IMAGE"
+              ? "image/*"
+              : null
+          }
+          multiple
+          title=""
+          ref={files}
+          onChange={onChange}
+        ></input>
+        <div className="icon">
+          <CloudUploadOutlined />
         </div>
+        Drag and Drop<br></br>or<br></br>Click to Upload Files
       </div>
-      <div className="preview">
-        <div className="title">Preview</div>
-        <Preview
-          dataType={dataType}
-          inputType={inputType}
-          desc={desc}
-          sliderProps={sliderProps}
-          checkBoxProps={checkBoxProps}
-          optionsProps={optionsProps}
-          textInputStyle={textInputStyle}
-        ></Preview>
-      </div>
-      <Button type="primary" className="btn-next" onClick={submitTask}>Next</Button>
+      <div className="feedback">{error}</div>
     </div>
   );
 }

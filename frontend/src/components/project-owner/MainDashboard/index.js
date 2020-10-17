@@ -16,19 +16,24 @@ const columns = [
     render: (text, record) => {
       return <Link to={`/projects/${record.id}`}>{text}</Link>;
     },
+    sorter: (a, b) => a.projectName.localeCompare(b.projectName),
   },
   {
     title: "Date Created",
     dataIndex: "dateCreated",
+    sorter: (a, b) =>
+      new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime(),
   },
   {
     title: "Total Number of Tasks",
     dataIndex: "tasksCount",
+    sorter: (a, b) => a.tasksCount - b.tasksCount,
   },
   {
     title: "Percentage of Tasks Labelled",
     dataIndex: "overallPercentage",
     render: (text) => <Fragment>{text}%</Fragment>,
+    sorter: (a, b) => a.overallPercentage - b.overallPercentage,
   },
 ];
 
@@ -40,27 +45,20 @@ const Dashboard = () => {
       const res = await axios.get("/api/projects");
 
       if (res.status === 200) {
-        if (
-          res.data.data.projects.length ||
-          res.data.data.contributedProjects.length
-        ) {
-          setProjects({
-            poProjects: res.data.data.projects.map((project) => ({
+        setProjects({
+          poProjects: res.data.data.projects.map((project) => ({
+            ...project,
+            key: project.id,
+            dateCreated: new Date(project.created_at + "+8").toDateString(),
+          })),
+          contributedProjects: res.data.data.contributedProjects.map(
+            (project) => ({
               ...project,
               key: project.id,
-              dateCreated: new Date(
-                project.projectManagers[0].created_at
-              ).toDateString(),
-            })),
-            contributedProjects: res.data.data.contributedProjects.map(
-              (project) => ({
-                ...project,
-                key: project.id,
-                dateCreated: new Date(project.created_at).toDateString(),
-              })
-            ),
-          });
-        } else setProjects([]);
+              dateCreated: new Date(project.created_at + "+8").toDateString(),
+            })
+          ),
+        });
       }
     };
 
@@ -136,7 +134,7 @@ const Dashboard = () => {
         centered
         className="tabs-container"
         type="card"
-        tabBarStyle={{ marginBottom: 0 }}
+        tabBarStyle={{ width: "60%", margin: "0 auto" }}
       >
         <TabPane tab="Projects" key="1" className="projects-table">
           {renderPOProjectsTable()}

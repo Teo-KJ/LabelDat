@@ -2,7 +2,7 @@ import React from "react";
 import "./styles.scss";
 
 import { Select } from "antd";
-import { SettingOutlined } from "@ant-design/icons";
+import { SettingOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -36,12 +36,21 @@ export default function (props) {
               );
             })}
           </Select>
-          <div
-            className={`icon ${props.settingIsOpen ? " rotated-icon" : ""}`}
-            onClick={() => props.toggle(!props.settingIsOpen)}
-          >
-            <SettingOutlined style={{ color: "#b6b6b6" }} />
-          </div>
+          {props.isSetting ? (
+            <div
+              className={`icon ${props.settingIsOpen ? " rotated-icon" : ""}`}
+              onClick={() => props.toggle(!props.settingIsOpen)}
+            >
+              <SettingOutlined style={{ color: "#b6b6b6" }} />
+            </div>
+          ) : (
+            <div
+              onClick={() => props.toggle(!props.settingIsOpen)}
+              className={"icon"}
+            >
+              <QuestionCircleOutlined style={{ color: "#b6b6b6" }} />
+            </div>
+          )}
         </React.Fragment>
       ) : (
         <React.Fragment>

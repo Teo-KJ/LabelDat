@@ -1,0 +1,12 @@
+$margintop: 20px;
+
+audio:focus {
+  outline: none;
+}
+
+.audio-preview {
+  text-align: center;
+  audio {
+    margin-top: $margintop;
+  }
+}

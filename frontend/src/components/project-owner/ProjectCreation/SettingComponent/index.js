@@ -8,8 +8,8 @@ import "./styles.scss";
 import Dropdown from "./Dropdown";
 
 export default function (props) {
-  const [dataTypeSettingOpen, toggleDataTypeSetting] = useState(true);
-  const [inputTypeSettingOpen, toggleInputTypeSetting] = useState(true);
+  const [dataTypeSettingOpen, toggleDataTypeSetting] = useState(false);
+  const [inputTypeSettingOpen, toggleInputTypeSetting] = useState(false);
   const [descriptionSettingOpen, toggleDescriptionSetting] = useState(false);
   const dataType = props.dataType;
   const inputType = props.inputType;
@@ -104,7 +104,7 @@ export default function (props) {
                       <Button
                         type="primary"
                         danger
-                        onClick={() => deleteCheckboxValue(_)}
+                        onClick={() => deleteValue(_, "checkbox")}
                       >
                         <DeleteOutlined />
                         {_}
@@ -115,7 +115,7 @@ export default function (props) {
             </div>
           </React.Fragment>
         );
-      case "Options":
+      case "Radio":
         return (
           <React.Fragment>
             <div className="input-setting-row">
@@ -133,11 +133,12 @@ export default function (props) {
             <div className="input-setting-row input-setting-row-sp">
               {props.optionsProps
                 ? props.optionsProps.values
-                  ? props.optionsProps.values.map((_) => (
+                  ? props.optionsProps.values.map((_, i) => (
                       <Button
+                        key={i}
                         type="primary"
                         danger
-                        onClick={() => deleteCheckboxValue(_)}
+                        onClick={() => deleteValue(_, "radio")}
                       >
                         <DeleteOutlined />
                         {_}
@@ -155,15 +156,6 @@ export default function (props) {
 
   const [optionsValue, addOptionsValue] = useState("");
 
-  // function deleteOptionsValue(value) {
-  //   let newList = [...props.optionsProps.values];
-  //   newList = newList.filter((_) => _ !== value);
-  //   props.changeCheckBoxProps({
-  //     ...props.optionsProps,
-  //     values: newList,
-  //   });
-  // }
-
   function newOptionsValue() {
     props.changeOptionsProps({
       ...props.optionsProps,
@@ -176,13 +168,22 @@ export default function (props) {
 
   const [checkboxValue, addCheckboxValue] = useState("");
 
-  function deleteCheckboxValue(value) {
-    let newList = [...props.checkBoxProps.values];
-    newList = newList.filter((_) => _ !== value);
-    props.changeCheckBoxProps({
-      ...props.checkBoxProps,
-      values: newList,
-    });
+  function deleteValue(value, type) {
+    if (type === "checkbox") {
+      let newList = [...props.checkBoxProps.values];
+      newList = newList.filter((_) => _ !== value);
+      props.changeCheckBoxProps({
+        ...props.checkBoxProps,
+        values: newList,
+      });
+    } else if (type === "radio") {
+      let newList = [...props.optionsProps.values];
+      newList = newList.filter((_) => _ !== value);
+      props.changeOptionsProps({
+        ...props.optionsProps,
+        values: newList,
+      });
+    }
   }
 
   function newCheckboxValue() {
@@ -212,18 +213,37 @@ export default function (props) {
   }
 
   return (
-    
     <div className="setting-component">
-      <Input className="project-name" placeholder="Project Name" value={props.projectName} onChange={(e)=>{props.changeProjectName(e.target.value)}}/>
+      <Input
+        className="project-name"
+        placeholder="Project Name"
+        value={props.projectName}
+        onChange={(e) => {
+          props.changeProjectName(e.target.value);
+        }}
+      />
       <Dropdown
         text="Select Data Type"
-        list={["Image", "Sound"]}
+        list={["Image", "Audio"]}
         toggle={toggleDataTypeSetting}
         settingIsOpen={dataTypeSettingOpen}
         selectType={props.changeDataType}
         dropdown={true}
         value={dataType}
+        isSetting={false}
       />
+      {dataTypeSettingOpen ? (
+        <div className="setting-sct setting-data">
+          <strong>
+            <p>Help</p>
+          </strong>
+          <p style={{ textAlign: "justify" }}>
+            This option allows you and your labellers to label data. Some of the
+            recommended labellling options include checkbox, radio buttons,
+            bounding boxes, joint-markings &amp; drawing polygons
+          </p>
+        </div>
+      ) : null}
 
       <Dropdown
         dropdown={false}
@@ -241,12 +261,13 @@ export default function (props) {
 
       <Dropdown
         text="Select Input Type"
-        list={["Text", "Slider", "Options", "Checkbox"]}
+        list={["Radio", "Checkbox"]}
         toggle={toggleInputTypeSetting}
         settingIsOpen={inputTypeSettingOpen}
         selectType={props.changeInputType}
         dropdown={true}
         value={inputType}
+        isSetting={true}
       />
       {inputTypeSettingOpen && inputType ? (
         <div className="setting-sct setting-data">

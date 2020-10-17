@@ -15,8 +15,8 @@ const AuthContextProvider = (props) => {
   const signInHandler = async (values) => {
     const res = await axios.post("/api/users/signin", values);
     if (res.status === 200) {
-      setUser(res.data.data);
       history.push("/");
+      setUser(res.data.data);
     }
   };
 
@@ -31,7 +31,10 @@ const AuthContextProvider = (props) => {
 
   const signOutHandler = async () => {
     const res = await axios.get("/api/users/logout");
-    if (res.status === 200) setUser({});
+    if (res.status === 200) {
+      history.push("/");
+      setUser({});
+    }
   };
 
   return (

@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, Divider, Row, Col, Card, Button } from "antd";
 import { ExportOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import axios from "axios";
+import Loading from "../../shared/Loading";
+import history from "../../../history";
 
 import {
   Chart,
@@ -10,55 +13,79 @@ import {
   Interaction,
   Coordinate,
   LineAdvance,
+  Annotation,
 } from "bizcharts";
 import "./styles.scss";
 
-const data = {
-  projectName: "Project Alpha",
-  overallTasksProgress: [
-    {
-      type: "Unlabelled",
-      percentage: 80,
-    },
-    {
-      type: "Labelled",
-      percentage: 20,
-    },
-  ],
-  weeklyTasksProgress: [
-    {
-      date: "23 Sep",
-      tasksCount: 8, // Refer to the number of tasks completed in a day
-    },
-    {
-      date: "24 Sep",
-      tasksCount: 11,
-    },
-    {
-      date: "25 Sep",
-      tasksCount: 15,
-    },
-    {
-      date: "26 Sep",
-      tasksCount: 17,
-    },
-    {
-      date: "27 Sep",
-      tasksCount: 16,
-    },
-    {
-      date: "28 Sep",
-      tasksCount: 14,
-    },
-    {
-      date: "29 Sep",
-      tasksCount: 10,
-    },
-  ],
-};
+const Dashboard = (props) => {
+  const [projectAnalytics, setProjectAnalytics] = useState(null);
 
-const Dashboard = () => {
-  const { projectName, weeklyTasksProgress, overallTasksProgress } = data;
+  useEffect(() => {
+    const fetchProjectAnalytics = async () => {
+      const res = await axios.get(
+        `/api/projects/${props.match.params.projectId}/analytics?days=7`
+      );
+      const {
+        labelProgress,
+        overallPercentage,
+        projectName,
+        numTasks,
+      } = res.data;
+
+      setProjectAnalytics({
+        projectName,
+        numTasks,
+        overallTasksProgress: [
+          {
+            type: "Unlabelled",
+            percentage: 100 - overallPercentage,
+          },
+          {
+            type: "Labelled",
+            percentage: overallPercentage,
+          },
+        ],
+        weeklyTasksProgress: labelProgress.map(({ labelCount, date }) => ({
+          labelCount,
+          date: new Date(date).toLocaleDateString(undefined, {
+            weekday: "short",
+            day: "numeric",
+            month: "short",
+          }),
+        })),
+      });
+    };
+
+    fetchProjectAnalytics();
+  }, [props.match.params.projectId]);
+
+  const fetchCSV = async () => {
+    const res = await axios.get(
+      `/api/projects/${props.match.params.projectId}/export?ext=csv`
+    );
+
+    let csvContent = "data:text/csv;charset=utf-8," + res.data;
+    var encodedUri = encodeURI(csvContent);
+    let link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute(
+      "download",
+      `${projectAnalytics.projectName} Label Data.csv`
+    );
+    document.body.appendChild(link);
+
+    link.click();
+  };
+
+  if (!projectAnalytics) return <Loading />;
+
+  const {
+    projectName,
+    weeklyTasksProgress,
+    overallTasksProgress,
+    numTasks,
+  } = projectAnalytics;
+
   return (
     <div className="dashboard-container">
       <Divider orientation="left">
@@ -66,8 +93,12 @@ const Dashboard = () => {
       </Divider>
 
       <div className="project-button-group">
-        {/* TODO: Export Data Functionality */}
         <Button
+          disabled={
+            overallTasksProgress.filter(({ type }) => type === "Labelled")[0]
+              .percentage === 0
+          }
+          onClick={fetchCSV}
           className="project-button"
           type="primary"
           shape="round"
@@ -76,8 +107,11 @@ const Dashboard = () => {
         >
           Export Data
         </Button>
-        {/* TODO: Direct to another page to upload more tasks */}
+
         <Button
+          onClick={() =>
+            history.push(`/projects/${props.match.params.projectId}/add-tasks`)
+          }
           className="project-button"
           type="primary"
           shape="round"
@@ -94,7 +128,7 @@ const Dashboard = () => {
             <Chart
               scale={{
                 date: { alias: "Date" },
-                tasksCount: { alias: "Number of Tasks Completed" },
+                labelCount: { alias: "Number of Tasks Completed", min: 0 },
               }}
               autoFit
               height={320}
@@ -104,7 +138,7 @@ const Dashboard = () => {
                 shape="smooth"
                 point
                 area
-                position="date*tasksCount"
+                position="date*labelCount"
               />
             </Chart>
           </Card>
@@ -123,6 +157,16 @@ const Dashboard = () => {
                 position="percentage"
                 color="type"
                 shape="sliceShape"
+              />
+              <Annotation.Text
+                position={["50%", "50%"]}
+                content={`Task Count: ${numTasks}`}
+                style={{
+                  lineHeight: "240px",
+                  fontSize: "20",
+                  fill: "#262626",
+                  textAlign: "center",
+                }}
               />
               <Interaction type="element-single-selected" />
             </Chart>

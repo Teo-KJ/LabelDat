@@ -1,41 +1,58 @@
-$titleFontFamily: 'Ubuntu', sans-serif;
-$widthAfterNavbar :100%;
-$borderColor: #D6D6D6;
-$borderSize: 10px;
-$titleFontSize: 20px;
+$borderColor: #d6d6d6;
+$borderRadius: 10px;
 
-.task-creation {
-  width: $widthAfterNavbar;
+.upload-files-container {
+  margin: 0 auto;
+  width: 70%;
   height: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  .editor {
-    box-sizing: border-box;
-    height: 100%;
-    grid-column: 0 1;
-    border-right: $borderColor $borderSize/2 solid;
+  .upload-files:hover {
+    border: 1px dashed rgb(0, 166, 255);
+    box-shadow: 0px 0px 5px #6dcff669;
+    .icon {
+      color: rgb(0, 166, 255);
+    }
   }
-  .preview {
-    box-sizing: border-box;
-    border-left: $borderColor $borderSize/2 solid;
-    height: 100%;
-    grid-column: 1 2;
+  .upload-files-log {
+    width: 60%;
+    max-width: 500px;
+    margin: 0 auto;
+    .log-suc {
+      width: 100%;
+      padding: 5px 0;
+      color: green;
+    }
   }
-  .title {
-    width: fit-content;
+  .upload-files {
+    transition: 0.5s;
+    max-width: 500px;
     box-sizing: border-box;
-    font-size: $titleFontSize;
-    font-family: $titleFontFamily;
-    color: #9d9d9d;
-    font-weight: 700;
-    margin-top: 10px;
-    margin-left: 50%;
-    transform: translateX(-50%);
+    padding: 20px;
+    margin: 0 auto;
+    width: 60%;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid $borderColor;
+    border-radius: $borderRadius;
+    text-align: center;
+    .icon {
+      transition: 0.5s;
+      font-size: 5em;
+      color: $borderColor;
+    }
+    input {
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
   }
 }
 
-.btn-next {
-  position: absolute;
-  bottom: 50px;
-  right: 50px;
+.feedback {
+  margin: 10px auto;
+  text-align: center;
+  color: red;
 }

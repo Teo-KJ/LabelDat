@@ -42,6 +42,20 @@ const SignUp = () => {
               >
                 <Input />
               </Form.Item>
+              <Form.Item
+                className="form-item"
+                name="email"
+                label="Email"
+                rules={[
+                  { type: "email", message: "Please enter a valid email!" },
+                  {
+                    required: true,
+                    message: "Please input your email!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
 
               <Form.Item
                 className="form-item"
@@ -74,13 +88,14 @@ const SignUp = () => {
                 </Select>
               </Form.Item>
 
-              <Form.Item
+              {/* Toggle this off first */}
+              {/* <Form.Item
                 className="form-item"
                 name="orgId"
                 label="Organization ID"
               >
                 <Input />
-              </Form.Item>
+              </Form.Item> */}
 
               <Form.Item
                 className="form-item"

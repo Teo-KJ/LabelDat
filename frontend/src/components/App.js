@@ -1,17 +1,20 @@
 import React, { useEffect, Fragment, useContext } from "react";
-import { Router, Route, Redirect } from "react-router-dom";
+import { Router, Route } from "react-router-dom";
 import history from "../history";
 import ProjectDashboard from "./project-owner/ProjectDashboard";
 import LabelForm from "./labeller/LabelForm";
-import TaskCreation from "./project-owner/TaskCreation";
+import ProjectCreation from "./project-owner/ProjectCreation";
 import MainDashboard from "./project-owner/MainDashboard";
 import SignIn from "./shared/SignIn";
 import SignUp from "./shared/SignUp";
-import UploadFiles from "./project-owner/UploadFiles";
+import TaskCreation from "./project-owner/TaskCreation";
 import { AuthContext } from "../context/auth-context";
 import Loading from "./shared/Loading";
 import Sidebar from "./shared/Sidebar";
+import Landing from "./shared/Landing";
 import LabellerDashboard from "./labeller/Dashboard";
+import ProjectLabelReview from "./labeller/ProjectLabelReview";
+import Profile from "./shared/Profile";
 import { Layout } from "antd";
 
 const { Content } = Layout;
@@ -33,11 +36,7 @@ function App() {
     if (!Object.keys(authContext.user).length) {
       return (
         <Fragment>
-          {history.location.pathname === "/signup" ? (
-            <Redirect to="/signup" />
-          ) : (
-            <Redirect to="/signin" />
-          )}
+          <Route exact component={Landing} path="/" />
           <Route exact component={SignUp} path="/signup" />
           <Route exact component={SignIn} path="/signin" />
         </Fragment>
@@ -51,11 +50,14 @@ function App() {
       case "PROJECT_OWNER":
         return (
           <Fragment>
-            <Route exact component={TaskCreation} path="/create-project" />
-            <Route exact path="/uploadfiles">
-              <UploadFiles dataType={"image"}></UploadFiles>
-            </Route>
             <Route exact component={MainDashboard} path="/" />
+            <Route exact component={Profile} path="/profile" />
+            <Route exact component={ProjectCreation} path="/create-project" />
+            <Route
+              exact
+              component={TaskCreation}
+              path="/projects/:projectId/add-tasks"
+            />
             <Route
               exact
               component={ProjectDashboard}
@@ -66,6 +68,11 @@ function App() {
               component={LabelForm}
               path="/projects/:projectId/tasks"
             />
+            <Route
+              exact
+              component={ProjectLabelReview}
+              path="/projects/:projectId/review"
+            />
           </Fragment>
         );
       // Render routes for Labeller
@@ -73,10 +80,16 @@ function App() {
         return (
           <Fragment>
             <Route exact component={LabellerDashboard} path="/" />
+            <Route exact component={Profile} path="/profile" />
             <Route
               exact
               component={LabelForm}
               path="/projects/:projectId/tasks"
+            />
+            <Route
+              exact
+              component={ProjectLabelReview}
+              path="/projects/:projectId/review"
             />
           </Fragment>
         );
@@ -89,7 +102,9 @@ function App() {
   return (
     <Router history={history}>
       <Layout>
-        <Sidebar />
+        <Sidebar
+          key={authContext.user ? Object.keys(authContext.user).length : null}
+        />
         <Content>{renderRoutes()}</Content>
       </Layout>
     </Router>
