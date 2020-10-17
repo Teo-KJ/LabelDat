@@ -76,3 +76,16 @@ def logout():
     except BadRequest as err:
         response.data = GenericErrorResponse(message=err.description).to_response()
         return jsonify(response.to_dict()), err.code
+
+@user_controller.route('/leaderboard', methods=['GET'])
+def leaderboard():
+    response = RestResponse()
+    try:
+        if request.method == "GET":
+            lb = UserService.get_leaderboard()
+            response.data = lb
+        return jsonify(response.to_dict()), 200
+    
+    except BadRequest as err:
+        response.data = GenericErrorResponse(message=err.description).to_response()
+        return jsonify(response.to_dict()), err.code

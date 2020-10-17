@@ -51,3 +51,19 @@ class UserService:
         if not found_user:
             raise BadRequest("There is no valid current user.")
         return found_user.to_response()["userType"]
+
+    @staticmethod
+    def get_leaderboard():
+        queryProject = '''
+            select username,
+            count(user_id) as NumOfTasks
+            from label, user
+            where user.id = label.user_id
+            group by user_id;
+        '''
+        queryList = [dict(row) for row in db.session.execute(queryProject)]
+        
+        for i in queryList:
+            i['NumOfTasks'] = str(i['NumOfTasks'])
+        
+        return queryList
