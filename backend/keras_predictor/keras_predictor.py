@@ -39,6 +39,7 @@ def __image_classifier(response):
 
 	# Process images
 	for index, item in enumerate(response['data']):
+		print(response['data'][index]['filename'])
 		image_base64 = item['itemData']
 		image = __image_decoder(image_base64)
 		image = efn.center_crop_and_resize(image=image, image_size=IMG_SIZE)
@@ -47,7 +48,11 @@ def __image_classifier(response):
 		img_array = tf.expand_dims(img_array, 0)
 	
 		# Predict
-		prediction = model.predict(img_array)
+		try:
+			prediction = model.predict(img_array)
+		except ValueError:
+			response['data'][index]['ml_suggest'] = None
+			continue
 		prediction = tf.keras.applications.imagenet_utils.decode_predictions(prediction)
 
 		print(prediction)
