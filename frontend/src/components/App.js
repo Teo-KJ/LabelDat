@@ -14,6 +14,7 @@ import Sidebar from "./shared/Sidebar";
 import Landing from "./shared/Landing";
 import LabellerDashboard from "./labeller/Dashboard";
 import ProjectLabelReview from "./labeller/ProjectLabelReview";
+import Profile from "./shared/Profile";
 import { Layout } from "antd";
 
 const { Content } = Layout;
@@ -50,6 +51,7 @@ function App() {
         return (
           <Fragment>
             <Route exact component={MainDashboard} path="/" />
+            <Route exact component={Profile} path="/profile" />
             <Route exact component={ProjectCreation} path="/create-project" />
             <Route
               exact
@@ -78,6 +80,7 @@ function App() {
         return (
           <Fragment>
             <Route exact component={LabellerDashboard} path="/" />
+            <Route exact component={Profile} path="/profile" />
             <Route
               exact
               component={LabelForm}
