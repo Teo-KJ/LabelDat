@@ -261,7 +261,7 @@ export default function (props) {
 
       <Dropdown
         text="Select Input Type"
-        list={["Text", "Slider", "Radio", "Checkbox"]}
+        list={["Radio", "Checkbox"]}
         toggle={toggleInputTypeSetting}
         settingIsOpen={inputTypeSettingOpen}
         selectType={props.changeInputType}
