@@ -5,6 +5,7 @@ from flask import Blueprint, jsonify, request, send_file, session
 from models.user_type import UserType
 from services import *
 from utilities import *
+from keras_predictor.keras_predictor import get_suggestion
 from werkzeug.exceptions import *
 
 project_controller = Blueprint("controllers/project_controller",
@@ -82,7 +83,8 @@ def get_project_tasks_unlabelled(project_id):
             unlabelled_tasks_and_layout = ProjectService.get_tasks_by_user_from_project(project_id, current_user_id,
                                                                                         tasks_count, False)
             response = unlabelled_tasks_and_layout
-        return jsonify(response.to_dict()), 200
+            response = get_suggestion(response.to_dict())
+        return jsonify(response), 200
     except BadRequest as err:
         response.data = GenericErrorResponse(message=err.description).to_response()
         return jsonify(response.to_dict()), err.code
