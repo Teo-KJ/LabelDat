@@ -52,15 +52,13 @@ const Dashboard = () => {
           poProjects: res.data.data.projects.map((project) => ({
             ...project,
             key: project.id,
-            dateCreated: new Date(
-              project.projectManagers[0].created_at
-            ).toDateString(),
+            dateCreated: new Date(project.created_at + "+8").toDateString(),
           })),
           contributedProjects: res.data.data.contributedProjects.map(
             (project) => ({
               ...project,
               key: project.id,
-              dateCreated: new Date(project.created_at).toDateString(),
+              dateCreated: new Date(project.created_at + "+8").toDateString(),
             })
           ),
         });
