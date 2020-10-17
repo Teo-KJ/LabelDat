@@ -7,6 +7,11 @@ import efficientnet.keras as efn
 import numpy as np
 import re
 
+IMG_SIZE = 380
+
+# Create model and keep it loaded
+model = efn.EfficientNetB4(weights='noisy-student')
+
 def get_suggestion(response):
 	"""
 	Appends an ml suggestion to the response based on itemDataType.
@@ -32,11 +37,6 @@ def __image_classifier(response):
 	Args:
 		response (dict): Query response to send to API. Should be of itemDataType image.
 	"""
-	IMG_SIZE = 380
-
-	# Create model
-	model = efn.EfficientNetB4(weights='noisy-student')
-
 	# Process images
 	for index, item in enumerate(response['data']):
 		print(response['data'][index]['filename'])
