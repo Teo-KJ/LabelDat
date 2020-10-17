@@ -11,6 +11,7 @@ IMG_SIZE = 380
 
 # Create model and keep it loaded
 model = efn.EfficientNetB4(weights='noisy-student')
+cache = dict()		# image base 64: prediction
 
 def get_suggestion(response):
 	"""
@@ -20,6 +21,7 @@ def get_suggestion(response):
 	Args:
 		response (dict): Query response to send to API.
 	"""
+
 	label_type = response['itemDataType']
 	if label_type.lower() == 'image':
 		response = __image_classifier(response)
@@ -39,22 +41,29 @@ def __image_classifier(response):
 	"""
 	# Process images
 	for index, item in enumerate(response['data']):
-		print(response['data'][index]['filename'])
 		image_base64 = item['itemData']
-		image = __image_decoder(image_base64)
-		image = efn.center_crop_and_resize(image=image, image_size=IMG_SIZE)
-		image = efn.preprocess_input(image)
-		img_array = tf.keras.preprocessing.image.img_to_array(image)
-		img_array = tf.expand_dims(img_array, 0)
-	
-		# Predict
-		prediction = model.predict(img_array)
-		prediction = tf.keras.applications.imagenet_utils.decode_predictions(prediction)
+		if image_base64 in cache:
+			print(cache[image_base64])
+			response['data'][index]['ml_suggest'] = cache[image_base64][0][0][1]
+		else:
+			print(response['data'][index]['filename'])
 
-		print(prediction)
+			image = __image_decoder(image_base64)
+			image = efn.center_crop_and_resize(image=image, image_size=IMG_SIZE)
+			image = efn.preprocess_input(image)
+			img_array = tf.keras.preprocessing.image.img_to_array(image)
+			img_array = tf.expand_dims(img_array, 0)
 
-		# Append prediction to response
-		response['data'][index]['ml_suggest'] = prediction[0][0][1]
+			# Predict
+			prediction = model.predict(img_array)
+			prediction = tf.keras.applications.imagenet_utils.decode_predictions(prediction)
+
+			# Append prediction to response
+			print(prediction)
+			response['data'][index]['ml_suggest'] = prediction[0][0][1]
+			cache[image_base64] = prediction
+
+		print(response['data'][index]['ml_suggest'])
 
 	return response
 
