@@ -16,21 +16,18 @@ const columns = [
     render: (text, record) => {
       return <Link to={`/projects/${record.id}`}>{text}</Link>;
     },
+    sorter: (a, b) => a.projectName.localeCompare(b.projectName),
   },
   {
     title: "Date Created",
     dataIndex: "dateCreated",
-    // sorter: (a, b) =>
-    //   new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime(),
+    sorter: (a, b) =>
+      new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime(),
   },
   {
     title: "Total Number of Tasks",
     dataIndex: "tasksCount",
-    sorter: (a, b) => {
-      console.log(a.overallPercentage);
-
-      return a.tasksCount - b.tasksCount;
-    },
+    sorter: (a, b) => a.tasksCount - b.tasksCount,
   },
   {
     title: "Percentage of Tasks Labelled",
@@ -99,7 +96,7 @@ const Dashboard = () => {
   };
 
   if (!projects) return <Loading />;
-  console.log(projects);
+
   return (
     <div className="dashboard-container">
       <Divider orientation="left">
