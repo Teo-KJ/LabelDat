@@ -7,20 +7,37 @@ const columns = [
   {
     title: "Project Name",
     dataIndex: "projectName",
-    width: "170px",
     sorter: (a, b) => a.projectName.localeCompare(b.projectName),
   },
   {
     title: "Date Created",
     dataIndex: "dateCreated",
-    width: "170px",
     sorter: (a, b) =>
       new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime(),
   },
   {
+    title: "Data Type",
+    dataIndex: "itemDataType",
+    sorter: (a, b) => a.itemDataType.localeCompare(b.itemDataType),
+    filters: [
+      { text: "Image", value: "Image" },
+      { text: "Audio", value: "Audio" },
+    ],
+    onFilter: (value, record) => record.itemDataType.includes(value),
+  },
+  {
+    title: "Input Type",
+    dataIndex: "inputType",
+    sorter: (a, b) => a.inputType.localeCompare(b.inputType),
+    filters: [
+      { text: "Radio", value: "Radio" },
+      { text: "Checkbox", value: "Checkbox" },
+    ],
+    onFilter: (value, record) => record.inputType.includes(value),
+  },
+  {
     title: "Overall Completion Rate",
     dataIndex: "overallPercentage",
-    width: "170px",
     render: (text, record) => (
       <Tooltip
         title={`${Math.ceil(
@@ -35,7 +52,6 @@ const columns = [
   {
     title: "Contribution Rate",
     dataIndex: "contributionPercentage",
-    width: "170px",
     render: (text, record) => (
       <Tooltip
         title={`${record.contributionCount}/${record.tasksCount} Tasks Contributed`}

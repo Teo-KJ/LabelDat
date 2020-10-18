@@ -16,6 +16,18 @@ const Dashboard = () => {
         setProjects(
           res.data.data.contributedProjects.map((project) => ({
             ...project,
+            itemDataType:
+              project.itemDataType === "IMAGE"
+                ? "Image"
+                : project.itemDataType === "AUDIO"
+                ? "Audio"
+                : "",
+            inputType:
+              project.layout.type === "checkbox"
+                ? "Checkbox"
+                : project.layout.type === "radio"
+                ? "Radio"
+                : "",
             key: project.id,
             dateCreated: new Date(project.created_at).toDateString(),
           }))

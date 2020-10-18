@@ -25,6 +25,26 @@ const columns = [
       new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime(),
   },
   {
+    title: "Data Type",
+    dataIndex: "itemDataType",
+    sorter: (a, b) => a.itemDataType.localeCompare(b.itemDataType),
+    filters: [
+      { text: "Image", value: "Image" },
+      { text: "Audio", value: "Audio" },
+    ],
+    onFilter: (value, record) => record.itemDataType.includes(value),
+  },
+  {
+    title: "Input Type",
+    dataIndex: "inputType",
+    sorter: (a, b) => a.inputType.localeCompare(b.inputType),
+    filters: [
+      { text: "Radio", value: "Radio" },
+      { text: "Checkbox", value: "Checkbox" },
+    ],
+    onFilter: (value, record) => record.inputType.includes(value),
+  },
+  {
     title: "Total Number of Tasks",
     dataIndex: "tasksCount",
     sorter: (a, b) => a.tasksCount - b.tasksCount,
@@ -48,12 +68,36 @@ const Dashboard = () => {
         setProjects({
           poProjects: res.data.data.projects.map((project) => ({
             ...project,
+            itemDataType:
+              project.itemDataType === "IMAGE"
+                ? "Image"
+                : project.itemDataType === "AUDIO"
+                ? "Audio"
+                : "",
+            inputType:
+              project.layout.type === "checkbox"
+                ? "Checkbox"
+                : project.layout.type === "radio"
+                ? "Radio"
+                : "",
             key: project.id,
             dateCreated: new Date(project.created_at + "+8").toDateString(),
           })),
           contributedProjects: res.data.data.contributedProjects.map(
             (project) => ({
               ...project,
+              itemDataType:
+                project.itemDataType === "IMAGE"
+                  ? "Image"
+                  : project.itemDataType === "AUDIO"
+                  ? "Audio"
+                  : "",
+              inputType:
+                project.layout.type === "checkbox"
+                  ? "Checkbox"
+                  : project.layout.type === "radio"
+                  ? "Radio"
+                  : "",
               key: project.id,
               dateCreated: new Date(project.created_at + "+8").toDateString(),
             })
