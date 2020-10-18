@@ -1,6 +1,7 @@
 import React from "react";
 import { Field, ErrorMessage } from "formik";
-import { Radio, Checkbox, Alert, Row, Col } from "antd";
+import { Radio, Checkbox, Alert, Row, Col, Tooltip } from "antd";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import Image from "../Image";
 import Audio from "../Audio";
 import "./styles.scss";
@@ -24,7 +25,21 @@ const LabelFormTask = ({ data, layout, taskIndex, itemDataType }) => {
           <Row justify="center">
             <Col span={16}>
               <div className="task-description">
-                <p>{layout.description}</p>
+                <p>
+                  {layout.description}
+
+                  {data.ml_suggest ? (
+                    <span className="ml-suggestion">
+                      <Tooltip
+                        title={`Our machine learning model thinks this is a ${processMLSuggestion(
+                          data.ml_suggest
+                        )}.`}
+                      >
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </span>
+                  ) : null}
+                </p>
               </div>
             </Col>
           </Row>
@@ -71,6 +86,15 @@ const LabelFormTask = ({ data, layout, taskIndex, itemDataType }) => {
     default:
       return null;
   }
+};
+
+const processMLSuggestion = (suggestion) => {
+  return suggestion
+    .replace(/_/g, " ")
+    .toLowerCase()
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };
 
 export default LabelFormTask;
