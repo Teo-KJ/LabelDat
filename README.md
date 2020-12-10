@@ -1,4 +1,17 @@
 # CZ3002 Data Labelling Application (LabelDat)
+LabelDat is a webapp designed as a one-stop portal for project owners to manage and organise the labelling of datasets, as well as to facilitate the labelling of datasets. 
+
+Hence, project owners can upload an unlabelled dataset on the portal for other project owners and labellers to label the data. The labelled datasets can then be downloaded for pre-processing and training of machine learning models in the later stages.
+
+## Contributors
+This project is jointly developed by the following members.
+* Chiah Soon
+* Wilson
+* Shing Ling
+* Han Yi
+* Alfredo
+* Kai Jie
+* Jun Le
 
 ## Frontend: React.js
 
@@ -79,3 +92,6 @@ For Mac :
    ```
    ALTER USER 'root'@'localhost' IDENTIFIED BY 'toor';
    ```
+
+## API Endpoints
+Our API endpoints are documented in this [link](https://interstellar-meadow-685701.postman.co/workspace/CZ3002-ASE~e03348d4-5ed1-43e2-b02f-8dd183f1619c/collection/12435852-ce76e0df-1771-4134-9248-13a8a0903773?ctx=documentation)
