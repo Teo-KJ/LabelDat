@@ -92,6 +92,9 @@ An export function is available for the project owner to export and download the
     python3 main.py
     ```
 
+### API Endpoints
+Our API endpoints are documented in this [link](https://interstellar-meadow-685701.postman.co/workspace/CZ3002-ASE~e03348d4-5ed1-43e2-b02f-8dd183f1619c/collection/12435852-ce76e0df-1771-4134-9248-13a8a0903773?ctx=documentation)
+
 ## Database: MySQL
 
 ### Setup instructions
@@ -122,6 +125,3 @@ For Mac :
    ```
    ALTER USER 'root'@'localhost' IDENTIFIED BY 'toor';
    ```
-
-## API Endpoints
-Our API endpoints are documented in this [link](https://interstellar-meadow-685701.postman.co/workspace/CZ3002-ASE~e03348d4-5ed1-43e2-b02f-8dd183f1619c/collection/12435852-ce76e0df-1771-4134-9248-13a8a0903773?ctx=documentation)
