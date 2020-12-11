@@ -1,4 +1,6 @@
 # CZ3002 Data Labelling Application (LabelDat)
+<img height="150" alt="image" src=https://user-images.githubusercontent.com/48685014/101879804-d6520a00-3bcc-11eb-8442-44efb28af5d2.png> 
+
 LabelDat is a webapp designed as a one-stop portal for project owners to manage and organise the labelling of datasets, as well as to facilitate the labelling of datasets. 
 
 Hence, project owners can upload an unlabelled dataset on the portal for other project owners and labellers to label the data. The labelled datasets can then be downloaded for pre-processing and training of machine learning models in the later stages.
@@ -12,6 +14,34 @@ This project is jointly developed by the following members.
 * Alfredo
 * Kai Jie
 * Jun Le
+
+## App Features
+The following are some features of the application.
+
+### Create labelling project and task
+Create project and instructions to perform labelling task
+
+<img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101880134-609a6e00-3bcd-11eb-8d3d-f0682973aca5.png>
+
+### Dashboard
+Track progress with a dashboard to summarise the labelling progress of each labelling project
+
+<img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101880412-d6063e80-3bcd-11eb-8cee-f6c20202e730.png> <img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101881049-d5ba7300-3bce-11eb-9af0-5efcfd5cbcb5.png>
+
+### Machine Learning assisted labelling
+Speed up labelling task by using machine learning to suggest the label
+
+<img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101880573-1bc30700-3bce-11eb-864c-8d4cca17900f.png>
+
+### User Profile and Leaderboard
+Shows individual user profile and compare their labelling performance with other users through a leaderboard
+
+<img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101880773-6cd2fb00-3bce-11eb-8079-7759b6ea4ece.png>
+
+### Export labelled dataset
+An export function is available for the project owner to download the labelled dataset into device
+
+<img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101881158-f84c8c00-3bce-11eb-865f-aba4645a7f0a.png>
 
 ## Frontend: React.js
 
