@@ -7,13 +7,13 @@ Hence, project owners can upload an unlabelled dataset on the portal for other p
 
 ## Contributors
 This project is jointly developed by the following members.
-* Chiah Soon
-* Wilson
-* Shing Ling
-* Han Yi
-* Alfredo
-* Kai Jie
-* Jun Le
+* [Chiah Soon](https://github.com/chiahsoon)
+* [Wilson](https://github.com/wilsonteng97)
+* [Shing Ling](https://github.com/luhceeh)
+* [Han Yi](https://github.com/HanYiChoong)
+* [Alfredo](https://github.com/aryelciu001)
+* [Kai Jie](https://github.com/Teo-KJ)
+* [Jun Le](https://github.com/jlgoh)
 
 ## App Features
 The following are some features of the application.
@@ -24,7 +24,7 @@ Create project and instructions to perform labelling task
 <img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101880134-609a6e00-3bcd-11eb-8d3d-f0682973aca5.png>
 
 ### Dashboard
-Track progress with a dashboard to summarise the labelling progress of each labelling project
+Track progress with a dashboard to summarise the labelling progress of each project
 
 <img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101880412-d6063e80-3bcd-11eb-8cee-f6c20202e730.png> <img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101881049-d5ba7300-3bce-11eb-9af0-5efcfd5cbcb5.png>
 
@@ -39,7 +39,7 @@ Shows individual user profile and compare their labelling performance with other
 <img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101880773-6cd2fb00-3bce-11eb-8079-7759b6ea4ece.png>
 
 ### Export labelled dataset
-An export function is available for the project owner to download the labelled dataset into device
+An export function is available for the project owner to export and download the labelled dataset into device
 
 <img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101881158-f84c8c00-3bce-11eb-865f-aba4645a7f0a.png>
 
