@@ -14,15 +14,15 @@ This project is jointly developed by the following members.
 * [Jun Le](https://github.com/jlgoh)
 
 ## About LabelDat
-In recent yers, we see a boom in data which allowed for the increase use in machine learning and artificial intelligence. The large amounts of data will mean a lot of time will be needed to clean and process the data before applying machine learning techniques. In addition, low quality data can arise due to poor cleaning and processing of the data. This can cause problems as machine learning models struggle to learn, thus further delaying the project as compared to when higher quality data is in use. 
+In recent yers, we see a boom in data which allowed for the increase use in machine learning and artificial intelligence. The large amounts of data would mean a lot of time is needed to clean and process the data before applying machine learning techniques. In addition, low quality data can arise due to poor cleaning and processing of the data. This can cause problems as machine learning models struggle to learn, thus further delaying the project as compared to when higher quality data is in use. 
 
-As such, we develop LabelDat, the dataset labelling webapp. LabelDat allows for project owners to upload an unlabelled dataset on the portal for other owners and labellers to label the data on the platform. The webapp includes features to enhance the labelling process through the interface and use of machine learning to predict the labels. The webapp also tracks the labelling process. After labelling, the datasets can then be downloaded for further usage. The features are elaborated below.
+As such, we develop LabelDat, the dataset labelling webapp for 2 groups of users - project owners and labellers. LabelDat allows for project owners to upload an unlabelled dataset on the portal for other project owners and labellers to label the data on the platform. The webapp includes features to enhance the labelling process through the interface and use of machine learning to predict the labels. After labelling, the datasets can then be downloaded for further usage. The features are elaborated below.
 
 ## App Features
 The following are some features of the application.
 
 ### Create labelling project and task
-Create project and instructions to perform labelling task
+Project owners create project and instructions to perform labelling task
 
 <img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101880134-609a6e00-3bcd-11eb-8d3d-f0682973aca5.png>
 
@@ -37,7 +37,7 @@ Speed up labelling task by using machine learning to suggest the label
 <img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101880573-1bc30700-3bce-11eb-864c-8d4cca17900f.png>
 
 ### User Profile and Leaderboard
-Shows individual user profile and compare their labelling performance with other users through a leaderboard
+Shows individual users' profile, both labellers and project owners, and compare their labelling performance with other users through a leaderboard
 
 <img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101880773-6cd2fb00-3bce-11eb-8079-7759b6ea4ece.png>
 
