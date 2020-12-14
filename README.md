@@ -1,4 +1,4 @@
-# CZ3002 Data Labelling Application (LabelDat)
+# LabelDat, the Dataset Labelling Application
 <img height="150" alt="image" src=https://user-images.githubusercontent.com/48685014/101879804-d6520a00-3bcc-11eb-8442-44efb28af5d2.png> 
 
 *LabelDat* is a webapp designed as a one-stop portal to manage, organise and facilitate the labelling of datasets. The project is done as part of a school project on Advanced Software Engineering.
@@ -45,6 +45,9 @@ Shows individual user profile and compare their labelling performance with other
 An export function is available for the project owner to export and download the labelled dataset into device
 
 <img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101881158-f84c8c00-3bce-11eb-865f-aba4645a7f0a.png>
+
+------------------------------------------------------
+# App Development
 
 ## Frontend: React.js
 
