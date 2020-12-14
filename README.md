@@ -16,33 +16,33 @@ This project is jointly developed by the following members.
 ## About LabelDat
 In recent yers, we see a boom in data which allowed for the increase use in machine learning and artificial intelligence. The large amounts of data would mean a lot of time is needed to clean and process the data before applying machine learning techniques. In addition, low quality data can arise due to poor cleaning and processing of the data. This can cause problems as machine learning models struggle to learn, thus further delaying the project as compared to when higher quality data is in use. 
 
-As such, we develop LabelDat, the dataset labelling webapp for 2 groups of users - project owners and labellers. LabelDat allows for project owners to upload an unlabelled dataset on the portal for other project owners and labellers to label the data on the platform. The webapp includes features to enhance the labelling process through the interface and use of machine learning to predict the labels. After labelling, the datasets can then be downloaded for further usage. The features are elaborated below.
+As such, we develop LabelDat, the dataset labelling webapp for 2 groups of users - project owners and labellers. LabelDat allows project owners to upload an unlabelled dataset on the portal, so that other project owners and labellers can label the data on the platform. The webapp includes features to enhance the labelling process through the interface and use of machine learning to predict the labels. After labelling, the datasets can then be downloaded for further usage. The features are elaborated below.
 
 ## App Features
 The following are some features of the application.
 
 ### Create labelling project and task
-Project owners create project and instructions to perform labelling task
+Project owners can create new project and outline instructions to perform labelling task.
 
 <img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101880134-609a6e00-3bcd-11eb-8d3d-f0682973aca5.png>
 
 ### Dashboard
-Track progress with a dashboard to summarise the labelling progress of each project
+Track progress with a dashboard to summarise the labelling progress of each project.
 
 <img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101880412-d6063e80-3bcd-11eb-8cee-f6c20202e730.png> <img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101881049-d5ba7300-3bce-11eb-9af0-5efcfd5cbcb5.png>
 
 ### Machine Learning assisted labelling
-Speed up labelling task by using machine learning to suggest the label
+Speed up labelling task by using machine learning to suggest the labels.
 
 <img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101880573-1bc30700-3bce-11eb-864c-8d4cca17900f.png>
 
 ### User Profile and Leaderboard
-Shows individual users' profile, both labellers and project owners, and compare their labelling performance with other users through a leaderboard
+Shows individual users' profile, both labellers and project owners, and compare their labelling performance with other users through a leaderboard.
 
 <img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101880773-6cd2fb00-3bce-11eb-8079-7759b6ea4ece.png>
 
 ### Export labelled dataset
-An export function is available for the project owner to export and download the labelled dataset into device
+An export function is available for the project owner to export and download the labelled dataset.
 
 <img height="220" alt="image" src=https://user-images.githubusercontent.com/48685014/101881158-f84c8c00-3bce-11eb-865f-aba4645a7f0a.png>
 
