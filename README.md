@@ -1,4 +1,4 @@
-# LabelDat, the Dataset Labelling Application
+# LabelDat
 <img height="150" alt="image" src=https://user-images.githubusercontent.com/48685014/101879804-d6520a00-3bcc-11eb-8442-44efb28af5d2.png> 
 
 *LabelDat* is a webapp designed as a one-stop portal to manage, organise and facilitate the labelling of datasets. The project is done as part of a school project on Advanced Software Engineering.
