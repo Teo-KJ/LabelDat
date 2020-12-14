@@ -14,7 +14,7 @@ This project is jointly developed by the following members.
 * [Jun Le](https://github.com/jlgoh)
 
 ## About LabelDat
-In recent yers, we see a boom in data which allowed for the increase use in machine learning and artificial intelligence. The large amounts of data would mean a lot of time is needed to clean and process the data before applying machine learning techniques. In addition, low quality data can arise due to poor cleaning and processing of the data. This can cause problems as machine learning models struggle to learn, thus further delaying the project as compared to when higher quality data is in use. 
+In recent years, we see a boom in data which allowed for the increase use in machine learning and artificial intelligence. The large amounts of data would mean a lot of time is needed to clean and process the data before applying machine learning techniques. In addition, low quality data can arise due to poor cleaning and processing of the data. This can cause problems as machine learning models struggle to learn, thus further delaying the project as compared to when higher quality data is in use. 
 
 As such, we develop LabelDat, the dataset labelling webapp for 2 groups of users - project owners and labellers. LabelDat allows project owners to upload an unlabelled dataset on the portal, so that other project owners and labellers can label the data on the platform. The webapp includes features to enhance the labelling process through the interface and use of machine learning to predict the labels. After labelling, the datasets can then be downloaded for further usage. The features are elaborated below.
 
